@@ -447,6 +447,445 @@ const resources = {
       },
     },
   },
+  id: {
+    translation: {
+      font: "font-poppins",
+      dir: "ltr",
+      topHeader:
+        "Diskon 50% untuk Semua Baju Renang dan Pengiriman Cepat Gratis!",
+      shop: "Beli Sekarang",
+      welcome: "Selamat Datang di Situs E-Commerce",
+
+      home: "Beranda",
+      contact: "Kontak",
+      about: "Tentang",
+      signUp: "Daftar",
+      account: "Akun Saya",
+
+      headerIcons: {
+        1: "Kelola Akun Saya",
+        2: "Pesanan Saya",
+        3: "Pembatalan Saya",
+        4: "Ulasan Saya",
+        5: "Keluar",
+      },
+      search: "Cari...",
+      homeSections: {
+        row1: {
+          col1: [
+            "Mode Wanita",
+            "Mode Pria",
+            "Teknologi",
+            "Rumah & Gaya Hidup",
+            "Obat-obatan",
+            "Olahraga & Luar Ruangan",
+            "Bayi & Mainan",
+            "Makanan & Hewan Peliharaan",
+            "Kesehatan & Kecantikan",
+          ],
+          col2: ["Serangkaian iPhone 14", "Diskon Voucher Hingga 10%", "Beli Sekarang"],
+        },
+        row2: ["Hari Ini", "Penjualan Flash", "Hari", "Jam", "Menit", "Detik"],
+      },
+      removeFromCart: "Hapus dari Keranjang",
+      addToCart: "Tambah ke Keranjang",
+      new: "BARU",
+      itemsArray: {
+        0: {
+          title: "Mobil Listrik Anak",
+          type: "Gaming",
+          details:
+            "Mobil listrik yang menyenangkan untuk anak-anak berkendara dengan gaya, memberikan jam hiburan dan kesenangan.",
+        },
+        1: {
+          title: "Kamera DSLR CANON EOS",
+          type: "Teknologi",
+          details:
+            "Tangkap foto dan video yang menakjubkan dengan kamera DSLR profesional ini, sempurna untuk penggemar fotografi.",
+        },
+        2: {
+          title: "Makanan Anjing Kering",
+          type: "Umum",
+          details:
+            "Makanan anjing kering bergizi untuk menjaga kesehatan dan kebahagiaan teman berbulu Anda, dibuat dengan bahan berkualitas tinggi.",
+        },
+        3: {
+          title: "Laptop Gaming ASUS FHD",
+          type: "Teknologi",
+          details:
+            "Nikmati pengalaman gaming berkinerja tinggi dengan laptop gaming ASUS FHD, dilengkapi dengan grafis canggih dan gameplay yang mulus.",
+        },
+        4: {
+          title: "Set Produk Curology",
+          type: "Umum",
+          details:
+            "Set perawatan kulit lengkap dari Curology untuk membersihkan, melembapkan, dan melindungi kulit Anda, meninggalkan kulit yang lembut dan bercahaya.",
+        },
+        5: {
+          title: "Gamepad USB GP11 Shooter",
+          type: "Gaming",
+          details:
+            "Tingkatkan pengalaman gaming Anda dengan gamepad USB GP11 Shooter, dilengkapi dengan konstruksi berkualitas tinggi dan kontrol yang presisi.",
+        },
+        6: {
+          title: "Jaket Satin Berquilt",
+          type: "Pakaian",
+          details:
+            "Tetap gaya dan hangat dengan jaket satin berquilt ini, sempurna untuk menambah sentuhan trendi pada pakaian Anda.",
+        },
+        7: {
+          title: "Rak Buku Kecil",
+          type: "Umum",
+          details:
+            "Rapikan buku dan barang hiasan Anda dengan rak buku kecil ini, dirancang untuk muat di ruang sempit.",
+        },
+        8: {
+          title: "Pengatur Suhu CPU Cair RGB",
+          type: "Teknologi",
+          details:
+            "Jaga CPU Anda tetap dingin dan berjalan lancar dengan pengatur suhu CPU cair RGB, dilengkapi dengan pompa berkinerja tinggi dan pencahayaan RGB yang dapat disesuaikan.",
+        },
+        9: {
+          title: "Tas Gucci",
+          type: "Pakaian",
+          details:
+            "Perjalanan dengan gaya menggunakan tas Gucci, dibuat dari bahan premium dan dirancang untuk ketahanan dan kemewahan.",
+        },
+        10: {
+          title: "The North Coat",
+          type: "Pakaian",
+          details:
+            "Tetap hangat dan fashionable dengan The North Coat, dilengkapi dengan konstruksi yang tahan lama dan desain timeless.",
+        },
+        11: {
+          title: "Gamepad HAVIT HV-G92",
+          type: "Gaming",
+          details:
+            "Nikmati kontrol gaming yang responsif dan presisi dengan gamepad HAVIT HV-G92, dirancang untuk berjam-jam kesenangan bermain game.",
+        },
+        12: {
+          title: "Keyboard Kabel AK-900",
+          type: "Teknologi",
+          details:
+            "Tulis dengan cepat dan akurat menggunakan keyboard kabel AK-900, dilengkapi dengan konstruksi yang tahan lama dan desain ergonomis.",
+        },
+        13: {
+          title: "Monitor Gaming IPS LCD",
+          type: "Teknologi",
+          details:
+            "Imersikan diri Anda dalam gaming dengan monitor gaming IPS LCD, memberikan visual yang cerah dan gameplay yang mulus.",
+        },
+        14: {
+          title: "Kursi Nyaman S-Series",
+          type: "Pakaian",
+          details:
+            "Relaksasi dengan nyaman menggunakan kursi nyaman S-Series, dilengkapi dengan desain ergonomis dan bantalan empuk untuk duduk berjam-jam.",
+        },
+        15: {
+          title: "JBL Boombox 2",
+          type: "Baru Tiba",
+          details:
+            "Nikmati suara yang kuat dengan JBL Boombox 2, dilengkapi dengan desain yang tangguh dan baterai tahan lama untuk mendengarkan sepanjang hari.",
+        },
+        16: {
+          title: "Parfum",
+          type: "Baru Tiba",
+          details:
+            "Parfum ini adalah campuran oud, mawar, dan dupa, menciptakan aroma yang kaya dan mewah yang bertahan sepanjang hari.",
+        },
+        17: {
+          title: "Telepon",
+          type: "Baru Tiba",
+          details:
+            "Telepon ini dilengkapi dengan layar besar, prosesor kuat, dan baterai tahan lama, sempurna untuk bekerja dan bermain.",
+        },
+        18: {
+          title: "PlayStation 5",
+          type: "Baru Tiba",
+          details:
+            "Versi hitam dan putih PS5 segera hadir dalam penjualan.",
+        },
+        19: {
+          title: "Speaker",
+          type: "Baru Tiba",
+          details: "Kualitas suara yang luar biasa dengan speaker nirkabel Amazon.",
+        },
+        20: {
+          title: "Koleksi Wanita",
+          type: "Baru Tiba",
+          details:
+            "Koleksi wanita yang menampilkan gaya yang berbeda, dan Anda dapat menemukan koleksi terbaik di sini.",
+        },
+        21: {
+          title: "Sepatu Sepak Bola",
+          type: "Baru Tiba",
+          details:
+            "Sepatu sepak bola terbaik untuk permainan Anda, dan Anda dapat menemukan koleksi terbaik di sini.",
+        },
+      },
+      categories: {
+        general: "Umum",
+        technology: "Teknologi",
+        gaming: "Gaming",
+        clothes: "Pakaian",
+        newArrival: "Baru Tiba",
+      },
+      services: {
+        0: {
+          value: "PENGIRIMAN GRATIS DAN CEPAT",
+          description: "Pengiriman gratis untuk semua pesanan di atas $140",
+        },
+
+        1: {
+          value: "LAYANAN PELANGGAN 24/7",
+          description: "Dukungan pelanggan ramah 24/7",
+        },
+        2: {
+          value: "JAMINAN UANG KEMBALI",
+          description: "Kami mengembalikan uang dalam 30 hari",
+        },
+      },
+      redButtons: {
+        viewAllProducts: "Lihat Semua Produk",
+        viewAll: "Lihat Semua",
+        exploreByCategory: "Jelajahi Berdasarkan Kategori",
+        buyNow: "Beli Sekarang",
+        sendMassage: "Kirim Pesan",
+        createAccount: "Buat Akun",
+        login: "Masuk",
+        applyCoupon: "Gunakan Kupon",
+        processToCheckout: "Proses ke Pembayaran",
+        placeOrder: "Pesan",
+        backToHomePage: "Kembali ke Beranda",
+        chooseByCategory: "Pilih Berdasarkan Kategori",
+      },
+      whiteButtons: {
+        backToHomePage: "Kembali ke Beranda",
+        loadMore: "Muat Lebih Banyak..",
+        moveAllToBag: "Pindahkan Semua ke Tas",
+        seeAll: "Lihat Semua",
+        returnToShop: "Kembali ke Toko",
+        updateCart: "Perbarui Keranjang",
+      },
+
+      wishlist: {
+        title: "Daftar Keinginan",
+        justForYou: "Khusus untuk Anda",
+      },
+      cart: {
+        header: {
+          product: "Produk",
+          price: "Harga",
+          quantity: "Kuantitas",
+          subtotal: "Subtotal",
+        },
+        cartTotal: "Total Keranjang",
+        total: "Total",
+        subtotal: "Subtotal",
+        shipping: "Pengiriman",
+        free: "Gratis",
+      },
+      checkOut: {
+        title: "Pembayaran",
+        billingDetails: "Detail Tagihan",
+        firstName: "Nama Depan",
+        company: "Nama Perusahaan",
+        Country: "Negara",
+        address: "Alamat Jalan",
+        city: "Kota",
+        phone: "Telepon",
+        email: "Alamat Email",
+        apartment: "Apartemen, lantai, dll. (opsional)",
+        methods: "Metode Pembayaran",
+        bank: "Bank (Visa)",
+        cash: "Tunai pada Pengiriman",
+        couponCode: "Kode Kupon",
+      },
+      payment: {
+        payment: "Detail Pembayaran",
+        number: "Nomor Kartu",
+        enter: "Masukkan nomor kartu Anda",
+        expirationDate: "Tanggal Kadaluarsa",
+      },
+      productPage: {
+        relatedItems: "Produk Terkait",
+        colors: "Warna",
+        size: "Ukuran",
+        inStock: "Tersedia",
+        reviews: "Ulasan",
+        review: "Ulasan",
+        1: "Pengiriman Gratis",
+        1.1: "Masukkan kode pos Anda untuk Ketersediaan Pengiriman",
+        2: "Pengembalian Pengiriman",
+        2.1: "Pengembalian Pengiriman Gratis 30 Hari. Detail",
+      },
+      contactPage: {
+        call: "Hubungi Kami",
+        available: "Kami tersedia 24/7, 7 hari dalam seminggu.",
+        phone: "Telepon",
+        write: "Tulis kepada Kami",
+        fillForm: "Isi formulir kami dan kami akan menghubungi Anda dalam 24 jam.",
+        emails: "Email",
+        yourName: "Nama Anda",
+        yourEmail: "Email Anda",
+        yourPhone: "Nomor Telepon Anda",
+        yourMessage: "Pesan Anda",
+      },
+      aboutPage: {
+        title: "Tentang",
+        story: "Cerita Kami",
+        paragraph1:
+          "Diluncurkan pada tahun 2015, Exclusive adalah pasar belanja online utama di Asia Selatan dengan kehadiran aktif di Bangladesh. Didukung oleh berbagai solusi pemasaran, data, dan layanan yang disesuaikan, Exclusive memiliki 10.500 penjual dan 300 merek serta melayani 3 juta pelanggan di seluruh wilayah.",
+        paragraph2:
+          "Exclusive memiliki lebih dari 1 juta produk untuk ditawarkan, tumbuh dengan sangat cepat. Exclusive menawarkan beragam produk dalam kategori yang mencakup konsumen.",
+        card1: "Penjual aktif di situs kami",
+        card2: "Penjualan Produk Bulanan",
+        card3: "Pelanggan aktif di situs kami",
+        card4: "Penjualan Bruto Tahunan di Situs Kami",
+        k1: "10,5k",
+        k2: "33k",
+        k3: "45,5k",
+        k4: "25k",
+        name1: "Tom Cruise",
+        name2: "Tom Hanks",
+        name3: "Will Smith",
+        name4: "Tom Hardy",
+        job1: "Pendiri & Ketua",
+        job2: "CTO",
+        job3: "CEO",
+        job4: "Desainer Produk",
+      },
+      accountPage: {
+        setMassage: "Detail akun berhasil diperbarui!",
+        welcome: "Selamat Datang! ",
+        home: "Beranda",
+        myAccount: "Akun Saya",
+        ManageMyAccount: "Kelola Akun Saya",
+        myProfile: "Profil Saya",
+        addressBook: "Buku Alamat",
+        myPaymentOptions: "Pilihan Pembayaran Saya",
+        myOrders: "Pesanan Saya",
+        myReturns: "Pengembalian Saya",
+        myCancelations: "Pembatalan Saya",
+        myWishlist: "Daftar Keinginan Saya",
+        editYourProfile: "Edit Profil Anda",
+        firstName: "Nama Depan",
+        yourFirstName: "nama depan Anda",
+        lastName: "Nama Belakang",
+        yourLastName: "nama belakang Anda",
+        email: "Email",
+        yourEmail: "email Anda",
+        address: "Alamat",
+        yourAddress: "alamat Anda",
+        passwordChanges: "Perubahan Kata Sandi",
+        currentPassword: "Kata Sandi Saat Ini",
+        newPassword: "Kata Sandi Baru",
+        confirmPassword: "Konfirmasi Kata Sandi",
+        cancel: "Batal",
+        saveChanges: "Simpan Perubahan",
+      },
+
+      signUpPage: {
+        title: "Buat Akun",
+        enter: "Masukkan detail Anda di bawah ini:",
+        email: "Email",
+        password: "Kata Sandi",
+        createAccount: "Buat Akun",
+        withGoogle: "Daftar dengan Google",
+        haveAccount: "Sudah punya akun?",
+        login: "Masuk",
+      },
+      loginPage: {
+        title: "Masuk ke Exclusive",
+        enter: "Masukkan detail Anda di bawah ini:",
+        emailOrPhone: "Email atau Nomor Telepon",
+        password: "Kata Sandi",
+        forgot: "Lupa Kata Sandi?",
+        notHaveAccount: "Belum punya akun?",
+        login: "Masuk",
+      },
+      Snackbar: {
+        inCart: "Produk sudah ada di keranjang!",
+        movedToCart: "Produk berhasil dipindahkan ke keranjang!",
+        noItems: "Tidak ada produk untuk dipindahkan ke keranjang!",
+      },
+      category: {
+        redTitle: "Kategori",
+        title: "Telusuri Berdasarkan Kategori",
+        categories: {
+          0: "Telepon",
+          1: "Komputer",
+          2: "SmartWatch",
+          3: "Kamera",
+          4: "HeadPhones",
+          5: "Gaming",
+        },
+      },
+      bestSelling: {
+        redTitle: "Bulan Ini",
+        title: "Produk Terlaris",
+      },
+      deal: {
+        greenTitle: "Kategori",
+        title: "Pengalaman Mendengarkan yang Lebih Baik",
+        days: "Hari",
+        hours: "Jam",
+        minutes: "Menit",
+        seconds: "Detik",
+        buyNow: "Beli Sekarang!",
+      },
+      allProducts: {
+        redTitle: "Produk Kami",
+        title: "Jelajahi Produk Kami",
+        byCategory: "Jelajahi Berdasarkan Kategori",
+      },
+      featured: {
+        redTitle: "Fitur",
+        title: "Baru Tiba",
+        shopNow: "Beli Sekarang",
+        playStation: {
+          title: "PlayStation 5",
+          description: "Versi hitam dan putih PS5 segera hadir dalam penjualan.",
+        },
+        WomenCollections: {
+          title: "Koleksi Wanita",
+          description: "Koleksi wanita yang menampilkan gaya yang berbeda.",
+        },
+        speakers: {
+          title: "Speaker",
+          description: "Speaker nirkabel Amazon",
+        },
+        perfume: {
+          title: "Parfum",
+          description: "GUCCI INTENSE OUD EDP",
+        },
+      },
+      footer: {
+        subscribe: "Berlangganan",
+        offer: "Dapatkan diskon 10% untuk pesanan pertama Anda",
+        enterEmail: "Masukkan email Anda",
+        enterPassword: "Masukkan kata sandi Anda",
+        account: "Akun",
+        myAccount: "Akun Saya",
+        sign: "Masuk / Daftar",
+        cart: "Keranjang",
+        wishlist: "Daftar Keinginan",
+        shop: "Toko",
+        downloadApp: "Unduh Aplikasi",
+        save: "Hemat $3 untuk Pengguna Baru Aplikasi",
+        support: "Dukungan",
+        address: "111 Bijoy sarani, Dhaka, DH 1515, Bangladesh",
+        quickLinks: "Tautan Cepat",
+        privacy: "Kebijakan Privasi",
+        usage: "Syarat Penggunaan",
+        FAQ: "FAQ",
+        Contact: "Kontak",
+        copyrights: "© Hak Cipta Rimel 2022. Semua hak dilindungi",
+        allRightsReserved: "© Semua hak dilindungi",
+      },
+    },
+  },
+
   gr: {
     translation: {
       font: "font-poppins",
