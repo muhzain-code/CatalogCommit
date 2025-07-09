@@ -45,23 +45,37 @@
   }
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
+.scrollbar::-webkit-scrollbar {
+  width: 0px;
 }
 
-::-webkit-scrollbar-track {
-  background: #f1f1f1;
+::-webkit-scrollbar {
+  height: 5px;
+  width: 7px;
+  background-color: rgb(248, 172, 172);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #c1c1c1;
-  border-radius: 3px;
+  background-color: rgb(0, 0, 0);
 }
 
-::-webkit-scrollbar-thumb:hover {
+/* Custom scrollbar */
+/* ::-webkit-scrollbar {
+  width: 6px;
+} */
+
+/* ::-webkit-scrollbar-track {
+  background: #f1f1f1;
+} */
+
+/* ::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+} */
+
+/* ::-webkit-scrollbar-thumb:hover {
   background: #a8a8a8;
-}
+} */
 
 /* Line clamp utility */
 .line-clamp-2 {
