@@ -41,6 +41,8 @@ function ChangeLang() {
       return "سيتم إعادة تحميل الصفحة وتغيير اللغة للعربية!";
     } else if (selectedLanguage === "es") {
       return "¡La página se recargará y el idioma se cambiará a español!";
+    } else if (selectedLanguage === "id") {
+      return "Halaman akan dimuat ulang dan bahasa akan diubah ke Bahasa Indonesia!";
     }
   };
 
@@ -56,6 +58,7 @@ function ChangeLang() {
         <MenuItem value="ar">Arabic (العربية)</MenuItem>
         <MenuItem value="gr">German (Deutsch)</MenuItem>
         <MenuItem value="es">Spanish (Español)</MenuItem>
+        <MenuItem value="id">Indonesia (Bahasa Indonesia)</MenuItem>
       </Select>
       {loading && (
         <>
