@@ -5,6 +5,7 @@ import { X, MapPin, Phone, ExternalLink, Upload, Trash2, Plus } from "lucide-rea
 import ImageWithFallback from "../ImageWithFallback"
 import { umkmService } from "../../../Services/umkmService"
 import { categoryService } from "../../../Services/categoryService"
+import { closeLoading, showError, showLoading, showSuccess } from "../../../Utils/sweetAlert"
 
 const ProductModal = ({ isOpen, onClose, onSave, product }) => {
     const [formData, setFormData] = useState({
@@ -45,6 +46,7 @@ const ProductModal = ({ isOpen, onClose, onSave, product }) => {
             setCategories(categoryResponse.data || [])
         } catch (error) {
             console.error("Error loading options:", error)
+            showError("Gagal Memuat Data", "Tidak dapat memuat data UMKM dan kategori")
         } finally {
             setLoadingOptions(false)
         }
@@ -56,19 +58,20 @@ const ProductModal = ({ isOpen, onClose, onSave, product }) => {
                 name: product.name || "",
                 description: product.description || "",
                 price: product.price?.toString() || "",
-                shipping_price: product.shipping_price?.toString() || "", // <== dari API, bukan `shippingCost`
+                shipping_price: product.shipping_price?.toString() || "",
                 free_shipping: product.free_shipping || false,
-                status: product.status || "available", // langsung dari API, tidak perlu dari `rawData`
+                status: product.status || "available",
                 umkm_id: product.umkm_id?.toString() || "",
-                category_id: product.category_id?.toString() || ""  ,
+                category_id: product.category_id?.toString() || "",
                 date: product.date || "",
-                photos: product.active_photos?.map((photo) => ({
-                    id: photo.id,
-                    caption: photo.caption || "",
-                    file_path: photo.file_path || "",
-                    is_active: photo.is_active ? 1 : 0,
-                    url: photo.url || "",
-                })) || [],
+                photos:
+                    product.active_photos?.map((photo) => ({
+                        id: photo.id,
+                        caption: photo.caption || "",
+                        file_path: photo.file_path || "",
+                        is_active: photo.is_active ? 1 : 0,
+                        url: photo.url || "",
+                    })) || [],
             })
         } else {
             setFormData({
@@ -86,10 +89,6 @@ const ProductModal = ({ isOpen, onClose, onSave, product }) => {
         }
         setErrors({})
     }, [product, isOpen])
-
-    useEffect(() => {
-        console.log(formData);
-    }, [formData])
 
     const handleInputChange = (e) => {
         const { name, value, type, checked } = e.target
@@ -133,8 +132,6 @@ const ProductModal = ({ isOpen, onClose, onSave, product }) => {
 
     const handleFileUpload = (index, file) => {
         if (file) {
-            // In a real app, you would upload this file to your server
-            // For now, we'll just create a preview URL
             const previewUrl = URL.createObjectURL(file)
             handlePhotoChange(index, "file", file)
             handlePhotoChange(index, "preview", previewUrl)
@@ -191,19 +188,16 @@ const ProductModal = ({ isOpen, onClose, onSave, product }) => {
         return Object.keys(newErrors).length === 0
     }
 
-    useEffect(() => {
-        console.log("form Data", formData);
-        
-    }, [formData])
-
     const handleSubmit = async (e) => {
         e.preventDefault()
 
         if (!validateForm()) {
+            showError("Validasi Gagal", "Mohon periksa kembali data yang diisi")
             return
         }
 
         setLoading(true)
+        showLoading(product ? "Mengupdate produk..." : "Menyimpan produk...")
 
         try {
             const submitData = {
@@ -227,11 +221,20 @@ const ProductModal = ({ isOpen, onClose, onSave, product }) => {
                     ...(photo.file && { file: photo.file }),
                 })),
             }
-            console.log("data submit",submitData);
+
+            console.log("submit data", submitData);
             
+
             await onSave(submitData)
+            closeLoading()
+            showSuccess(
+                product ? "Produk Berhasil Diupdate!" : "Produk Berhasil Disimpan!",
+                product ? "Data produk telah diperbarui" : "Produk baru telah ditambahkan",
+            )
         } catch (error) {
+            closeLoading()
             console.error("Error saving product:", error)
+            showError("Gagal Menyimpan Produk", error.message || "Terjadi kesalahan saat menyimpan produk")
         } finally {
             setLoading(false)
         }
@@ -245,7 +248,7 @@ const ProductModal = ({ isOpen, onClose, onSave, product }) => {
                 {/* Header */}
                 <div className="flex items-center justify-between p-6 border-b border-gray-200">
                     <h2 className="text-2xl font-bold text-gray-900">{product ? "Edit Produk" : "Tambah Produk Baru"}</h2>
-                    <button onClick={onClose} className="text-gray-400 hover:text-gray-600 transition-colors">
+                    <button onClick={onClose} className="text-gray-400 hover:text-gray-600 transition-colors" disabled={loading}>
                         <X className="w-6 h-6" />
                     </button>
                 </div>
@@ -549,15 +552,15 @@ const ProductModal = ({ isOpen, onClose, onSave, product }) => {
                                     <div className="space-y-3">
                                         <div className="flex items-center gap-2">
                                             <MapPin className="w-4 h-4 text-gray-500" />
-                                            <span className="text-sm text-gray-700">{product.umkm.address || "Alamat tidak tersedia"}</span>
+                                            <span className="text-sm text-gray-700">{product.umkm?.address || "Alamat tidak tersedia"}</span>
                                         </div>
 
                                         <div className="flex items-center gap-2">
                                             <Phone className="w-4 h-4 text-gray-500" />
-                                            <span className="text-sm text-gray-700">{product.umkm.phone || "Telepon tidak tersedia"}</span>
+                                            <span className="text-sm text-gray-700">{product.umkm?.phone || "Telepon tidak tersedia"}</span>
                                         </div>
 
-                                        {product.umkm.wa_link && (
+                                        {product.umkm?.wa_link && (
                                             <div className="flex items-center gap-2">
                                                 <ExternalLink className="w-4 h-4 text-gray-500" />
                                                 <a
@@ -575,27 +578,27 @@ const ProductModal = ({ isOpen, onClose, onSave, product }) => {
                             )}
                         </div>
                     </div>
-                        </form>
+                </form>
 
-                    {/* Footer */}
-                    <div className="flex justify-end space-x-4 pt-4 px-4 pb-4 border-t border-gray-200">
-                        <button
-                            type="button"
-                            onClick={onClose}
-                            className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
-                            disabled={loading}
-                        >
-                            Batal
-                        </button>
-                        <button
-                            type="submit"
-                            onClick={handleSubmit}
-                            className="admin-button-primary text-white px-6 py-2 rounded-lg shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
-                            disabled={loading}
-                        >
-                            {loading ? "Menyimpan..." : product ? "Update Produk" : "Simpan Produk"}
-                        </button>
-                    </div>
+                {/* Footer */}
+                <div className="flex justify-end space-x-4 pt-4 px-6 pb-6 border-t border-gray-200">
+                    <button
+                        type="button"
+                        onClick={onClose}
+                        className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                        disabled={loading}
+                    >
+                        Batal
+                    </button>
+                    <button
+                        type="submit"
+                        onClick={handleSubmit}
+                        className="admin-button-primary text-white px-6 py-2 rounded-lg shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                        disabled={loading}
+                    >
+                        {loading ? "Menyimpan..." : product ? "Update Produk" : "Simpan Produk"}
+                    </button>
+                </div>
             </div>
         </div>
     )

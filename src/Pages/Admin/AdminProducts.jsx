@@ -1,13 +1,16 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Plus, Search, Edit, Eye, Trash2, Filter, AlertCircle, RefreshCw, Package } from "lucide-react"
+import { Plus, Search, Edit, Trash2, Filter, AlertCircle, RefreshCw, Package } from "lucide-react"
 import { productService, transformProductData } from "../../Services/productService"
 import LoadingSpinner from "../../components/Admin/LoadingSpinner"
 import ErrorNotification from "../../components/Admin/ErrorNotification"
 import ImageWithFallback from "../../components/Admin/ImageWithFallback"
 import Pagination from "../../components/Admin/Pagination"
 import ProductModal from "../../components/Admin/Modals/ProductModal"
+import { closeLoading, showConfirmation, showError, showLoading, showSuccess } from "../../Utils/sweetAlert"
+import { umkmService } from "../../Services/umkmService"
+import { categoryService } from "../../Services/categoryService"
 
 const AdminProducts = () => {
     const [products, setProducts] = useState([])
@@ -32,7 +35,7 @@ const AdminProducts = () => {
 
     // Available filter options
     const [filterOptions, setFilterOptions] = useState({
-        brands: [],
+        // brands: [],
         umkms: [],
         categories: [],
     })
@@ -50,11 +53,17 @@ const AdminProducts = () => {
                 setProducts(transformedProducts)
 
                 // Extract filter options from the data
-                const brands = [...new Set(transformedProducts.map((p) => p.brand).filter(Boolean))]
-                const umkms = [...new Set(transformedProducts.map((p) => p.umkm).filter(Boolean))]
-                const categories = [...new Set(transformedProducts.map((p) => p.category).filter(Boolean))]
+                // const brands = [...new Set(transformedProducts.map((p) => p.brand).filter(Boolean))]
+                // const umkms = [...new Set(transformedProducts.map((p) => p.umkm).filter(Boolean))]
+                // const categories = [...new Set(transformedProducts.map((p) => p.category).filter(Boolean))]
 
-                setFilterOptions({ brands, umkms, categories })
+                // setFilterOptions({ brands, umkms, categories })
+
+                const [umkmResponse, categoryResponse] = await Promise.all([
+                    umkmService.getUMKMs(),
+                    categoryService.getCategories(),
+                ])
+                setFilterOptions({ umkms: umkmResponse.data || [], categories: categoryResponse.data || [] })
 
                 // Handle pagination from API meta
                 if (response.meta) {
@@ -67,6 +76,7 @@ const AdminProducts = () => {
             }
         } catch (err) {
             setError(err.message || "Failed to fetch products. Please try again.")
+            showError("Gagal Memuat Data", err.message || "Tidak dapat memuat data produk")
             console.error("Error fetching products:", err)
         } finally {
             setLoading(false)
@@ -77,10 +87,11 @@ const AdminProducts = () => {
     useEffect(() => {
         fetchProducts(currentPage, itemsPerPage, searchTerm, {
             brand: filterBrand,
-            umkm: filterUMKM,
-            category: filterCategory,
+            umkm_id: filterUMKM,
+            category_id: filterCategory,
             status: filterStatus,
         })
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentPage, itemsPerPage])
 
     // Handle search with debounce
@@ -90,26 +101,31 @@ const AdminProducts = () => {
                 // If already on page 1, fetch directly
                 fetchProducts(1, itemsPerPage, searchTerm, {
                     brand: filterBrand,
-                    umkm: filterUMKM,
-                    category: filterCategory,
+                    umkm_id: filterUMKM,
+                    category_id: filterCategory,
                     status: filterStatus,
                 })
             } else {
                 // Reset to page 1 when searching/filtering
                 setCurrentPage(1)
             }
-        }, 500)
+        }, 400)
 
         return () => clearTimeout(timeoutId)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [searchTerm, filterBrand, filterUMKM, filterCategory, filterStatus])
 
     const handleEdit = async (product) => {
         try {
-            const response = await productService.getProduct(product.id);
-            setSelectedProduct(response.data)            
+            showLoading("Memuat data produk...")
+            const response = await productService.getProduct(product.id)
+            closeLoading()
+            setSelectedProduct(response.data)
             setIsModalOpen(true)
         } catch (err) {
+            closeLoading()
             console.error("Error get detail product:", err)
+            showError("Gagal Memuat Data", "Tidak dapat memuat detail produk")
         }
     }
 
@@ -118,31 +134,44 @@ const AdminProducts = () => {
         setIsModalOpen(true)
     }
 
-    const handleDelete = async (id) => {
-        if (confirm("Apakah Anda yakin ingin menghapus produk ini?")) {
-            try {
+    const handleDelete = async (id, productName) => {
+        try {
+            const result = await showConfirmation(
+                "Hapus Produk?",
+                `Apakah Anda yakin ingin menghapus produk "${productName}"? Tindakan ini tidak dapat dibatalkan.`,
+                "Ya, Hapus!",
+            )
+
+            if (result.isConfirmed) {
+                showLoading("Menghapus produk...")
                 await productService.deleteProduct(id)
+                closeLoading()
+
+                showSuccess("Produk Berhasil Dihapus!", "Produk telah dihapus dari sistem")
+
                 // Refresh the current page
                 fetchProducts(currentPage, itemsPerPage, searchTerm, {
                     brand: filterBrand,
-                    umkm: filterUMKM,
-                    category: filterCategory,
+                    umkm_id: filterUMKM,
+                    category_id: filterCategory,
                     status: filterStatus,
                 })
-            } catch (err) {
-                setError(err.message || "Failed to delete product. Please try again.")
-                console.error("Error deleting product:", err)
             }
+        } catch (err) {
+            closeLoading()
+            setError(err.message || "Failed to delete product. Please try again.")
+            showError("Gagal Menghapus Produk", err.message || "Terjadi kesalahan saat menghapus produk")
+            console.error("Error deleting product:", err)
         }
     }
 
     const handleSave = async (productData) => {
         try {
             if (selectedProduct) {
-                console.log("product data", productData);
-                
                 await productService.updateProduct(selectedProduct.id, productData)
             } else {
+                console.log("product data", productData);
+                
                 await productService.createProduct(productData)
             }
 
@@ -150,13 +179,15 @@ const AdminProducts = () => {
             // Refresh the current page
             fetchProducts(currentPage, itemsPerPage, searchTerm, {
                 brand: filterBrand,
-                umkm: filterUMKM,
-                category: filterCategory,
+                umkm_id: filterUMKM,
+                category_id: filterCategory,
                 status: filterStatus,
             })
         } catch (err) {
             setError(err.message || "Failed to save product. Please try again.")
+            showError("Gagal Menyimpan Produk", err.message || "Terjadi kesalahan saat menyimpan produk")
             console.error("Error saving product:", err)
+            throw err // Re-throw to let modal handle it
         }
     }
 
@@ -201,8 +232,8 @@ const AdminProducts = () => {
     const handleRefresh = () => {
         fetchProducts(currentPage, itemsPerPage, searchTerm, {
             brand: filterBrand,
-            umkm: filterUMKM,
-            category: filterCategory,
+            umkm_id: filterUMKM,
+            category_id: filterCategory,
             status: filterStatus,
         })
     }
@@ -261,10 +292,6 @@ const AdminProducts = () => {
                             <RefreshCw className={`w-4 h-4 ${loading ? "animate-spin" : ""}`} />
                             Refresh
                         </button>
-                        {/* <button className="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors">
-            <Download className="w-4 h-4" />
-            Export
-          </button> */}
                         <button
                             onClick={handleAdd}
                             className="admin-button-primary text-white px-6 py-2 rounded-lg flex items-center gap-2 shadow-lg"
@@ -295,7 +322,7 @@ const AdminProducts = () => {
                             Clear Filters
                         </button>
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                         <div className="relative">
                             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                             <input
@@ -306,18 +333,18 @@ const AdminProducts = () => {
                                 onChange={(e) => setSearchTerm(e.target.value)}
                             />
                         </div>
-                        <select
-                            className="px-4 py-2 border border-gray-300 rounded-lg admin-input-focus"
-                            value={filterBrand}
-                            onChange={(e) => handleFilterChange("brand", e.target.value)}
-                        >
-                            <option value="">Semua Brand</option>
-                            {filterOptions.brands.map((brand) => (
-                                <option key={brand} value={brand}>
-                                    {brand}
-                                </option>
-                            ))}
-                        </select>
+                        {/* <select
+              className="px-4 py-2 border border-gray-300 rounded-lg admin-input-focus"
+              value={filterBrand}
+              onChange={(e) => handleFilterChange("brand", e.target.value)}
+            >
+              <option value="">Semua Brand</option>
+              {filterOptions.brands.map((brand) => (
+                <option key={brand} value={brand}>
+                  {brand}
+                </option>
+              ))}
+            </select> */}
                         <select
                             className="px-4 py-2 border border-gray-300 rounded-lg admin-input-focus"
                             value={filterUMKM}
@@ -325,8 +352,8 @@ const AdminProducts = () => {
                         >
                             <option value="">Semua UMKM</option>
                             {filterOptions.umkms.map((umkm) => (
-                                <option key={umkm} value={umkm}>
-                                    {umkm}
+                                <option key={umkm.id} value={umkm.id}>
+                                    {umkm.name}
                                 </option>
                             ))}
                         </select>
@@ -337,21 +364,11 @@ const AdminProducts = () => {
                         >
                             <option value="">Semua Kategori</option>
                             {filterOptions.categories.map((category) => (
-                                <option key={category} value={category}>
-                                    {category}
+                                <option key={category.id} value={category.id}>
+                                    {category.name}
                                 </option>
                             ))}
                         </select>
-                        {/* <select
-                            className="px-4 py-2 border border-gray-300 rounded-lg admin-input-focus"
-                            value={filterStatus}
-                            onChange={(e) => handleFilterChange("status", e.target.value)}
-                        >
-                            <option value="">Semua Status</option>
-                            <option value="Tersedia">Tersedia</option>
-                            <option value="Pre Order">Pre Order</option>
-                            <option value="Nonaktif">Nonaktif</option>
-                        </select> */}
                         <select
                             className="px-4 py-2 border border-gray-300 rounded-lg admin-input-focus"
                             value={itemsPerPage}
@@ -395,7 +412,9 @@ const AdminProducts = () => {
                                     <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Ongkir
                                     </th>
-                                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Aksi
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody className="bg-white divide-y divide-gray-200">
@@ -420,10 +439,8 @@ const AdminProducts = () => {
                                                         className="h-12 min-w-12 max-w-12 rounded-lg object-cover shadow-sm shrink-0"
                                                         fallbackIcon={Package}
                                                     />
-                                                    <div className="ml-4 max-w-xs"> {/* optional: max-w-xs agar panjang teks dibatasi */}
-                                                        <div className="text-sm font-medium text-gray-900 break-words">
-                                                            {product.name}
-                                                        </div>
+                                                    <div className="ml-4 max-w-xs">
+                                                        <div className="text-sm font-medium text-gray-900 break-words">{product.name}</div>
                                                         <div className="text-sm text-gray-500">ID: {product.id}</div>
                                                     </div>
                                                 </div>
@@ -457,9 +474,9 @@ const AdminProducts = () => {
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                                 <div className="flex space-x-2">
-                                                    <button className="text-blue-600 hover:text-blue-900 p-2 hover:bg-blue-50 rounded-lg transition-colors">
+                                                    {/* <button className="text-blue-600 hover:text-blue-900 p-2 hover:bg-blue-50 rounded-lg transition-colors">
                                                         <Eye className="w-4 h-4" />
-                                                    </button>
+                                                    </button> */}
                                                     <button
                                                         onClick={() => handleEdit(product)}
                                                         className="text-green-600 hover:text-green-900 p-2 hover:bg-green-50 rounded-lg transition-colors"
@@ -467,7 +484,7 @@ const AdminProducts = () => {
                                                         <Edit className="w-4 h-4" />
                                                     </button>
                                                     <button
-                                                        onClick={() => handleDelete(product.id)}
+                                                        onClick={() => handleDelete(product.id, product.name)}
                                                         className="text-red-600 hover:text-red-900 p-2 hover:bg-red-50 rounded-lg transition-colors"
                                                     >
                                                         <Trash2 className="w-4 h-4" />
@@ -492,7 +509,6 @@ const AdminProducts = () => {
                         />
                     )}
                 </div>
-
             </div>
             <ProductModal
                 isOpen={isModalOpen}
