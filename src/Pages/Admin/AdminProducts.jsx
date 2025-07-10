@@ -139,6 +139,8 @@ const AdminProducts = () => {
     const handleSave = async (productData) => {
         try {
             if (selectedProduct) {
+                console.log("product data", productData);
+                
                 await productService.updateProduct(selectedProduct.id, productData)
             } else {
                 await productService.createProduct(productData)
@@ -293,7 +295,7 @@ const AdminProducts = () => {
                             Clear Filters
                         </button>
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
                         <div className="relative">
                             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                             <input
@@ -340,7 +342,7 @@ const AdminProducts = () => {
                                 </option>
                             ))}
                         </select>
-                        <select
+                        {/* <select
                             className="px-4 py-2 border border-gray-300 rounded-lg admin-input-focus"
                             value={filterStatus}
                             onChange={(e) => handleFilterChange("status", e.target.value)}
@@ -349,7 +351,7 @@ const AdminProducts = () => {
                             <option value="Tersedia">Tersedia</option>
                             <option value="Pre Order">Pre Order</option>
                             <option value="Nonaktif">Nonaktif</option>
-                        </select>
+                        </select> */}
                         <select
                             className="px-4 py-2 border border-gray-300 rounded-lg admin-input-focus"
                             value={itemsPerPage}

@@ -60,7 +60,7 @@ const ProductModal = ({ isOpen, onClose, onSave, product }) => {
                 free_shipping: product.free_shipping || false,
                 status: product.status || "available", // langsung dari API, tidak perlu dari `rawData`
                 umkm_id: product.umkm_id?.toString() || "",
-                category_id: product.category_id?.toString() || "",
+                category_id: product.category_id?.toString() || ""  ,
                 date: product.date || "",
                 photos: product.active_photos?.map((photo) => ({
                     id: photo.id,
@@ -191,6 +191,11 @@ const ProductModal = ({ isOpen, onClose, onSave, product }) => {
         return Object.keys(newErrors).length === 0
     }
 
+    useEffect(() => {
+        console.log("form Data", formData);
+        
+    }, [formData])
+
     const handleSubmit = async (e) => {
         e.preventDefault()
 
@@ -222,7 +227,8 @@ const ProductModal = ({ isOpen, onClose, onSave, product }) => {
                     ...(photo.file && { file: photo.file }),
                 })),
             }
-
+            console.log("data submit",submitData);
+            
             await onSave(submitData)
         } catch (error) {
             console.error("Error saving product:", error)
@@ -583,6 +589,7 @@ const ProductModal = ({ isOpen, onClose, onSave, product }) => {
                         </button>
                         <button
                             type="submit"
+                            onClick={handleSubmit}
                             className="admin-button-primary text-white px-6 py-2 rounded-lg shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
                             disabled={loading}
                         >

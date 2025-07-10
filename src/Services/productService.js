@@ -66,7 +66,10 @@ export const productService = {
 
   // Update product
   updateProduct: async (id, productData) => {
+    console.log("api product data", productData);
+    
     const apiData = transformProductToApi(productData)
+    console.log("api data", apiData);
     return apiCall(`/products/${id}`, {
       method: "PUT",
       body: JSON.stringify(apiData),
@@ -129,7 +132,7 @@ const transformStatus = (apiStatus) => {
 export const transformStatusToApi = (displayStatus) => {
   const statusMap = {
     Tersedia: "available",
-    "Pre Order": "pre_order",
+    'Pre Order': "pre_order",
     Nonaktif: "inactive",
   }
   return statusMap[displayStatus] || "available"
@@ -141,11 +144,18 @@ export const transformProductToApi = (componentProduct) => {
     name: componentProduct.name,
     description: componentProduct.description,
     price: componentProduct.price.toString(),
-    shipping_price: componentProduct.shippingCost ? componentProduct.shippingCost.toString() : null,
-    free_shipping: componentProduct.freeShipping,
-    status: transformStatusToApi(componentProduct.status),
-    umkm_id: componentProduct.umkmId,
-    category_id: componentProduct.categoryId,
-    date: componentProduct.createdAt,
+    shipping_price: componentProduct.shipping_price ? componentProduct.shipping_price.toString() : null,
+    free_shipping: componentProduct.free_shipping,
+    status: componentProduct.status,
+    umkm_id: componentProduct.umkm_id,
+    category_id: componentProduct.category_id,  
+    date: componentProduct.date,
+    photos: componentProduct.photos?.map((photo) => ({
+      caption: photo.caption || null,
+      file_path: photo.file_path || null,
+      is_active: photo.is_active ?? 1,
+      ...(photo.file && { file: photo.file }),
+    })) || [],
   }
 }
+
