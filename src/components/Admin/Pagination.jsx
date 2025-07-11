@@ -41,7 +41,7 @@ const Pagination = ({ currentPage, totalPages, totalItems, itemsPerPage, onPageC
     if (totalPages <= 1) return null
 
     return (
-        <div className="flex items-center justify-between px-6 py-4 bg-white border-t border-gray-200">
+        <div className="flex items-center justify-between px-6 py-4 bg-gray-50 border-t border-gray-200">
             {/* Info */}
             <div className="flex items-center text-sm text-gray-700">
                 <span>

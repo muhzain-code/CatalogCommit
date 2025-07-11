@@ -108,14 +108,52 @@ export const productService = {
 
   // Update product
   updateProduct: async (id, productData) => {
-    console.log("api product data", productData);
-
     const apiData = transformProductToApi(productData);
-    console.log("api data", apiData);
-    return apiCall(`/products/${id}`, {
-      method: "PUT",
-      body: JSON.stringify(apiData),
-    });
+
+    const hasFile = apiData.photos?.some((p) => p.file instanceof File);
+
+    if (hasFile) {
+      const form = new FormData();
+
+      // Tambahkan field biasa ke form
+      for (const [key, value] of Object.entries(apiData)) {
+        if (key !== "photos") {
+          if (typeof value === "boolean") {
+            form.append(key, value ? 1 : 0);
+          } else {
+            form.append(key, value !== null ? value : "");
+          }
+        }
+      }
+
+      // Tambahkan photos
+      apiData.photos.forEach((photo, index) => {
+        if (photo.file instanceof File) {
+          form.append(`photos[${index}][file]`, photo.file);
+        }
+        form.append(`photos[${index}][caption]`, photo.caption || "");
+        form.append(`photos[${index}][file_path]`, photo.file_path || "");
+        form.append(`photos[${index}][is_active]`, photo.is_active ?? 1);
+      });
+
+      form.append("_method", "PUT");
+
+      return apiCall(`/products/${id}`, {
+        method: "POST", // NOTE: Gunakan POST jika backend menerima override PUT via form-data
+        body: form,
+        headers: {
+          // Biarkan kosong agar boundary ditangani otomatis oleh browser
+        },
+      });
+    } else {
+      return apiCall(`/products/${id}`, {
+        method: "PUT",
+        body: JSON.stringify(apiData),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    }
   },
 
   // Delete product
@@ -157,6 +195,13 @@ export const transformProductData = (apiProduct) => {
       price: "",
       link: "",
     },
+    promo: apiProduct.promo
+      ? {
+          event_id: apiProduct.promo.event_id || "",
+          promo_id: apiProduct.promo.promo_id || "",
+          promo_price: apiProduct.promo.promo_price || "",
+        }
+      : null,
     // Raw API data for reference
     rawData: apiProduct,
   };

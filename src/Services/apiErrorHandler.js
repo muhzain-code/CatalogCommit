@@ -98,13 +98,31 @@ export const apiErrorHandler = {
 }
 
 // Helper function to handle API responses
+// export const handleApiResponse = async (response) => {
+//   if (!response.ok) {
+//     const error = new Error(`HTTP error! status: ${response.status}`)
+//     await apiErrorHandler.handleError(error, response)
+//     throw error
+//   }
+
+//   const data = await response.json()
+//   return data
+// }
+
 export const handleApiResponse = async (response) => {
+  const data = await response.json().catch(() => null) // kalau bukan JSON, jangan error
+
   if (!response.ok) {
-    const error = new Error(`HTTP error! status: ${response.status}`)
+    const error = new Error(data?.message || `HTTP error! status: ${response.status}`)
+    error.response = response
+    error.responseData = data
+    error.status = response.status
+
     await apiErrorHandler.handleError(error, response)
     throw error
   }
 
-  const data = await response.json()
   return data
 }
+
+

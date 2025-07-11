@@ -20,22 +20,86 @@ const apiCall = async (endpoint, options = {}) => {
     return await handleApiResponse(response)
   } catch (error) {
     const errorResult = await apiErrorHandler.handleError(error)
-    throw new Error(errorResult.message)
+    throw errorResult
   }
 }
 
 export const categoryService = {
   // Get all categories
-  getCategories: async (page = 1, perPage = 100) => {
+  getCategories: async (page = 1, perPage = 100, search = "", filters = {}) => {
     const params = new URLSearchParams({
       page: page.toString(),
       per_page: perPage.toString(),
     })
+
+    // Add search parameter if provided
+    if (search && search.trim()) {
+      params.append("search", search.trim());
+    }
+
+    // Add filter parameters if provided
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value && value.trim()) {
+        params.append(key, value.trim());
+      }
+    });
+
     return apiCall(`/categories?${params}`)
   },
 
   // Get single category
   getCategory: async (id) => {
     return apiCall(`/categories/${id}`)
+  },
+
+  createCategories: async (umkmData) => {
+    const form = new FormData();
+
+    for (const [key, value] of Object.entries(umkmData)) {
+      // Tangani file khusus
+      if (key === "photo" && value instanceof File) {
+        form.append("photo", value);
+      } else {
+        form.append(key, value);
+      }
+    }
+
+    return apiCall("/categories", {
+      method: "POST",
+      body: form,
+      headers: {
+        // Jangan set Content-Type agar otomatis pakai multipart/form-data
+      },
+    });
+  },
+
+  updateCategories: async (id, umkmData) => {
+    console.log("kategori data api", umkmData);
+    
+    const form = new FormData();
+    form.append("_method", "PUT")
+
+    for (const [key, value] of Object.entries(umkmData)) {
+      // Tangani file khusus
+      if (key === "photo" && value instanceof File) {
+        form.append("photo", value);
+      } else {
+        form.append(key, value);
+      }
+    }
+
+    return apiCall(`/categories/${id}`, {
+      method: "POST",
+      body: form,
+      headers: {
+        // Jangan set Content-Type agar otomatis pakai multipart/form-data
+      },
+    });
+  },
+
+  deleteCategories: async (id) => {
+    return apiCall(`/categories/${id}`, {
+      method: "DELETE",
+    });
   },
 }

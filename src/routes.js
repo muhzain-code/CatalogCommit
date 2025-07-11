@@ -19,7 +19,6 @@ import Category from "./Pages/Category"
 import AdminLayout from "./Pages/Admin/AdminLayout"
 import AdminDashboard from "./Pages/Admin/AdminDashboard"
 import AdminProducts from "./Pages/Admin/AdminProducts"
-import AdminBrands from "./Pages/Admin/AdminBrand"
 import AdminUMKM from "./Pages/Admin/AdminUMKM"
 import AdminCategories from "./Pages/Admin/AdminCategories"
 import AdminPhysicalNews from "./Pages/Admin/AdminPhysicalNews"
@@ -54,7 +53,7 @@ const routes = [
     children: [
       { path: "", element: AdminDashboard },
       { path: "products", element: AdminProducts },
-      { path: "brands", element: AdminBrands },
+      // { path: "brands", element: AdminBrands },
       { path: "umkm", element: AdminUMKM },
       { path: "categories", element: AdminCategories },
       { path: "physical-news", element: AdminPhysicalNews },

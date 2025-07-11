@@ -51,6 +51,8 @@ const AdminProducts = () => {
             if (response.data) {
                 const transformedProducts = response.data.map(transformProductData)
                 setProducts(transformedProducts)
+                console.log(products);
+                
 
                 // Extract filter options from the data
                 // const brands = [...new Set(transformedProducts.map((p) => p.brand).filter(Boolean))]
@@ -97,7 +99,7 @@ const AdminProducts = () => {
     // Handle search with debounce
     useEffect(() => {
         const timeoutId = setTimeout(() => {
-            if (currentPage === 1) {
+            if (currentPage == 1) {
                 // If already on page 1, fetch directly
                 fetchProducts(1, itemsPerPage, searchTerm, {
                     brand: filterBrand,
@@ -333,18 +335,6 @@ const AdminProducts = () => {
                                 onChange={(e) => setSearchTerm(e.target.value)}
                             />
                         </div>
-                        {/* <select
-              className="px-4 py-2 border border-gray-300 rounded-lg admin-input-focus"
-              value={filterBrand}
-              onChange={(e) => handleFilterChange("brand", e.target.value)}
-            >
-              <option value="">Semua Brand</option>
-              {filterOptions.brands.map((brand) => (
-                <option key={brand} value={brand}>
-                  {brand}
-                </option>
-              ))}
-            </select> */}
                         <select
                             className="px-4 py-2 border border-gray-300 rounded-lg admin-input-focus"
                             value={filterUMKM}
@@ -410,7 +400,7 @@ const AdminProducts = () => {
                                         Harga
                                     </th>
                                     <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Ongkir
+                                        Harga Promo
                                     </th>
                                     <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Aksi
@@ -434,7 +424,7 @@ const AdminProducts = () => {
                                             <td className="px-6 py-4 align-top">
                                                 <div className="flex items-start">
                                                     <ImageWithFallback
-                                                        src={product.image || "/placeholder.svg"}
+                                                        srcs={[product.image]}
                                                         alt={product.name}
                                                         className="h-12 min-w-12 max-w-12 rounded-lg object-cover shadow-sm shrink-0"
                                                         fallbackIcon={Package}
@@ -461,8 +451,8 @@ const AdminProducts = () => {
                                             <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">
                                                 Rp {product.price.toLocaleString("id-ID")}
                                             </td>
-                                            <td className="px-6 py-4 whitespace-nowrap">
-                                                <div className="text-sm text-gray-900">
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">
+                                                {/* <div className="text-sm text-gray-900">
                                                     {product.freeShipping ? (
                                                         <span className="text-green-600 font-medium">Gratis</span>
                                                     ) : product.shippingCost ? (
@@ -470,7 +460,13 @@ const AdminProducts = () => {
                                                     ) : (
                                                         <span className="text-gray-400">-</span>
                                                     )}
-                                                </div>
+                                                </div> */}
+                                                {/* {console.log("PROMO", product.promo)} */}
+                                                {product.promo ? (
+                                                    `Rp ${Number(product.promo.promo_price || 0).toLocaleString("id-ID")}`
+                                                ) : (
+                                                    '-'
+                                                )}
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                                 <div className="flex space-x-2">
