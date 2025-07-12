@@ -14,6 +14,7 @@ import Product from "./Pages/Product"
 import AllProducts from "./Pages/AllProducts"
 import NotFound from "./Pages/NotFound"
 import Category from "./Pages/Category"
+import UMKMDetail from "./Pages/UmkmDetail"
 
 // Import Admin Components
 import AdminLayout from "./Pages/Admin/AdminLayout"
@@ -44,6 +45,7 @@ const routes = [
       { path: "allProducts", element: AllProducts },
       { path: "category", element: Category },
       { path: "allProducts/:title", element: Product },
+      { path: "umkm", element: UMKMDetail },
       { path: "*", element: NotFound },
     ],
   },

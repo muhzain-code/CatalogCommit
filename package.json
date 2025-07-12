@@ -22,6 +22,7 @@
     "flowbite-react": "^0.9.0",
     "framer-motion": "^11.1.7",
     "i18next": "^23.16.8",
+    "keen-slider": "^6.8.6",
     "lucide-react": "^0.525.0",
     "react": "^18.2.0",
     "react-content-loader": "^7.0.0",

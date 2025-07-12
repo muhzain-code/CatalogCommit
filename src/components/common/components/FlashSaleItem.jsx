@@ -6,7 +6,7 @@ import PropTypes from "prop-types";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import WishlistIcon from "./WishlistIcon";
-import AddToCart from "./AddToCart";
+// import AddToCart from "./AddToCart";
 import RatingComp from "./Rating";
 
 const FlashSaleItem = ({ item }) => {
@@ -24,7 +24,7 @@ const FlashSaleItem = ({ item }) => {
     }
   }, [item]);
 
-  const { handleAddToCart, isInCart } = AddToCart({ item }); // Use AddToCart component to get handleAddToCart and isInCart
+  // const { handleAddToCart, isInCart } = AddToCart({ item }); // Use AddToCart component to get handleAddToCart and isInCart
 
   // Function to render stars
   const renderStars = () => {
@@ -55,7 +55,7 @@ const FlashSaleItem = ({ item }) => {
         onMouseLeave={() => setIsHovered(false)}
         className="relative rounded flex items-center justify-center bg-zinc-100 w-[270px] h-80 md:h-60 transform transition-transform duration-300 hover:scale-105 focus:outline-none hover:-translate-y-2"
       >
-        {isHovered && (
+        {/* {isHovered && (
           <button
             onClick={handleAddToCart}
             className={`z-10 absolute bottom-0 left-0 right-0 bg-black text-white py-2 px-4  duration-300  hover:bg-gray-800 focus:outline-none ${
@@ -64,7 +64,7 @@ const FlashSaleItem = ({ item }) => {
           >
             {isInCart ? i18n.t("removeFromCart") : i18n.t("addToCart")}
           </button>
-        )}
+        )} */}
         {item.discount && (
           <div className="absolute top-0 left-0 bg-red-500 text-white py-1 px-3 m-2 rounded">
             -{item.discount}%
