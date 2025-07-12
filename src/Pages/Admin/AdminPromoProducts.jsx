@@ -8,6 +8,8 @@ import ErrorNotification from "../../components/Admin/ErrorNotification"
 import { closeLoading, showConfirmation, showError, showLoading, showSuccess } from "../../Utils/sweetAlert"
 import { promoProductService } from "../../Services/promoProductService"
 import Pagination from "../../components/Admin/Pagination"
+import { productService } from "../../Services/productService"
+import { eventService } from "../../Services/eventService"
 
 const AdminPromoProducts = () => {
     const [promoProducts, setPromoProducts] = useState([])
@@ -18,12 +20,20 @@ const AdminPromoProducts = () => {
     const [searchTerm, setSearchTerm] = useState("")
 
     const [filterStatus, setFilterStatus] = useState("")
+    const [filterProduct, setFilterProduct] = useState("")
+    const [filterEvent, setFilterEvent] = useState("")
 
     const [currentPage, setCurrentPage] = useState(1)
     const [totalPages, setTotalPages] = useState(1)
     const [totalItems, setTotalItems] = useState(0)
     const [itemsPerPage, setItemsPerPage] = useState(10)
     const [paginationMeta, setPaginationMeta] = useState({})
+
+    const [filterOptions, setFilterOptions] = useState({
+        // brands: [],
+        products: [],
+        events: [],
+    })
 
     const fetchPromoProducts = async (page = 1, perPage = 6, search = "", filters = {}) => {
         try {
@@ -35,6 +45,27 @@ const AdminPromoProducts = () => {
                     status: u.is_active ? "Aktif" : "Nonaktif",
                     createdAt: new Date(u.created_at).toISOString().split("T")[0],
                 }))
+
+                // 1. Ambil total produk
+                const initialProductRes = await productService.getProducts(1, 1);
+                const totalProducts = initialProductRes.meta?.total || 0;
+
+                // 2. Ambil total event
+                const initialEventRes = await eventService.getEvents(1, 1);
+                const totalEvents = initialEventRes.meta?.total || 0;
+
+                // 3. Ambil semua data dengan per_page = total
+                const [productResponse, eventResponse] = await Promise.all([
+                    productService.getProducts(1, totalProducts),
+                    eventService.getEvents(1, totalEvents),
+                ]);
+
+                // 4. Simpan ke state
+                setFilterOptions({
+                    products: productResponse.data || [],
+                    events: eventResponse.data || [],
+                });
+
                 setPromoProducts(transformed)
                 setPaginationMeta(response.meta)
                 setCurrentPage(response.meta.current_page)
@@ -51,9 +82,12 @@ const AdminPromoProducts = () => {
     }
 
     useEffect(() => {
-        fetchPromoProducts(currentPage, itemsPerPage, searchTerm, { is_active: filterStatus })
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [currentPage, itemsPerPage])
+        fetchPromoProducts(currentPage, itemsPerPage, searchTerm, {
+            product_id: filterProduct,
+            event_id: filterEvent,
+            is_active: filterStatus
+        })
+    }, [currentPage, filterEvent, filterProduct, filterStatus, itemsPerPage, searchTerm])
 
     useEffect(() => {
         const timeoutId = setTimeout(() => {
@@ -113,11 +147,11 @@ const AdminPromoProducts = () => {
         }
     }
 
-    const handleDelete = async (id, kategoriName) => {
+    const handleDelete = async (id, productName, promoName) => {
         try {
             const result = await showConfirmation(
                 "Hapus Produk Promo?",
-                `Apakah Anda yakin ingin menghapus "${kategoriName}"? Tindakan ini tidak dapat dibatalkan.`,
+                `Apakah Anda yakin ingin menghapus produk "${productName}" dari promo "${promoName}"? Tindakan ini tidak dapat dibatalkan.`,
                 "Ya, Hapus!",
             )
 
@@ -144,9 +178,21 @@ const AdminPromoProducts = () => {
         setCurrentPage(1) // Reset to first page
     }
 
-    const handleFilterChange = (value) => {
+    const handleFilterChange = (filterType, value) => {
         setCurrentPage(1) // Reset to first page when filtering
-        setFilterStatus(value)
+        switch (filterType) {
+            case "product":
+                setFilterProduct(value)
+                break
+            case "event":
+                setFilterEvent(value)
+                break
+            case "status":
+                setFilterStatus(value)
+                break
+            default:
+                break
+        }
     }
 
     const handlePageChange = (page) => setCurrentPage(page)
@@ -169,7 +215,7 @@ const AdminPromoProducts = () => {
             <div className="space-y-6">
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                     <div>
-                        <h2 className="text-3xl font-bold text-gray-900">Manajemen Produk</h2>
+                        <h2 className="text-3xl font-bold text-gray-900">Manajemen Produk Promo</h2>
                         <p className="text-gray-600 mt-1">Kelola semua produk Produk Promo dalam satu tempat</p>
                     </div>
                 </div>
@@ -244,8 +290,33 @@ const AdminPromoProducts = () => {
                         </div> */}
                         <select
                             className="px-4 py-2 border border-gray-300 rounded-lg admin-input-focus"
+                            value={filterProduct}
+                            onChange={(e) => handleFilterChange("product", e.target.value)}
+                        >
+                            <option value="">Semua Produk</option>
+                            {filterOptions.products.map((product) => (
+                                <option key={product.id} value={product.id}>
+                                    {product.name}
+                                </option>
+                            ))}
+                        </select>
+                        <select
+                            className="px-4 py-2 border border-gray-300 rounded-lg admin-input-focus"
+                            value={filterEvent}
+                            onChange={(e) => handleFilterChange("event", e.target.value)}
+                        >
+                            <option value="">Semua Event</option>
+                            {filterOptions.events.map((event) => (
+                                <option key={event.id} value={event.id}>
+                                    {event.name}
+                                </option>
+                            ))}
+                        </select>
+
+                        <select
+                            className="px-4 py-2 border border-gray-300 rounded-lg admin-input-focus"
                             value={filterStatus}
-                            onChange={(e) => handleFilterChange(e.target.value)}
+                            onChange={(e) => handleFilterChange("status", e.target.value)}
                         >
                             <option value="">Semua Status</option>
                             <option value="1">Aktif</option>
@@ -370,7 +441,7 @@ const AdminPromoProducts = () => {
                                                     <Edit className="w-4 h-4" />
                                                 </button>
                                                 <button
-                                                    onClick={() => handleDelete(promo.id)}
+                                                    onClick={() => handleDelete(promo.id, promo.product.name, promo.event.name)}
                                                     className="text-red-600 hover:text-red-900 p-2 hover:bg-red-50 rounded-lg transition-colors"
                                                 >
                                                     <Trash2 className="w-4 h-4" />
@@ -399,6 +470,8 @@ const AdminPromoProducts = () => {
                 onClose={() => setIsModalOpen(false)}
                 onSave={handleSave}
                 promo={selectedPromoProducts}
+                products={filterOptions.products}
+                events={filterOptions.events}
             />
         </div>
     )

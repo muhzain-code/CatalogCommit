@@ -26,7 +26,7 @@ const apiCall = async (endpoint, options = {}) => {
 
 export const eventService = {
   // Get all categories
-  getEvent: async (page = 1, perPage = 100, search = "", filters = {}) => {
+  getEvents: async (page = 1, perPage = 100, search = "", filters = {}) => {
     const params = new URLSearchParams({
       page: page.toString(),
       per_page: perPage.toString(),

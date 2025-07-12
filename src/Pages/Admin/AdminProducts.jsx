@@ -52,7 +52,7 @@ const AdminProducts = () => {
                 const transformedProducts = response.data.map(transformProductData)
                 setProducts(transformedProducts)
                 console.log(products);
-                
+
 
                 // Extract filter options from the data
                 // const brands = [...new Set(transformedProducts.map((p) => p.brand).filter(Boolean))]
@@ -61,11 +61,31 @@ const AdminProducts = () => {
 
                 // setFilterOptions({ brands, umkms, categories })
 
+                // const [umkmResponse, categoryResponse] = await Promise.all([
+                //     umkmService.getUMKMs(),
+                //     categoryService.getCategories(),
+                // ])
+                // setFilterOptions({ umkms: umkmResponse.data || [], categories: categoryResponse.data || [] })
+
+                // 1. Ambil total data UMKM dan Kategori
+                const initialUMKMRes = await umkmService.getUMKMs(1, 1);
+                const totalUMKM = initialUMKMRes.meta?.total || 0;
+
+                const initialCategoryRes = await categoryService.getCategories(1, 1);
+                const totalCategory = initialCategoryRes.meta?.total || 0;
+
+                // 2. Ambil seluruh data dengan perPage = total
                 const [umkmResponse, categoryResponse] = await Promise.all([
-                    umkmService.getUMKMs(),
-                    categoryService.getCategories(),
-                ])
-                setFilterOptions({ umkms: umkmResponse.data || [], categories: categoryResponse.data || [] })
+                    umkmService.getUMKMs(1, totalUMKM),
+                    categoryService.getCategories(1, totalCategory),
+                ]);
+
+                // 3. Set ke filter
+                setFilterOptions({
+                    umkms: umkmResponse.data || [],
+                    categories: categoryResponse.data || [],
+                });
+
 
                 // Handle pagination from API meta
                 if (response.meta) {
@@ -173,7 +193,7 @@ const AdminProducts = () => {
                 await productService.updateProduct(selectedProduct.id, productData)
             } else {
                 console.log("product data", productData);
-                
+
                 await productService.createProduct(productData)
             }
 
