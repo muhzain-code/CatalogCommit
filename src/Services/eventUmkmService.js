@@ -113,3 +113,29 @@ export const eventUmkmService = {
     });
   },
 };
+
+export const fetchAllEventUmkm = async (search = "", filters = {}) => {
+  const perPage = 100;
+  let currentPage = 1;
+  let allData = [];
+  let totalPages = 1;
+
+  while (currentPage <= totalPages) {
+    const response = await eventUmkmService.getEventUmkm(
+      currentPage,
+      perPage,
+      search,
+      filters
+    );
+
+    const data = response?.data || [];
+    const meta = response?.meta || {};
+
+    allData.push(...data);
+
+    totalPages = meta?.last_page || 1;
+    currentPage++;
+  }
+
+  return allData;
+};

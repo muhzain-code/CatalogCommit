@@ -64,6 +64,10 @@ export const eventService = {
     return response;
   },
 
+  getEvent: async (id) => {
+    return apiCall(`/events/${id}`);
+  },
+
   clearEventsCache: () => {
     Object.keys(sessionStorage).forEach((key) => {
       if (key.startsWith("events:")) {
