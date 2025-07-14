@@ -76,7 +76,7 @@ const FlashSaleItem = ({ item }) => {
             {i18n.t("new")}
           </div>
         )}
-        <Link to={{ pathname: `/allProducts/${item.title}` }} key={item.id}>
+        <Link to={{ pathname: `/allProducts/${item.id}` }} key={item.id}>
           <img
             loading="lazy"
             src={item.imageSrc}
