@@ -109,6 +109,7 @@ const AdminPromoProducts = () => {
     }
 
     const handleRefresh = () => {
+        promoProductService.clearPromoProductCache();
         fetchPromoProducts(currentPage, itemsPerPage, searchTerm, { is_active: filterStatus })
     }
 
@@ -126,6 +127,7 @@ const AdminPromoProducts = () => {
 
             setIsModalOpen(false)
             // Refresh the current page
+            promoProductService.clearPromoProductCache();
             fetchPromoProducts(currentPage, itemsPerPage, searchTerm, { is_active: filterStatus })
         } catch (err) {
             setError(err.message || "Failed to save kategori. Please try again.")
@@ -163,6 +165,7 @@ const AdminPromoProducts = () => {
                 showSuccess("Produk Promo Berhasil Dihapus!", "Produk Promo telah dihapus dari sistem")
 
                 // Refresh the current page
+                promoProductService.clearPromoProductCache();
                 fetchPromoProducts(currentPage, itemsPerPage, searchTerm, { is_active: filterStatus })
             }
         } catch (err) {
@@ -219,7 +222,7 @@ const AdminPromoProducts = () => {
                         <p className="text-gray-600 mt-1">Kelola semua produk Produk Promo dalam satu tempat</p>
                     </div>
                 </div>
-                <LoadingSpinner text="Memuat kategori..." />
+                <LoadingSpinner text="Memuat produk promo..." />
                 <ErrorNotification />
             </div>
         )
@@ -277,7 +280,7 @@ const AdminPromoProducts = () => {
                             Clear Filters
                         </button>
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                         {/* <div className="relative">
                             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
                             <input

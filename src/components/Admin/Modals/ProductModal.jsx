@@ -12,13 +12,14 @@ const ProductModal = ({ isOpen, onClose, onSave, product }) => {
         name: "",
         description: "",
         price: "",
-        shipping_price: "",
-        free_shipping: false,
+        // shipping_price: "",
+        // free_shipping: false,
         status: "available",
         umkm_id: "",
         category_id: "",
-        date: "",
+        // date: "",
         photos: [],
+        marketplaces: [],
     })
 
     const [errors, setErrors] = useState({})
@@ -58,12 +59,12 @@ const ProductModal = ({ isOpen, onClose, onSave, product }) => {
                 name: product.name || "",
                 description: product.description || "",
                 price: product.price?.toString() || "",
-                shipping_price: product.shipping_price?.toString() || "",
-                free_shipping: product.free_shipping || false,
+                // shipping_price: product.shipping_price?.toString() || "",
+                // free_shipping: product.free_shipping || false,
                 status: product.status || "available",
                 umkm_id: product.umkm_id?.toString() || "",
                 category_id: product.category_id?.toString() || "",
-                date: product.date || "",
+                // date: product.date || "",
                 photos:
                     product.active_photos?.map((photo) => ({
                         id: photo.id,
@@ -72,19 +73,26 @@ const ProductModal = ({ isOpen, onClose, onSave, product }) => {
                         is_active: photo.is_active ? 1 : 0,
                         url: photo.url || "",
                     })) || [],
+                marketplaces: product.marketplaces?.map(m => ({
+                    name: m.name || "",
+                    price: m.price?.toString() || "",
+                    marketplace_link: m.marketplace_link || "",
+                    is_active: m.is_active ?? true,
+                })) || [{ name: "", price: "", marketplace_link: "", is_active: true }],
             })
         } else {
             setFormData({
                 name: "",
                 description: "",
                 price: "",
-                shipping_price: "",
-                free_shipping: false,
+                // shipping_price: "",
+                // free_shipping: false,
                 status: "available",
                 umkm_id: "",
                 category_id: "",
-                date: new Date().toISOString().split("T")[0],
+                // date: new Date().toISOString().split("T")[0],
                 photos: [],
+                marketplaces: [],
             })
         }
         setErrors({})
@@ -137,6 +145,32 @@ const ProductModal = ({ isOpen, onClose, onSave, product }) => {
             handlePhotoChange(index, "preview", previewUrl)
         }
     }
+
+    const handleMarketplaceChange = (index, field, value) => {
+        setFormData((prev) => {
+            const updated = [...prev.marketplaces];
+            updated[index][field] = value;
+            return { ...prev, marketplaces: updated };
+        });
+    };
+
+    const addMarketplace = () => {
+        setFormData((prev) => ({
+            ...prev,
+            marketplaces: [
+                ...prev.marketplaces,
+                { name: "", price: "", marketplace_link: "", is_active: true },
+            ],
+        }));
+    };
+
+    const removeMarketplace = (index) => {
+        setFormData((prev) => ({
+            ...prev,
+            marketplaces: prev.marketplaces.filter((_, i) => i !== index),
+        }));
+    };
+
 
     const validateForm = () => {
         const newErrors = {}
@@ -200,14 +234,16 @@ const ProductModal = ({ isOpen, onClose, onSave, product }) => {
         showLoading(product ? "Mengupdate produk..." : "Menyimpan produk...")
 
         try {
+            // console.log(parseInt(formData.price));
+            
             const submitData = {
                 name: formData.name.trim(),
                 description: formData.description.trim(),
-                price: Number.parseFloat(formData.price),
+                price: Math.round(Number(formData.price)),
                 shipping_price: formData.free_shipping
                     ? null
                     : formData.shipping_price
-                        ? Number.parseFloat(formData.shipping_price)
+                        ? Number.parseInt(formData.shipping_price)
                         : null,
                 free_shipping: formData.free_shipping,
                 status: formData.status,
@@ -220,10 +256,16 @@ const ProductModal = ({ isOpen, onClose, onSave, product }) => {
                     is_active: photo.is_active || 1,
                     ...(photo.file && { file: photo.file }),
                 })),
+                marketplaces: formData.marketplaces.map(mp => ({
+                    name: mp.name,
+                    price: parseInt(mp.price),
+                    marketplace_link: mp.marketplace_link,
+                    is_active: !!mp.is_active,
+                })),
             }
 
-            console.log("submit data", submitData);
-            
+            // console.log("submit data", submitData);
+
 
             await onSave(submitData)
             closeLoading()
@@ -233,8 +275,17 @@ const ProductModal = ({ isOpen, onClose, onSave, product }) => {
             )
         } catch (error) {
             closeLoading()
-            console.error("Error saving product:", error)
-            showError("Gagal Menyimpan Produk", error.message || "Terjadi kesalahan saat menyimpan produk")
+
+            console.log("DETAIL ERROR:", error)
+
+            const validationErrors = error?.originalError?.responseData?.error
+
+            if (validationErrors) {
+                const messages = Object.values(validationErrors).flat().join("\n")
+                showError("Validasi Gagal", messages)
+            } else {
+                showError("Gagal Menyimpan", error.message || "Terjadi kesalahan.")
+            }
         } finally {
             setLoading(false)
         }
@@ -357,7 +408,7 @@ const ProductModal = ({ isOpen, onClose, onSave, product }) => {
                                         {errors.price && <p className="text-red-500 text-sm mt-1">{errors.price}</p>}
                                     </div>
 
-                                    <div className="flex items-center space-x-3">
+                                    {/* <div className="flex items-center space-x-3">
                                         <input
                                             type="checkbox"
                                             name="free_shipping"
@@ -386,13 +437,13 @@ const ProductModal = ({ isOpen, onClose, onSave, product }) => {
                                             />
                                             {errors.shipping_price && <p className="text-red-500 text-sm mt-1">{errors.shipping_price}</p>}
                                         </div>
-                                    )}
+                                    )} */}
                                 </div>
                             </div>
 
                             {/* Status and Date */}
                             <div className="bg-gray-50 rounded-lg p-4">
-                                <h3 className="text-lg font-semibold text-gray-900 mb-4">Status & Tanggal</h3>
+                                <h3 className="text-lg font-semibold text-gray-900 mb-4">Status</h3>
 
                                 <div className="space-y-4">
                                     <div>
@@ -412,7 +463,7 @@ const ProductModal = ({ isOpen, onClose, onSave, product }) => {
                                         {errors.status && <p className="text-red-500 text-sm mt-1">{errors.status}</p>}
                                     </div>
 
-                                    <div>
+                                    {/* <div>
                                         <label className="block text-sm font-medium text-gray-700 mb-2">Tanggal</label>
                                         <input
                                             type="date"
@@ -422,13 +473,97 @@ const ProductModal = ({ isOpen, onClose, onSave, product }) => {
                                             className="w-full px-4 py-2 border border-gray-300 rounded-lg admin-input-focus"
                                             disabled={loading}
                                         />
-                                    </div>
+                                    </div> */}
                                 </div>
                             </div>
                         </div>
 
                         {/* Right Column */}
                         <div className="space-y-6">
+                            {/* Marketplace Section */}
+                            <div className="bg-gray-50 rounded-lg p-4">
+                                <div className="flex items-center justify-between mb-4">
+                                    <h3 className="text-lg font-semibold text-gray-900">Marketplace</h3>
+                                    <button
+                                        type="button"
+                                        onClick={addMarketplace}
+                                        className="flex items-center gap-2 px-3 py-1 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700 disabled:opacity-50 transition-colors"
+                                    >
+                                        <Plus className="w-4 h-4" />
+                                        Tambah Marketplace
+                                    </button>
+                                </div>
+
+                                <div className="space-y-4">
+                                    {formData.marketplaces.map((mp, index) => (
+                                        <div key={index} className="border border-gray-200 rounded-lg p-4 space-y-3">
+                                            <div className="flex items-center justify-between">
+                                                <h4 className="font-medium text-gray-900">Marketplace {index + 1}</h4>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => removeMarketplace(index)}
+                                                    className="text-red-600 hover:text-red-800 p-1"
+                                                    disabled={loading}
+                                                >
+                                                    <Trash2 className="w-4 h-4" />
+                                                </button>
+                                            </div>
+
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                <div>
+                                                    <label className="text-sm font-medium text-gray-700 mb-1 block">Nama Marketplace</label>
+                                                    <input
+                                                        type="text"
+                                                        value={mp.name}
+                                                        onChange={(e) => handleMarketplaceChange(index, "name", e.target.value)}
+                                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm admin-input-focus"
+                                                        placeholder="Shopee, Tokopedia, dll"
+                                                        disabled={loading}
+                                                    />
+                                                </div>
+
+                                                <div>
+                                                    <label className="text-sm font-medium text-gray-700 mb-1 block">Harga (Rp)</label>
+                                                    <input
+                                                        type="number"
+                                                        min="0"
+                                                        step="0.01"
+                                                        value={mp.price}
+                                                        onChange={(e) => handleMarketplaceChange(index, "price", e.target.value)}
+                                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm admin-input-focus"
+                                                        placeholder="Contoh: 20000"
+                                                        disabled={loading}
+                                                    />
+                                                </div>
+                                            </div>
+
+                                            <div>
+                                                <label className="text-sm font-medium text-gray-700 mb-1 block">Link Marketplace</label>
+                                                <input
+                                                    type="text"
+                                                    value={mp.marketplace_link}
+                                                    onChange={(e) => handleMarketplaceChange(index, "marketplace_link", e.target.value)}
+                                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm admin-input-focus"
+                                                    placeholder="https://..."
+                                                    disabled={loading}
+                                                />
+                                            </div>
+
+                                            <div className="flex items-center">
+                                                <input
+                                                    type="checkbox"
+                                                    checked={mp.is_active}
+                                                    onChange={(e) => handleMarketplaceChange(index, "is_active", e.target.checked)}
+                                                    className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                                                    disabled={loading}
+                                                />
+                                                <label className="ml-2 text-sm text-gray-700">Aktif</label>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
                             {/* Photos */}
                             <div className="bg-gray-50 rounded-lg p-4">
                                 <div className="flex items-center justify-between mb-4">

@@ -49,7 +49,32 @@ export const promoProductService = {
       }
     });
 
-    return apiCall(`/product-promos?${params}`);
+    // return apiCall(`/product-promos?${params}`);
+    const url = `/product-promos?${params.toString()}`;
+
+    // 🔍 Cek apakah sudah ada di sessionStorage
+    const cacheKey = `product-promos:${url}`;
+    const cached = sessionStorage.getItem(cacheKey);
+    if (cached) {
+      // console.log("✅ From sessionStorage:", url);
+      return JSON.parse(cached);
+    }
+
+    // 🛰️ Belum ada, ambil dari API
+    const response = await apiCall(url);
+
+    // 💾 Simpan ke sessionStorage
+    sessionStorage.setItem(cacheKey, JSON.stringify(response));
+
+    return response;
+  },
+
+  clearPromoProductCache: () => {
+    Object.keys(sessionStorage).forEach((key) => {
+      if (key.startsWith("product-promos:")) {
+        sessionStorage.removeItem(key);
+      }
+    });
   },
 
   createPromoProduct: async (promoProductData) => {
@@ -92,14 +117,14 @@ export const promoProductService = {
   // },
 
   updatePromoProduct: async (id, promoProductData) => {
-  return apiCall(`/product-promos/${id}`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(promoProductData),
-  });
-},
+    return apiCall(`/product-promos/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(promoProductData),
+    });
+  },
 
   deletePromoProduct: async (id) => {
     return apiCall(`/product-promos/${id}`, {

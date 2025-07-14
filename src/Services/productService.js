@@ -22,7 +22,7 @@ const apiCall = async (endpoint, options = {}) => {
   } catch (error) {
     // Let the error handler deal with it
     const errorResult = await apiErrorHandler.handleError(error);
-    throw new Error(errorResult.message);
+    throw errorResult
   }
 };
 
@@ -47,7 +47,32 @@ export const productService = {
       }
     });
 
-    return apiCall(`/products?${params}`);
+    // return apiCall(`/products?${params}`);
+    const url = `/products?${params.toString()}`;
+
+    // 🔍 Cek apakah sudah ada di sessionStorage
+    const cacheKey = `products:${url}`;
+    const cached = sessionStorage.getItem(cacheKey);
+    if (cached) {
+      // console.log("✅ From sessionStorage:", url);
+      return JSON.parse(cached);
+    }
+
+    // 🛰️ Belum ada, ambil dari API
+    const response = await apiCall(url);
+
+    // 💾 Simpan ke sessionStorage
+    sessionStorage.setItem(cacheKey, JSON.stringify(response));
+
+    return response;
+  },
+
+  clearProductsCache: () => {
+    Object.keys(sessionStorage).forEach((key) => {
+      if (key.startsWith("products:")) {
+        sessionStorage.removeItem(key);
+      }
+    });
   },
 
   // Get single product
@@ -67,7 +92,7 @@ export const productService = {
 
       // Tambahkan field biasa ke form
       for (const [key, value] of Object.entries(apiData)) {
-        if (key !== "photos") {
+        if (key !== "photos" && key !== "marketplaces") {
           // Tangani boolean (free_shipping) sebagai angka 1/0
           if (typeof value === "boolean") {
             form.append(key, value ? 1 : 0);
@@ -85,6 +110,19 @@ export const productService = {
         form.append(`photos[${index}][caption]`, photo.caption || "");
         form.append(`photos[${index}][file_path]`, photo.file_path || "");
         form.append(`photos[${index}][is_active]`, photo.is_active ?? 1);
+      });
+
+      apiData.marketplaces?.forEach((marketplace, index) => {
+        form.append(`marketplaces[${index}][name]`, marketplace.name || "");
+        form.append(`marketplaces[${index}][price]`, marketplace.price ?? 0);
+        form.append(
+          `marketplaces[${index}][marketplace_link]`,
+          marketplace.marketplace_link || ""
+        );
+        form.append(
+          `marketplaces[${index}][is_active]`,
+          marketplace.is_active ? 1 : 0
+        );
       });
 
       return apiCall("/products", {
@@ -108,7 +146,10 @@ export const productService = {
 
   // Update product
   updateProduct: async (id, productData) => {
+    console.log("sebelum",productData);
+    
     const apiData = transformProductToApi(productData);
+    console.log("sesudah",apiData);
 
     const hasFile = apiData.photos?.some((p) => p.file instanceof File);
 
@@ -248,5 +289,11 @@ export const transformProductToApi = (componentProduct) => {
         is_active: photo.is_active ?? 1,
         ...(photo.file && { file: photo.file }),
       })) || [],
+    marketplaces: componentProduct.marketplaces?.map((m) => ({
+      name: m.name || "",
+      price: m.price?.toString() || "",
+      marketplace_link: m.marketplace_link || "",
+      is_active: m.is_active ?? true,
+    })) || [],
   };
 };

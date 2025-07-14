@@ -24,9 +24,9 @@ const apiCall = async (endpoint, options = {}) => {
   }
 };
 
-export const umkmService = {
-  // Get all UMKM
-  getUMKMs: async (page = 1, perPage = 100, search = "", filters = {}) => {
+export const applicationsService = {
+  // Get all categories
+  getApplications: async (page = 1, perPage = 100, search = "", filters = {}) => {
     const params = new URLSearchParams({
       page: page.toString(),
       per_page: perPage.toString(),
@@ -44,11 +44,11 @@ export const umkmService = {
       }
     });
 
-    // return apiCall(`/umkms?${params}`);
-    const url = `/umkms?${params.toString()}`;
+    // return apiCall(`/event-umkm?${params}`)
+    const url = `/applications?${params.toString()}`;
 
     // 🔍 Cek apakah sudah ada di sessionStorage
-    const cacheKey = `umkms:${url}`;
+    const cacheKey = `applications:${url}`;
     const cached = sessionStorage.getItem(cacheKey);
     if (cached) {
       // console.log("✅ From sessionStorage:", url);
@@ -64,32 +64,22 @@ export const umkmService = {
     return response;
   },
 
-  clearUMKMCache: () => {
+  clearApplicationsCache: () => {
     Object.keys(sessionStorage).forEach((key) => {
-      if (key.startsWith("umkms:")) {
+      if (key.startsWith("applications:")) {
         sessionStorage.removeItem(key);
       }
     });
   },
 
-  // Get single UMKM
-  getUMKM: async (id) => {
-    return apiCall(`/umkms/${id}`);
-  },
-
-  createUmkm: async (umkmData) => {
+  createApplications: async (eventData) => {
     const form = new FormData();
 
-    for (const [key, value] of Object.entries(umkmData)) {
-      // Tangani file khusus
-      if (key === "photo_profile" && value instanceof File) {
-        form.append("photo_profile", value);
-      } else {
-        form.append(key, value);
-      }
+    for (const [key, value] of Object.entries(eventData)) {
+      form.append(key, value);
     }
 
-    return apiCall("/umkms", {
+    return apiCall("/applications", {
       method: "POST",
       body: form,
       headers: {
@@ -98,22 +88,17 @@ export const umkmService = {
     });
   },
 
-  updateUmkm: async (id, umkmData) => {
-    console.log("umkm data api", umkmData);
+  updateApplications: async (id, eventData) => {
+    console.log("umkm data api", eventData);
 
     const form = new FormData();
     form.append("_method", "PUT");
 
-    for (const [key, value] of Object.entries(umkmData)) {
-      // Tangani file khusus
-      if (key === "photo_profile" && value instanceof File) {
-        form.append("photo_profile", value);
-      } else {
-        form.append(key, value);
-      }
+    for (const [key, value] of Object.entries(eventData)) {
+      form.append(key, value);
     }
 
-    return apiCall(`/umkms/${id}`, {
+    return apiCall(`/applications/${id}`, {
       method: "POST",
       body: form,
       headers: {
@@ -122,8 +107,8 @@ export const umkmService = {
     });
   },
 
-  deleteUmkm: async (id) => {
-    return apiCall(`/umkms/${id}`, {
+  deleteApplications: async (id) => {
+    return apiCall(`/applications/${id}`, {
       method: "DELETE",
     });
   },

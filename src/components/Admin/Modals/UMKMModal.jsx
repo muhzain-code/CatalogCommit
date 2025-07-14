@@ -58,7 +58,7 @@ const UMKMModal = ({ isOpen, onClose, onSave, umkm }) => {
 
 
         setLoading(true)
-        showLoading(umkm ? "Mengupdate produk..." : "Menyimpan produk...")
+        showLoading(umkm ? "Mengupdate umkm..." : "Menyimpan umkm...")
 
         try {
             const payload = {

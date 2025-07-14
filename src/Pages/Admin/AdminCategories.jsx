@@ -76,6 +76,7 @@ const AdminCategories = () => {
     }
 
     const handleRefresh = () => {
+        categoryService.clearCategoriesCache();
         fetchCategories(currentPage, itemsPerPage, searchTerm, { is_active: filterStatus })
     }
 
@@ -93,6 +94,7 @@ const AdminCategories = () => {
 
             setIsModalOpen(false)
             // Refresh the current page
+            categoryService.clearCategoriesCache();
             fetchCategories(currentPage, itemsPerPage, searchTerm, { is_active: filterStatus })
         } catch (err) {
             setError(err.message || "Failed to save kategori. Please try again.")
@@ -130,6 +132,7 @@ const AdminCategories = () => {
                 showSuccess("Kategori Berhasil Dihapus!", "Kategori telah dihapus dari sistem")
 
                 // Refresh the current page
+                categoryService.clearCategoriesCache();
                 fetchCategories(currentPage, itemsPerPage, searchTerm, { is_active: filterStatus })
             }
         } catch (err) {
@@ -166,7 +169,7 @@ const AdminCategories = () => {
             <div className="space-y-6">
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                     <div>
-                        <h2 className="text-3xl font-bold text-gray-900">Manajemen Produk</h2>
+                        <h2 className="text-3xl font-bold text-gray-900">Manajemen Kategori</h2>
                         <p className="text-gray-600 mt-1">Kelola semua produk Kategori dalam satu tempat</p>
                     </div>
                 </div>

@@ -21,9 +21,10 @@ import AdminDashboard from "./Pages/Admin/AdminDashboard"
 import AdminProducts from "./Pages/Admin/AdminProducts"
 import AdminUMKM from "./Pages/Admin/AdminUMKM"
 import AdminCategories from "./Pages/Admin/AdminCategories"
-import AdminPhysicalNews from "./Pages/Admin/AdminPhysicalNews"
-import AdminPromoNews from "./Pages/Admin/AdminPromoNews"
+import AdminEventUMKM from "./Pages/Admin/AdminEventUMKM"
+import AdminEvents from "./Pages/Admin/AdminEvents"
 import AdminPromoProducts from "./Pages/Admin/AdminPromoProducts"
+import AdminBrands from "./Pages/Admin/AdminApplications"
 
 const routes = [
   {
@@ -53,11 +54,11 @@ const routes = [
     children: [
       { path: "", element: AdminDashboard },
       { path: "products", element: AdminProducts },
-      // { path: "brands", element: AdminBrands },
+      { path: "applications", element: AdminBrands },
       { path: "umkm", element: AdminUMKM },
       { path: "categories", element: AdminCategories },
-      { path: "physical-news", element: AdminPhysicalNews },
-      { path: "promo-news", element: AdminPromoNews },
+      { path: "event-umkm", element: AdminEventUMKM },
+      { path: "events", element: AdminEvents },
       { path: "promo-products", element: AdminPromoProducts },
     ],
   },

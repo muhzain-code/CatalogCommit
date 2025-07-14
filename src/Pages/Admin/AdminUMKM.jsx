@@ -75,6 +75,7 @@ const AdminUMKM = () => {
     }
 
     const handleRefresh = () => {
+        umkmService.clearUMKMCache();
         fetchUMKMs(currentPage, itemsPerPage, searchTerm, { is_active: filterStatus })
     }
 
@@ -107,6 +108,7 @@ const AdminUMKM = () => {
 
             setIsModalOpen(false)
             // Refresh the current page
+            umkmService.clearUMKMCache();
             fetchUMKMs(currentPage, itemsPerPage, searchTerm, { is_active: filterStatus })
         } catch (err) {
             setError(err.message || "Failed to save umkm. Please try again.")
@@ -144,6 +146,7 @@ const AdminUMKM = () => {
                 showSuccess("UMKM Berhasil Dihapus!", "UMKM telah dihapus dari sistem")
 
                 // Refresh the current page
+                umkmService.clearUMKMCache();
                 fetchUMKMs(currentPage, itemsPerPage, searchTerm, { is_active: filterStatus })
             }
         } catch (err) {
