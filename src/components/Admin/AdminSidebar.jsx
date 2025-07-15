@@ -1,7 +1,7 @@
 "use client"
 
 import { Link, useLocation } from "react-router-dom"
-import { ShoppingBag, Building2, FolderOpen, Megaphone, Gift, Home, LogOut, X, PartyPopper, Tag } from "lucide-react"
+import { ShoppingBag, Building2, FolderOpen, Megaphone, Gift, Home, X, PartyPopper, Tag } from "lucide-react"
 
 const AdminSidebar = ({ isOpen, setIsOpen }) => {
   const location = useLocation()
@@ -84,10 +84,6 @@ const AdminSidebar = ({ isOpen, setIsOpen }) => {
               <Home className="w-4 h-4 mr-3" />
               Kembali ke Website
             </Link>
-            <button className="flex items-center w-full px-4 py-2 text-sm text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors">
-              <LogOut className="w-4 h-4 mr-3" />
-              Keluar
-            </button>
           </div>
         </div>
       </div>

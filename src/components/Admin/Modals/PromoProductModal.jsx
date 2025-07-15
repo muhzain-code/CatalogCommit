@@ -3,7 +3,7 @@
 
 import { useState, useEffect } from "react"
 import { X } from "lucide-react"
-import { closeLoading, showError, showLoading, showSuccess } from "../../../Utils/sweetAlert"
+import { closeLoading, showConfirmation, showError, showLoading, showSuccess } from "../../../Utils/sweetAlert"
 
 const PromoProductModal = ({ isOpen, onClose, onSave, promo, products = [], events = [] }) => {
     const [loading, setLoading] = useState(false)
@@ -48,6 +48,15 @@ const PromoProductModal = ({ isOpen, onClose, onSave, promo, products = [], even
     const handleSubmit = async (e) => {
         e.preventDefault()
 
+        const result = await showConfirmation(
+            promo ? "Update Promo?" : "Simpan Promo?",
+            promo
+                ? "Apakah Anda yakin ingin memperbarui data promo ini?"
+                : "Apakah Anda yakin ingin menyimpan promo baru?",
+            promo ? "Ya, Update!" : "Ya, Simpan!"
+        );
+
+        if (!result.isConfirmed) return;
 
         setLoading(true)
         showLoading(promo ? "Mengupdate promo..." : "Menyimpan promo...")

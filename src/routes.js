@@ -27,6 +27,7 @@ import AdminEventUMKM from "./Pages/Admin/AdminEventUMKM"
 import AdminEvents from "./Pages/Admin/AdminEvents"
 import AdminPromoProducts from "./Pages/Admin/AdminPromoProducts"
 import AdminBrands from "./Pages/Admin/AdminApplications"
+import Forgot from "./Pages/Forgot"
 
 const routes = [
   {
@@ -39,6 +40,7 @@ const routes = [
       { path: "about", element: About },
       { path: "signup", element: SignUp },
       { path: "login", element: LogIn },
+      { path: "forgot", element: Forgot },
       { path: "wishlist", element: Wishlist },
       { path: "cart", element: Cart },
       { path: "checkout", element: Checkout },

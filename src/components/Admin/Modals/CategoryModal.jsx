@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { X } from "lucide-react"
-import { closeLoading, showError, showLoading, showSuccess } from "../../../Utils/sweetAlert"
+import { closeLoading, showConfirmation, showError, showLoading, showSuccess } from "../../../Utils/sweetAlert"
 
 const CategoryModal = ({ isOpen, onClose, onSave, category }) => {
     const [loading, setLoading] = useState(false)
@@ -36,6 +36,15 @@ const CategoryModal = ({ isOpen, onClose, onSave, category }) => {
     const handleSubmit = async (e) => {
         e.preventDefault()
 
+        const result = await showConfirmation(
+            category ? "Update Kategori?" : "Simpan Kategori?",
+            category
+                ? "Apakah Anda yakin ingin memperbarui kategori ini?"
+                : "Apakah Anda yakin ingin menyimpan kategori baru?",
+            category ? "Ya, Update!" : "Ya, Simpan!"
+        );
+
+        if (!result.isConfirmed) return;
 
         setLoading(true)
         showLoading(category ? "Mengupdate kategori..." : "Menyimpan kategori...")

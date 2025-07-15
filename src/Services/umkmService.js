@@ -1,6 +1,5 @@
+import { API_BASE_URL } from "../config";
 import { apiErrorHandler, handleApiResponse } from "./apiErrorHandler";
-
-const API_BASE_URL = "http://localhost:8000/api";
 
 // Generic API call function with centralized error handling
 const apiCall = async (endpoint, options = {}) => {

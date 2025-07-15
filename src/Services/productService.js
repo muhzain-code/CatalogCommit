@@ -1,6 +1,5 @@
+import { API_BASE_URL } from "../config";
 import { apiErrorHandler, handleApiResponse } from "./apiErrorHandler";
-
-const API_BASE_URL = "http://localhost:8000/api";
 
 // Generic API call function with centralized error handling
 const apiCall = async (endpoint, options = {}) => {
@@ -108,7 +107,7 @@ export const productService = {
           form.append(`photos[${index}][file]`, photo.file);
         }
         form.append(`photos[${index}][caption]`, photo.caption || "");
-        form.append(`photos[${index}][file_path]`, photo.file_path || "");
+        // form.append(`photos[${index}][file_path]`, photo.file_path || "");
         form.append(`photos[${index}][is_active]`, photo.is_active ?? 1);
       });
 
@@ -173,7 +172,7 @@ export const productService = {
           form.append(`photos[${index}][file]`, photo.file);
         }
         form.append(`photos[${index}][caption]`, photo.caption || "");
-        form.append(`photos[${index}][file_path]`, photo.file_path || "");
+        // form.append(`photos[${index}][file_path]`, photo.file_path || "");
         form.append(`photos[${index}][is_active]`, photo.is_active ?? 1);
       });
 
@@ -285,7 +284,7 @@ export const transformProductToApi = (componentProduct) => {
     photos:
       componentProduct.photos?.map((photo) => ({
         caption: photo.caption || null,
-        file_path: photo.file_path || null,
+        // file_path: photo.file_path || null,
         is_active: photo.is_active ?? 1,
         ...(photo.file && { file: photo.file }),
       })) || [],
