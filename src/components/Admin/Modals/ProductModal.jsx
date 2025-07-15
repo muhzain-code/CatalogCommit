@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react"
 import { X, MapPin, Phone, ExternalLink, Upload, Trash2, Plus } from "lucide-react"
-import ImageWithFallback from "../ImageWithFallback"
 import { umkmService } from "../../../Services/umkmService"
 import { categoryService } from "../../../Services/categoryService"
 import { closeLoading, showConfirmation, showError, showLoading, showSuccess } from "../../../Utils/sweetAlert"
@@ -612,7 +611,7 @@ const ProductModal = ({ isOpen, onClose, onSave, product }) => {
                                         className="flex items-center gap-2 px-3 py-1 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                                     >
                                         <Plus className="w-4 h-4" />
-                                        Tambah Foto
+                                        Tambah Foto Pendukung
                                     </button>
                                 </div>
 
@@ -692,11 +691,12 @@ const ProductModal = ({ isOpen, onClose, onSave, product }) => {
 
                                             {(photo.preview || photo.file_path || photo.url) && (
                                                 <div className="mt-3">
-                                                    <ImageWithFallback
-                                                        src={photo.preview || photo.file_path || photo.url}
+                                                    {/* <ImageWithFallback
+                                                        src={[photo.preview, photo.file_path, photo.url]}
                                                         alt={photo.caption || `Foto ${index + 1}`}
                                                         className="w-full h-60 object-cover rounded-lg border border-gray-200"
-                                                    />
+                                                    /> */}
+                                                    <img src={photo.preview} alt={photo.caption || `Foto ${index + 1}`} className="w-full h-60 object-cover rounded-lg border border-gray-200" />
                                                 </div>
                                             )}
                                         </div>
