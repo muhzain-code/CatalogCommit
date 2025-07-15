@@ -28,6 +28,7 @@ import AdminEvents from "./Pages/Admin/AdminEvents"
 import AdminPromoProducts from "./Pages/Admin/AdminPromoProducts"
 import AdminBrands from "./Pages/Admin/AdminApplications"
 import Forgot from "./Pages/Forgot"
+import ResetPassword from "./Pages/ResetPassword"
 
 const routes = [
   {
@@ -41,6 +42,7 @@ const routes = [
       { path: "signup", element: SignUp },
       { path: "login", element: LogIn },
       { path: "forgot", element: Forgot },
+      { path: "reset-password", element: ResetPassword },
       { path: "wishlist", element: Wishlist },
       { path: "cart", element: Cart },
       { path: "checkout", element: Checkout },

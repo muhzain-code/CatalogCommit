@@ -2,38 +2,56 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Snackbar } from "@mui/material";
 import { Alert } from "@mui/material";
-import { auth } from "../Auth/firebase.jsx";
-import {
-    signInWithEmailAndPassword,
-} from "firebase/auth";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Loader2 } from "lucide-react";
+import { API_BASE_URL } from "../config.js";
+import Swal from "sweetalert2";
 
 const Forgot = () => {
     const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
     const [error, setError] = useState(null);
     const [message, setMessage] = useState("");
     const [open, setOpen] = useState(false);
+    const [loading, setLoading] = useState(false);
 
-    const handleLogIn = async (e) => {
+    const handleForgotPassword = async (e) => {
         e.preventDefault();
+        setLoading(true);
+        setError(null);
+        setMessage("");
+
         try {
-            // Attempt to sign in with email and password
-            await signInWithEmailAndPassword(auth, email, password);
-            // Update message state on successful login
-            setMessage("Login successful!");
-            setError("");
-            setOpen(true);
-            setTimeout(() => {
-                window.location.href = "/account";
-            }, 2000);
-            // Clear input fields
+            const response = await fetch(`${API_BASE_URL}/forgot`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ email }),
+            });
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                throw new Error(result.message || "Gagal mengirim email reset.");
+            }
+
+            Swal.fire({
+                icon: "success",
+                title: "Berhasil",
+                text: "Link reset berhasil dikirim ke email Anda.",
+                timer: 3000,
+                showConfirmButton: false,
+            });
+
             setEmail("");
-            setPassword("");
-        } catch (error) {
-            // Handle login errors
-            setError(error.message);
+        } catch (err) {
+            Swal.fire({
+                icon: "error",
+                title: "Gagal",
+                text: err.message || "Terjadi kesalahan.",
+            });
+        } finally {
             setOpen(true);
+            setLoading(false);
         }
     };
 
@@ -59,7 +77,7 @@ const Forgot = () => {
                 <p>Silakan masukkan email anda</p>
                 <form
                     className="flex flex-col gap-6 md:gap-8 w-72 md:w-96"
-                    onSubmit={handleLogIn}
+                    onSubmit={handleForgotPassword}
                 >
                     <div className="flex flex-col gap-1">
                         <input
@@ -76,9 +94,17 @@ const Forgot = () => {
                     <div className="flex flex-col items-center gap-2 justify-between mt-4">
                         <button
                             type="submit"
-                            className="my-2 w-full bg-red-600 hover:bg-red-500 text-white font-medium text-base py-4 px-4 rounded"
+                            className="my-2 w-full bg-[#e63946] hover:bg-[#e63946]/90 text-white text-base font-medium py-4 px-4 rounded flex items-center justify-center gap-2"
                         >
-                            Kirim Link Reset
+                            {loading ? (
+                                <>
+                                    <Loader2 className="w-5 h-5 animate-spin text-white" />
+                                    <span className="text-white">Memuat...</span>
+                                </>
+                            ) : (
+                                "Kirim Link Reset"
+                            )}
+
                         </button>
                         <Link
                             to="/login"
