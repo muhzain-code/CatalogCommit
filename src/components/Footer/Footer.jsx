@@ -1,8 +1,8 @@
-import {
-  createUserWithEmailAndPassword,
-  sendEmailVerification,
-} from "firebase/auth";
-import { auth } from "../../Auth/firebase";
+// import {
+//   createUserWithEmailAndPassword,
+//   sendEmailVerification,
+// } from "firebase/auth";
+// import { auth } from "../../Auth/firebase";
 // import { useState } from "react";
 import { Container, Grid, Typography, Snackbar, Alert } from "@mui/material";
 import QrCode from "./QrCode.png";
@@ -150,10 +150,10 @@ const Footer = () => {
               <li>
                 <Link
                   onClick={scrollToTop}
-                  to="/signup"
+                  to="/cek-resi"
                   sx={{ color: "white" }}
                 >
-                  {i18n.t("footer.sign")}
+                  Cek resi
                 </Link>
               </li>
               <li>

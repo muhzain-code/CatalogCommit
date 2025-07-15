@@ -8,7 +8,7 @@ import Payment from "./Pages/Payment"
 import Contact from "./Pages/Contact"
 import Account from "./Pages/Account"
 import About from "./Pages/About"
-import SignUp from "./Pages/SignUp"
+import SignUp from "./Pages/CekResi"
 import LogIn from "./Pages/LogIn"
 import Product from "./Pages/Product"
 import AllProducts from "./Pages/AllProducts"
@@ -38,7 +38,7 @@ const routes = [
       { path: "contact", element: Contact },
       { path: "account", element: Account },
       { path: "about", element: About },
-      { path: "signup", element: SignUp },
+      { path: "cek-resi", element: SignUp },
       { path: "login", element: LogIn },
       { path: "forgot", element: Forgot },
       { path: "wishlist", element: Wishlist },

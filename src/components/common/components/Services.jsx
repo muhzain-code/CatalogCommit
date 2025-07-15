@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import i18n from "./LangConfig";
+// import i18n from "./LangConfig";
 import { Box } from "@mui/material";
 
 const Service = ({ icon, value, description }) => {
@@ -93,8 +93,8 @@ const Services = () => {
               </defs>
             </svg>
           }
-          value={i18n.t("services.0.value")}
-          description={i18n.t("services.0.description")}
+          value={("GRATIS ONGKIR")}
+          description={("")}
         />
         <Service
           icon={
@@ -153,8 +153,8 @@ const Services = () => {
               </defs>
             </svg>
           }
-          value={i18n.t("services.1.value")}
-          description={i18n.t("services.1.description")}
+          value={("PENGIRIMAN CEPAT")}
+          description={("")}
         />
         <Service
           icon={
@@ -183,8 +183,8 @@ const Services = () => {
               />
             </svg>
           }
-          value={i18n.t("services.2.value")}
-          description={i18n.t("services.2.description")}
+          value={("HARGA TERJANGKAU")}
+          description={("")}
         />
       </div>
     </div>

@@ -34,7 +34,7 @@ const Navigations = () => {
       ? [{ path: "/account", label: i18n.t("account") }]
       : [
           { path: "/login", label: i18n.t("loginPage.login") },
-          // { path: "/signup", label: i18n.t("signUp") },
+          { path: "/cek-resi", label: i18n.t("Cek Resi") },
         ]),
   ];
 
