@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { X } from "lucide-react"
-import { closeLoading, showError, showLoading, showSuccess } from "../../../Utils/sweetAlert"
+import { closeLoading, showConfirmation, showError, showLoading, showSuccess } from "../../../Utils/sweetAlert"
 
 const EventsModal = ({ isOpen, onClose, onSave, data, dataUmkm }) => {
     const [loading, setLoading] = useState(false)
@@ -64,6 +64,15 @@ const EventsModal = ({ isOpen, onClose, onSave, data, dataUmkm }) => {
     const handleSubmit = async (e) => {
         e.preventDefault()
 
+        const result = await showConfirmation(
+            data ? "Update Event?" : "Simpan Event?",
+            data
+                ? "Apakah Anda yakin ingin memperbarui data event ini?"
+                : "Apakah Anda yakin ingin menyimpan event baru?",
+            data ? "Ya, Update!" : "Ya, Simpan!"
+        );
+
+        if (!result.isConfirmed) return;
 
         setLoading(true)
         showLoading(data ? "Mengupdate event..." : "Menyimpan event...")

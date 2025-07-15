@@ -5,7 +5,7 @@ import { X, MapPin, Phone, ExternalLink, Upload, Trash2, Plus } from "lucide-rea
 import ImageWithFallback from "../ImageWithFallback"
 import { umkmService } from "../../../Services/umkmService"
 import { categoryService } from "../../../Services/categoryService"
-import { closeLoading, showError, showLoading, showSuccess } from "../../../Utils/sweetAlert"
+import { closeLoading, showConfirmation, showError, showLoading, showSuccess } from "../../../Utils/sweetAlert"
 
 const ProductModal = ({ isOpen, onClose, onSave, product }) => {
     const [formData, setFormData] = useState({
@@ -66,12 +66,11 @@ const ProductModal = ({ isOpen, onClose, onSave, product }) => {
                 category_id: product.category_id?.toString() || "",
                 // date: product.date || "",
                 photos:
-                    product.active_photos?.map((photo) => ({
+                    product.photos?.map((photo) => ({
                         id: photo.id,
                         caption: photo.caption || "",
                         file_path: photo.file_path || "",
                         is_active: photo.is_active ? 1 : 0,
-                        url: photo.url || "",
                     })) || [],
                 marketplaces: product.marketplaces?.map(m => ({
                     name: m.name || "",
@@ -124,18 +123,32 @@ const ProductModal = ({ isOpen, onClose, onSave, product }) => {
 
     const addPhoto = () => {
         if (formData.photos.length < 5) {
+            const newIndex = formData.photos.length + 1;
+            const newCaption = `Photo ${newIndex}`;
+
             setFormData((prev) => ({
                 ...prev,
-                photos: [...prev.photos, { caption: "", file_path: "", is_active: 1 }],
-            }))
+                photos: [...prev.photos, {
+                    caption: newCaption,
+                    file_path: "",
+                    is_active: 1
+                }],
+            }));
         }
     }
 
     const removePhoto = (index) => {
-        setFormData((prev) => ({
-            ...prev,
-            photos: prev.photos.filter((_, i) => i !== index),
-        }))
+        setFormData((prev) => {
+            const newPhotos = prev.photos.filter((_, i) => i !== index)
+                .map((photo, i) => ({
+                    ...photo,
+                    caption: `Photo ${i + 1}`, // reset caption
+                }));
+            return {
+                ...prev,
+                photos: newPhotos,
+            };
+        });
     }
 
     const handleFileUpload = (index, file) => {
@@ -230,12 +243,22 @@ const ProductModal = ({ isOpen, onClose, onSave, product }) => {
             return
         }
 
+        const result = await showConfirmation(
+            product ? "Update Produk?" : "Simpan Produk?",
+            product
+                ? "Apakah Anda yakin ingin memperbarui data produk ini?"
+                : "Apakah Anda yakin ingin menyimpan produk baru?",
+            product ? "Ya, Update!" : "Ya, Simpan!"
+        );
+
+        if (!result.isConfirmed) return;
+
         setLoading(true)
         showLoading(product ? "Mengupdate produk..." : "Menyimpan produk...")
 
         try {
             // console.log(parseInt(formData.price));
-            
+
             const submitData = {
                 name: formData.name.trim(),
                 description: formData.description.trim(),
@@ -595,7 +618,7 @@ const ProductModal = ({ isOpen, onClose, onSave, product }) => {
                                             </div>
 
                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                                <div>
+                                                {/* <div>
                                                     <label className="block text-sm font-medium text-gray-700 mb-1">Caption</label>
                                                     <input
                                                         type="text"
@@ -609,9 +632,9 @@ const ProductModal = ({ isOpen, onClose, onSave, product }) => {
                                                     {errors[`photos.${index}.caption`] && (
                                                         <p className="text-red-500 text-xs mt-1">{errors[`photos.${index}.caption`]}</p>
                                                     )}
-                                                </div>
+                                                </div> */}
 
-                                                <div>
+                                                {/* <div>
                                                     <label className="block text-sm font-medium text-gray-700 mb-1">File Path</label>
                                                     <input
                                                         type="text"
@@ -625,7 +648,7 @@ const ProductModal = ({ isOpen, onClose, onSave, product }) => {
                                                     {errors[`photos.${index}.file_path`] && (
                                                         <p className="text-red-500 text-xs mt-1">{errors[`photos.${index}.file_path`]}</p>
                                                     )}
-                                                </div>
+                                                </div> */}
                                             </div>
 
                                             <div className="flex items-center gap-4">

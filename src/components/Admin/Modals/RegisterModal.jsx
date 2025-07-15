@@ -4,61 +4,56 @@ import { useState, useEffect } from "react"
 import { X } from "lucide-react"
 import { closeLoading, showConfirmation, showError, showLoading, showSuccess } from "../../../Utils/sweetAlert"
 
-const ApplicationsModal = ({ isOpen, onClose, onSave, data }) => {
+const RegisterModal = ({ isOpen, onClose, onSave }) => {
     const [loading, setLoading] = useState(false)
     const [formData, setFormData] = useState({
         name: "",
+        email: "",
+        password: "",
+        password_confirmation: "",
     })
 
     useEffect(() => {
-        if (data) {
-            setFormData({
-                name: data.name || "",
-            })
-        } else {
+        if (isOpen) {
             setFormData({
                 name: "",
+                email: "",
+                password: "",
+                password_confirmation: "",
             })
         }
-    }, [data])
+    }, [isOpen])
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        const result = await showConfirmation(
-            data ? "Update Applications?" : "Simpan Applications?",
-            data
-                ? "Apakah Anda yakin ingin memperbarui data applications ini?"
-                : "Apakah Anda yakin ingin menyimpan data applications baru?",
-            data ? "Ya, Update!" : "Ya, Simpan!"
-        )
 
-        if (!result.isConfirmed) return
+        const result = await showConfirmation(
+            "Simpan Akun?",
+            "Apakah Anda yakin ingin menyimpan akun baru?",
+            "Ya, Simpan!"
+        );
+
+        if (!result.isConfirmed) return;
 
         setLoading(true)
-        showLoading(data ? "Mengupdate applications..." : "Menyimpan applications...")
+        showLoading("Menyimpan data...")
 
         try {
             await onSave(formData)
             closeLoading()
-            showSuccess(
-                data ? "Applications Berhasil Diupdate!" : "Applications Berhasil Disimpan!",
-                data ? "Data Applications telah diperbarui" : "Applications baru telah ditambahkan",
-            )
+            showSuccess("Data telah disimpan", "Akun baru telah ditambahkan")
+            // onClose()
         } catch (error) {
             closeLoading()
-
             console.log("DETAIL ERROR:", error)
-
             const validationErrors = error?.originalError?.responseData?.error
-
             if (validationErrors) {
                 const messages = Object.values(validationErrors).flat().join("\n")
                 showError("Validasi Gagal", messages)
             } else {
                 showError("Gagal Menyimpan", error.message || "Terjadi kesalahan.")
             }
-        }
-        finally {
+        } finally {
             setLoading(false)
         }
     }
@@ -69,7 +64,7 @@ const ApplicationsModal = ({ isOpen, onClose, onSave, data }) => {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-white rounded-lg p-6 w-full max-w-md">
                 <div className="flex justify-between items-center mb-4">
-                    <h3 className="text-lg font-semibold">{data ? "Edit Applications" : "Tambah Applications"}</h3>
+                    <h3 className="text-lg font-semibold">Tambah Akun</h3>
                     <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
                         <X className="w-6 h-6" />
                     </button>
@@ -77,53 +72,58 @@ const ApplicationsModal = ({ isOpen, onClose, onSave, data }) => {
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Nama Applications *</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Nama *</label>
                         <input
                             type="text"
                             required
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            maxLength={255}
                             value={formData.name}
-                            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                            maxLength={100}
                             disabled={loading}
-                            placeholder="Masukkan Nama Applications"
-                        />
-                    </div>
-
-                    {/* <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">UMKM *</label>
-                        <select
-                            required
+                            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                            value={formData.umkm}
-                            onChange={(e) => setFormData({ ...formData, umkm: e.target.value })}
-                        >
-                            <option value="">Pilih UMKM</option>
-                            <option value="CV. Berkah Jaya">CV. Berkah Jaya</option>
-                            <option value="UD. Seni Budaya">UD. Seni Budaya</option>
-                            <option value="PT. Kreatif Nusantara">PT. Kreatif Nusantara</option>
-                        </select>
-                    </div>
-
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Deskripsi Applications</label>
-                        <textarea
-                            rows={3}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                            value={formData.description}
-                            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                            placeholder="Masukkan nama"
                         />
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">URL Foto Profil</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Email *</label>
                         <input
-                            type="url"
+                            type="email"
+                            required
+                            value={formData.email}
+                            disabled={loading}
+                            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                            value={formData.image}
-                            onChange={(e) => setFormData({ ...formData, image: e.target.value })}
+                            placeholder="contoh@email.com"
                         />
-                    </div> */}
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Password *</label>
+                        <input
+                            type="password"
+                            required
+                            minLength={8}
+                            value={formData.password}
+                            disabled={loading}
+                            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            placeholder="Minimal 8 karakter"
+                        />
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Konfirmasi Password *</label>
+                        <input
+                            type="password"
+                            required
+                            value={formData.password_confirmation}
+                            disabled={loading}
+                            onChange={(e) => setFormData({ ...formData, password_confirmation: e.target.value })}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            placeholder="Ulangi password"
+                        />
+                    </div>
 
                     <div className="flex justify-end space-x-3 pt-4">
                         <button
@@ -134,7 +134,7 @@ const ApplicationsModal = ({ isOpen, onClose, onSave, data }) => {
                             Batal
                         </button>
                         <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-                            {data ? "Update" : "Simpan"}
+                            Simpan
                         </button>
                     </div>
                 </form>
@@ -143,4 +143,4 @@ const ApplicationsModal = ({ isOpen, onClose, onSave, data }) => {
     )
 }
 
-export default ApplicationsModal
+export default RegisterModal
