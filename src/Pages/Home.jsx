@@ -5,8 +5,8 @@ import Row1 from "../components/Home/Row1";
 import Categories from "../components/Home/Categories";
 import Services from "../components/common/components/Services";
 import AllProducts from "../components/Home/AllProducts";
-import Featured from "../components/Home/Featured";
-import { ITEMS } from "../components/common/functions/items";
+// import Featured from "../components/Home/Featured";
+// import { ITEMS } from "../components/common/functions/items";
 const Home = () => {
   return (
     <div dir="ltr" className="flex flex-col xl:mx-32 mt-28 gap-3">
@@ -15,8 +15,8 @@ const Home = () => {
       <Categories />
       {/* <BestSelling items={ITEMS} /> */}
       {/* <Deal /> */}
-      <AllProducts items={ITEMS} />
-      <Featured />
+      <AllProducts/>
+      {/* <Featured /> */}
       <Services />
     </div>
   );

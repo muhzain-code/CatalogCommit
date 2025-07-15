@@ -128,3 +128,29 @@ export const umkmService = {
     });
   },
 };
+
+export const allUmkm = async (search = "", filters = {}) => {
+  const perPage = 100;
+  let currentPage = 1;
+  let allData = [];
+  let totalPages = 1;
+
+  while (currentPage <= totalPages) {
+    const response = await umkmService.getUMKMs(
+      currentPage,
+      perPage,
+      search,
+      filters
+    );
+
+    const data = response?.data || [];
+    const meta = response?.meta || {};
+
+    allData.push(...data);
+
+    totalPages = meta?.last_page || 1;
+    currentPage++;
+  }
+
+  return allData;
+};
