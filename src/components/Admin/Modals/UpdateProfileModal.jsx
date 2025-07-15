@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { X } from "lucide-react"
+import Cookies from "js-cookie";
 import { closeLoading, showConfirmation, showError, showLoading, showSuccess } from "../../../Utils/sweetAlert"
 
 const UpdateProfileModal = ({ isOpen, onClose, onSave, data }) => {
@@ -12,7 +13,7 @@ const UpdateProfileModal = ({ isOpen, onClose, onSave, data }) => {
     })
 
     useEffect(() => {
-        if (isOpen) {
+        if (isOpen && data) {
             setFormData({
                 name: data.name || "",
                 email: data.email || "",
@@ -36,7 +37,10 @@ const UpdateProfileModal = ({ isOpen, onClose, onSave, data }) => {
         showLoading("Mengupdate data...")
 
         try {
-            await onSave(formData)
+            const response = await onSave(formData);
+            console.log("RESPON HASIL UPDATE:", response);
+            Cookies.set("name", response.name);
+            Cookies.set("email", response.email);
             closeLoading()
             showSuccess("Data telah disimpan", "Data profil telah diperbarui")
             // onClose()

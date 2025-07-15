@@ -79,8 +79,9 @@ const AdminHeader = ({ sidebarOpen, setSidebarOpen }) => {
     };
 
     const handleUpdateProfile = async (formData) => {
-        await AuthService.updateProfile(formData);
+        // await AuthService.updateProfile(formData);
         setOpenUpdateProfile(false)
+        return await AuthService.updateProfile(formData);
     };
 
     const handleChangePassword = async (formData) => {
@@ -220,6 +221,7 @@ const AdminHeader = ({ sidebarOpen, setSidebarOpen }) => {
                 isOpen={openUpdateProfile}
                 onClose={() => setOpenUpdateProfile(false)}
                 onSave={handleUpdateProfile}
+                data={user}
             />
 
             <ChangePasswordModal
