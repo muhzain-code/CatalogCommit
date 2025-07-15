@@ -106,7 +106,7 @@ export const productService = {
         if (photo.file instanceof File) {
           form.append(`photos[${index}][file]`, photo.file);
         }
-        form.append(`photos[${index}][caption]`, photo.caption || "");
+        form.append(`photos[${index}][photo_type_id]`, photo.photo_type_id || "");
         // form.append(`photos[${index}][file_path]`, photo.file_path || "");
         form.append(`photos[${index}][is_active]`, photo.is_active ?? 1);
       });
@@ -283,7 +283,7 @@ export const transformProductToApi = (componentProduct) => {
     date: componentProduct.date,
     photos:
       componentProduct.photos?.map((photo) => ({
-        caption: photo.caption || null,
+        photo_type_id: photo.photo_type_id || null,
         // file_path: photo.file_path || null,
         is_active: photo.is_active ?? 1,
         ...(photo.file && { file: photo.file }),

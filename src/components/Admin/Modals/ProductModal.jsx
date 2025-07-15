@@ -68,9 +68,10 @@ const ProductModal = ({ isOpen, onClose, onSave, product }) => {
                 photos:
                     product.photos?.map((photo) => ({
                         id: photo.id,
-                        caption: photo.caption || "",
+                        photo_type_id: photo.photo_type_id || "",
                         file_path: photo.file_path || "",
                         is_active: photo.is_active ? 1 : 0,
+                        preview: null,
                     })) || [],
                 marketplaces: product.marketplaces?.map(m => ({
                     name: m.name || "",
@@ -90,7 +91,11 @@ const ProductModal = ({ isOpen, onClose, onSave, product }) => {
                 umkm_id: "",
                 category_id: "",
                 // date: new Date().toISOString().split("T")[0],
-                photos: [],
+                photos: [{
+                    file_path: "",
+                    is_active: 1,
+                    photo_type_id: 1,
+                }],
                 marketplaces: [],
             })
         }
@@ -123,15 +128,17 @@ const ProductModal = ({ isOpen, onClose, onSave, product }) => {
 
     const addPhoto = () => {
         if (formData.photos.length < 5) {
-            const newIndex = formData.photos.length + 1;
-            const newCaption = `Photo ${newIndex}`;
+            const newIndex = formData.photos.length;
+            // const newCaption = `Photo ${newIndex}`;
 
             setFormData((prev) => ({
                 ...prev,
                 photos: [...prev.photos, {
-                    caption: newCaption,
+                    // caption: newCaption,
+                    photo_type_id: newIndex === 0 ? 1 : 2,
                     file_path: "",
-                    is_active: 1
+                    is_active: 1,
+                    preview: null, 
                 }],
             }));
         }
@@ -142,7 +149,7 @@ const ProductModal = ({ isOpen, onClose, onSave, product }) => {
             const newPhotos = prev.photos.filter((_, i) => i !== index)
                 .map((photo, i) => ({
                     ...photo,
-                    caption: `Photo ${i + 1}`, // reset caption
+                    photo_type_id: i === 0 ? 1 : 2,
                 }));
             return {
                 ...prev,
@@ -154,6 +161,9 @@ const ProductModal = ({ isOpen, onClose, onSave, product }) => {
     const handleFileUpload = (index, file) => {
         if (file) {
             const previewUrl = URL.createObjectURL(file)
+            console.log("File dipilih:", file);
+        console.log("Preview URL:", previewUrl);
+
             handlePhotoChange(index, "file", file)
             handlePhotoChange(index, "preview", previewUrl)
         }
@@ -216,6 +226,10 @@ const ProductModal = ({ isOpen, onClose, onSave, product }) => {
             newErrors.shipping_price = "Biaya pengiriman tidak boleh negatif"
         }
 
+        if (!formData.photos[0]?.file && !formData.photos[0]?.file_path) {
+            newErrors.photos = "Foto utama wajib diunggah"
+        }
+
         // Photos validation (max 5)
         if (formData.photos.length > 5) {
             newErrors.photos = "Maksimal 5 foto dapat diunggah"
@@ -223,9 +237,9 @@ const ProductModal = ({ isOpen, onClose, onSave, product }) => {
 
         // Validate each photo
         formData.photos.forEach((photo, index) => {
-            if (photo.caption && photo.caption.length > 255) {
-                newErrors[`photos.${index}.caption`] = "Caption maksimal 255 karakter"
-            }
+            // if (photo.caption && photo.caption.length > 255) {
+            //     newErrors[`photos.${index}.caption`] = "Caption maksimal 255 karakter"
+            // }
             if (photo.file_path && photo.file_path.length > 255) {
                 newErrors[`photos.${index}.file_path`] = "File path maksimal 255 karakter"
             }
@@ -274,7 +288,7 @@ const ProductModal = ({ isOpen, onClose, onSave, product }) => {
                 category_id: Number.parseInt(formData.category_id),
                 date: formData.date,
                 photos: formData.photos.map((photo) => ({
-                    caption: photo.caption || null,
+                    photo_type_id: photo.photo_type_id || null,
                     file_path: photo.file_path || null,
                     is_active: photo.is_active || 1,
                     ...(photo.file && { file: photo.file }),
@@ -606,15 +620,18 @@ const ProductModal = ({ isOpen, onClose, onSave, product }) => {
                                     {formData.photos.map((photo, index) => (
                                         <div key={index} className="border border-gray-200 rounded-lg p-4 space-y-3">
                                             <div className="flex items-center justify-between">
-                                                <h4 className="font-medium text-gray-900">Foto {index + 1}</h4>
-                                                <button
-                                                    type="button"
-                                                    onClick={() => removePhoto(index)}
-                                                    className="text-red-600 hover:text-red-800 p-1"
-                                                    disabled={loading}
-                                                >
-                                                    <Trash2 className="w-4 h-4" />
-                                                </button>
+                                                <h4 className="font-medium text-gray-900">{index === 0 ? "📌 Foto Utama" : `🖼️ Foto Gallery ${index}`}</h4>
+                                                {index != 0 && (
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => removePhoto(index)}
+                                                        className="text-red-600 hover:text-red-800 p-1"
+                                                        disabled={loading || index == 0}
+                                                        title={index === 0 ? "Foto utama tidak bisa dihapus" : "Hapus foto"}
+                                                    >
+                                                        <Trash2 className="w-4 h-4" />
+                                                    </button>
+                                                )}
                                             </div>
 
                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -669,6 +686,7 @@ const ProductModal = ({ isOpen, onClose, onSave, product }) => {
                                                     onChange={(e) => handleFileUpload(index, e.target.files[0])}
                                                     className="text-sm text-gray-500"
                                                     disabled={loading}
+                                                    required={index == 0}
                                                 />
                                             </div>
 
