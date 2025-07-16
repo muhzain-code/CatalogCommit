@@ -33,7 +33,7 @@ const Contact = () => {
           </div>
           <div className="flex flex-col gap-2">
             <p className="text-lg">Kami tersedia dalam 24/7</p>
-            <p className="text-lg">7 hari dalam seminggu.</p>
+            <p className="text-lg">Jika anda butuh bantuan silahkan hubungi kami</p>
             <p className="text-lg font-bold">
               +62 8016 111 12222
             </p>
@@ -63,9 +63,9 @@ const Contact = () => {
             </span>
           </div>
           <div className="flex flex-col gap-2">
-            <p className="text-lg">Silahkan tulis pesan anda kepada email kami di bawah ini:</p>
+            <p className="text-lg">Silahkan tulis keluhan atau saran anda kepada email kami di bawah ini:</p>
             <p className="text-lg font-bold">
-              email : poter@example.com
+              email : ptpoter999@gmail.com
             </p>
           </div>
         </div>
