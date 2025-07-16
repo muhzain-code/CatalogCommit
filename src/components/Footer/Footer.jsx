@@ -4,10 +4,10 @@
 // } from "firebase/auth";
 // import { auth } from "../../Auth/firebase";
 // import { useState } from "react";
-import { Container, Grid, Typography, Snackbar, Alert } from "@mui/material";
-import QrCode from "./QrCode.png";
-import GooglePlay from "./GooglePlay.png";
-import AppStore from "./AppStore.png";
+import { Container, Grid, Typography } from "@mui/material";
+// import QrCode from "./QrCode.png";
+// import GooglePlay from "./GooglePlay.png";
+// import AppStore from "./AppStore.png";
 import i18n from "../common/components/LangConfig";
 import { Link } from "react-router-dom";
 const Footer = () => {
@@ -66,12 +66,13 @@ const Footer = () => {
             className="justify-center items-stretch md:justify-between md:leading-5"
           >
             <Typography className="font-bold" variant="h6" gutterBottom>
-              Exclusive
+              Keunggulan
             </Typography>
             <Typography className="font-medium" gutterBottom>
-              {i18n.t("footer.subscribe")}
+              Harga Terjangkau
             </Typography>
-            <Typography variant="body2">{i18n.t("footer.offer")}</Typography>
+            <Typography variant="body2">Gratis Ongkir </Typography>
+            <Typography variant="body2">Pengiriman Cepat</Typography>
             {/* <div className=" mt-4 flex w-56	 py-2 px-1 border border-gray-300 rounded-md focus:outline-none focus:border-gray-500 bg-transparent text-white placeholder-gray-400">
               <div className=" flex flex-col ">
                 <input
@@ -121,9 +122,9 @@ const Footer = () => {
             <Typography variant="h6" gutterBottom>
               {i18n.t("footer.support")}
             </Typography>
-            <Typography gutterBottom>{i18n.t("footer.address")}</Typography>
-            <Typography variant="body2">exclusive@gmail.com</Typography>
-            <Typography variant="body2">+88015-88888-9999</Typography>
+            <Typography gutterBottom>PemKab. Probolinggo</Typography>
+            <Typography variant="body2">ptpoter999@gmail.com</Typography>
+            <Typography variant="body2">+62 8015 8758 9695</Typography>
           </Grid>
 
           {/* Account */}
@@ -135,10 +136,10 @@ const Footer = () => {
             className="justify-center items-stretch md:justify-between md:leading-10"
           >
             <Typography variant="h6" gutterBottom>
-              {i18n.t("footer.account")}
+              Tentang
             </Typography>
             <ul className="list-none p-0">
-              <li>
+              {/* <li>
                 <Link
                   onClick={scrollToTop}
                   to="/account"
@@ -146,31 +147,31 @@ const Footer = () => {
                 >
                   {i18n.t("footer.myAccount")}
                 </Link>
-              </li>
+              </li> */}
               <li>
                 <Link
                   onClick={scrollToTop}
-                  to="/cek-resi"
+                  to="/about"
                   sx={{ color: "white" }}
                 >
-                  Cek resi
+                  Profile
                 </Link>
               </li>
-              <li>
+              {/* <li>
                 <Link onClick={scrollToTop} to="/cart" sx={{ color: "white" }}>
                   {i18n.t("footer.cart")}
                 </Link>
-              </li>
+              </li> */}
               <li>
                 <Link
                   onClick={scrollToTop}
-                  to="/wishlist"
+                  to="/contact"
                   sx={{ color: "white" }}
                 >
-                  {i18n.t("footer.wishlist")}
+                  Kontak
                 </Link>
               </li>
-              <li>
+              {/* <li>
                 <Link
                   onClick={scrollToTop}
                   to="/category"
@@ -178,7 +179,7 @@ const Footer = () => {
                 >
                   {i18n.t("footer.shop")}
                 </Link>
-              </li>
+              </li> */}
             </ul>
           </Grid>
 
@@ -206,22 +207,22 @@ const Footer = () => {
               </li>
 
               <li>
-                <Link onClick={scrollToTop} to="about" sx={{ color: "white" }}>
-                  {i18n.t("footer.usage")}
+                <Link onClick={scrollToTop} to="cek-resi" sx={{ color: "white" }}>
+                  Cek Resi
                 </Link>
               </li>
               <li>
-                <Link onClick={scrollToTop} to="about" sx={{ color: "white" }}>
-                  {i18n.t("footer.FAQ")}
+                <Link onClick={scrollToTop} to="wishlist" sx={{ color: "white" }}>
+                  Produk Disukai
                 </Link>
               </li>
               <li>
                 <Link
                   onClick={scrollToTop}
-                  to="/contact"
+                  to="/"
                   sx={{ color: "white" }}
                 >
-                  {i18n.t("footer.Contact")}
+                  Beranda
                 </Link>
               </li>
             </ul>
@@ -235,13 +236,13 @@ const Footer = () => {
             md={2}
             className="justify-center items-stretch md:justify-between md:leading-10"
           >
-            <Typography variant="h6" gutterBottom className="text-white">
+            {/* <Typography variant="h6" gutterBottom className="text-white">
               {i18n.t("footer.downloadApp")}
             </Typography>
             <Typography variant="body2" gutterBottom className="text-gray-500 ">
               {i18n.t("footer.save")}
-            </Typography>
-            <div className="flex flex-row gap-2 my-4">
+            </Typography> */}
+            {/* <div className="flex flex-row gap-2 my-4">
               <img src={QrCode} alt="Qr Code" />
               <div>
                 <Link onClick={scrollToTop} to="/">
@@ -251,7 +252,7 @@ const Footer = () => {
                   <img src={AppStore} alt="App Store" />
                 </Link>
               </div>
-            </div>
+            </div> */}
 
             {/* Social Icons */}
             <div className="mt-4 flex items-center gap-2">
@@ -339,9 +340,9 @@ const Footer = () => {
       </Container>
       {/* Copyright */}
       <hr className="w-full border-gray-800 my-4" />
-      <Typography variant="body2" className=" text-center text-gray-600">
+      {/* <Typography variant="body2" className=" text-center text-gray-600">
         {i18n.t("footer.copyrights")}
-      </Typography>
+      </Typography> */}
       {/* <Snackbar
         anchorOrigin={{ vertical: "top", horizontal: "right" }}
         open={open}
