@@ -28,8 +28,6 @@ const RelatedItems = ({ selectedProduct }) => {
                   item={item}
                   index={index}
                   totalItems={relatedItems.length}
-                  stars={item.stars}
-                  rates={item.rates}
                 />
               </Grid>
             ))}

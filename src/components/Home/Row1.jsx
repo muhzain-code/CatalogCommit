@@ -1,72 +1,56 @@
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import { categoryService } from "../../Services/categoryService"
-// import { ITEMS } from "../common/functions/items"
-// import apple from "./apple.png"
-// import i18n from "../common/components/LangConfig";
+import { eventService } from "../../Services/eventService";
 import BannerSection from "../common/components/BannerSection";
 
 const Row1 = () => {
-  // const dealItem = ITEMS.find(
-  //   (item) => item.title === i18n.t("itemsArray.17.title")
-  // );
-
   const [categories, setCategories] = useState([])
+  const [events, setEvents] = useState([])
   const [loading, setLoading] = useState(true)
-
   const [showAll, setShowAll] = useState(false);
   const visibleCategories = showAll ? categories : categories.slice(0, 10);
 
-  // const dealItem = ITEMS.find((item) => item.title === "Apple Watch") // fallback title
-  const events = {
-    data: [
-      { id: 6, photo: "https://images.unsplash.com/photo-1578426126743-3f553c0baea1?w=600&q=80" },
-      { id: 2, photo: " https://images.unsplash.com/photo-1504753793650-d4a2b783c15e?w=600&q=80" },
-      { id: 5, photo: " https://seputarumkm.com/wp-content/uploads/2023/07/664xauto-tips-memenangkan-kompetisi-di-flash-sale-1602158-c810e9193ba3192e83bac36a4a2ad163.jpg " },
-      { id: 1, photo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSjduLGjBBcfbB041z-SU907Pb4duWrkCURBQ&s" },
-      { id: 3, photo: " https://listrikkita.com/files/article/H62B7-saatnya-agusus-merdeka-gratis-ongkir-ke-seluruh-nusantara.jpg " },
-      { id: 4, photo: "https://asset-2.tstatic.net/wartakota/foto/bank/images/Ilustrasi-Diskon-Akhir-Tahun.jpg " }
-    ]
-  };
-
   useEffect(() => {
-    const fetchCategories = async () => {
+    const fetchData = async () => {
       try {
+        let kategoriData = []
         const cachedRaw = sessionStorage.getItem("cachedCategories")
-        if (cachedRaw) {
-          const cached = JSON.parse(cachedRaw)
-          const expired = !cached.expiresAt || cached.expiresAt < Date.now()
+        const expired = !cachedRaw || (JSON.parse(cachedRaw).expiresAt < Date.now())
 
-          if (!expired) {
-            setCategories(cached.data)
-            setLoading(false)
-            return
-          } else {
-            sessionStorage.removeItem("cachedCategories")
-          }
+        if (!expired) {
+          const cached = JSON.parse(cachedRaw)
+          kategoriData = cached.data
+        } else {
+          const response = await categoryService.getCategories()
+          kategoriData = response.data.map(({ id, name }) => ({ id, name }))
+          sessionStorage.setItem(
+            "cachedCategories",
+            JSON.stringify({
+              data: kategoriData,
+              expiresAt: Date.now() + 1000 * 60 * 10, // 10 menit
+            })
+          )
         }
 
-        const response = await categoryService.getCategories()
-        const kategoriData = response.data.map(({ id, name }) => ({ id, name }))
-        sessionStorage.setItem(
-          "cachedCategories",
-          JSON.stringify({
-            data: kategoriData,
-            expiresAt: Date.now() + 1000 * 60 * 10, // 10 menit
-          })
-        )
+        const eventRes = await eventService.getEvents()
+        const eventData = eventRes.data
+
         setCategories(kategoriData)
+        setEvents(eventData)
       } catch (error) {
-        console.error("Gagal fetch kategori:", error.message)
+        console.error("Gagal fetch:", error.response?.data || error.message)
         setCategories([])
+        setEvents([])
       } finally {
         setLoading(false)
       }
     }
 
-    fetchCategories()
+    fetchData()
   }, [])
-  console.log("event", events.data);
+
+  console.log("event", events);
 
 
 
@@ -109,7 +93,7 @@ const Row1 = () => {
 
       {/* Main Content */}
       <div className="flex xl:my-10 xl:ml-10 xl:gap-16 items-center jusify-between flex-col-reverse md:flex-row  md:h-96 bg-black text-white w-full">
-          <BannerSection products={events.data} />
+        <BannerSection products={events} />
       </div>
     </div>
   )

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { ChevronLeft, Heart, Share2, Calendar, Clock, Users, Tag, Building2 } from "lucide-react";
+import { ChevronLeft, Share2, Calendar, Clock, Users, Tag, Building2 } from "lucide-react";
 import { eventService } from "../Services/eventService";
 import { fetchAllEventUmkm } from "../Services/eventUmkmService";
 import { fetchAllPromoProduct } from "../Services/promoProductService";
@@ -47,7 +47,7 @@ const EventDetail = () => {
         }
 
         fetchEventData()
-    }, [])
+    }, [eventId])
     console.log("Event Data:", eventData)
     console.log("Event UMKMs:", eventUmkms)
     // console,log("alleventUmkms", allEventUmkms)

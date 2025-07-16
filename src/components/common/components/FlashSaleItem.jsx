@@ -1,6 +1,5 @@
 /* eslint-disable no-undef */
 /* eslint-disable react/prop-types */
-import i18n from "./LangConfig";
 import PropTypes from "prop-types";
 import { useState } from "react";
 import { Link } from "react-router-dom";
@@ -68,7 +67,7 @@ const FlashSaleItem = ({ item }) => {
             loading="lazy"
             src={item.image}
             alt={item.name}
-            className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
+            className="w-full h-full object-cover transition-transform duration-300"
           />
         </Link>
 

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import FlashSaleItem from "../common/components/FlashSaleItem";
-import PropTypes from "prop-types";
+// import PropTypes from "prop-types";
 import RedTitle from "../common/components/RedTitle";
 import ViewAll from "../common/components/ViewAll";
 import i18n from "../common/components/LangConfig";

@@ -4,7 +4,6 @@ import GaleriProduct from "../components/Product/Galeri";
 import ActiveLastBreadcrumb from "../components/common/components/Link";
 import RedButton from "../components/common/components/RedButton";
 import WishlistIcon from "../components/common/components/WishlistIcon";
-import i18n from "../components/common/components/LangConfig";
 import { Link, useParams } from "react-router-dom";
 import { productService } from "../Services/productService";
 import NotFound from "./NotFound";
