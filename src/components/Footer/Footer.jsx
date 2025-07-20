@@ -69,10 +69,18 @@ const Footer = () => {
               Keunggulan
             </Typography>
             <Typography className="font-medium" gutterBottom>
-              Harga Terjangkau
+              Gratis Ongkir
             </Typography>
-            <Typography variant="body2">Gratis Ongkir </Typography>
-            <Typography variant="body2">Pengiriman Cepat</Typography>
+            <Typography className="font-medium" gutterBottom>
+              Pengiriman Cepat
+            </Typography>
+            <Typography className="font-medium" gutterBottom>
+             Harga Terjangkau
+            </Typography>
+
+            {/* <Typography variant="body2">Gratis Ongkir </Typography>
+            <Typography variant="body2">Pengiriman Cepat</Typography> */}
+
             {/* <div className=" mt-4 flex w-56	 py-2 px-1 border border-gray-300 rounded-md focus:outline-none focus:border-gray-500 bg-transparent text-white placeholder-gray-400">
               <div className=" flex flex-col ">
                 <input
@@ -123,8 +131,10 @@ const Footer = () => {
               {i18n.t("footer.support")}
             </Typography>
             <Typography gutterBottom>PemKab. Probolinggo</Typography>
-            <Typography variant="body2">ptpoter999@gmail.com</Typography>
-            <Typography variant="body2">+62 8015 8758 9695</Typography>
+            <Typography gutterBottom>ptpoter999@gmail.com</Typography>
+            <Typography gutterBottom>+62 8015 8758 9695</Typography>
+            {/* <Typography variant="body2">ptpoter999@gmail.com</Typography>
+            <Typography variant="body2">+62 8015 8758 9695</Typography> */}
           </Grid>
 
           {/* Account */}
