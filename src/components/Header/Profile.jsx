@@ -4,15 +4,15 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import IconButton from "@mui/material/IconButton";
 import { useState } from "react";
-import { useCart } from "../../context/CartContext";
+// import { useCart } from "../../context/CartContext";
 import { useWishlist } from "../../context/WishlistContext";
 import { Link } from "react-router-dom";
 import { AuthContext, auth } from "../../Auth/firebase";
 import i18n from "../common/components/LangConfig";
-import ReadmeComponent from "../Readme/ReadmeComp";
+// import ReadmeComponent from "../Readme/ReadmeComp";
 // import ThemeSwitcher from "./ThemeSwitcher";
 const Profile = () => {
-  const { cartItems } = useCart();
+  // const { cartItems } = useCart();
   const { wishlistItems } = useWishlist();
   const [anchorEl, setAnchorEl] = useState(null);
   const [open, setOpen] = useState(false);
@@ -68,7 +68,7 @@ const Profile = () => {
           </svg>
         </IconButton>
       </Link>
-      <Link to="/cart">
+      {/* <Link to="/cart">
         <IconButton
           size="small"
           aria-controls={open ? "account-menu" : undefined}
@@ -119,7 +119,7 @@ const Profile = () => {
             />
           </svg>
         </IconButton>
-      </Link>
+      </Link> */}
       {currentUser && (
         <>
           <IconButton
@@ -300,7 +300,7 @@ const Profile = () => {
           </MenuItem>
         </Link>
       </Menu>
-      <ReadmeComponent />
+      {/* <ReadmeComponent /> */}
 
       {/* <ThemeSwitcher /> */}
     </div>

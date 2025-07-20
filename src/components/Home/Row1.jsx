@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { categoryService } from "../../Services/categoryService"
 import { eventService } from "../../Services/eventService";
 import BannerSection from "../common/components/BannerSection";
@@ -8,8 +8,9 @@ const Row1 = () => {
   const [categories, setCategories] = useState([])
   const [events, setEvents] = useState([])
   const [loading, setLoading] = useState(true)
-  const [showAll, setShowAll] = useState(false);
-  const visibleCategories = showAll ? categories : categories.slice(0, 10);
+  const visibleCategories = categories.slice(0, 10);
+  const navigate = useNavigate()
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -71,15 +72,17 @@ const Row1 = () => {
                     key={cat.id}
                     className="px-4 py-2 cursor-pointer hover:underline hover:underline-offset-8 ease-in-out duration-300 transform hover:translate-x-4"
                   >
-                    <Link to={`/category/${cat.id}`}>{cat.name}</Link>
+                    <Link to="/category" state={{ categoryId: cat.id }}>
+                      {cat.name}
+                    </Link>
                   </li>
                 ))}
                 {categories.length > 10 && (
                   <li
                     className="px-4 py-2 text-blue-600 cursor-pointer"
-                    onClick={() => setShowAll(!showAll)}
+                    onClick={() => navigate("/category")}
                   >
-                    {showAll ? "Tampilkan Lebih Sedikit" : "Lihat Semua Kategori"}
+                    Lihat Semua Kategori
                   </li>
                 )}
               </>

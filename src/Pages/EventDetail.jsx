@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import { ChevronLeft, Share2, Calendar, Clock, Users, Tag, Building2 } from "lucide-react";
+import { Share2, Calendar, Clock, Users, Tag, Building2 } from "lucide-react";
 import { eventService } from "../Services/eventService";
 import { fetchAllEventUmkm } from "../Services/eventUmkmService";
 import { fetchAllPromoProduct } from "../Services/promoProductService";
 import { Link, useParams } from "react-router-dom";
+import NotFound from "./NotFound";
 
 const EventDetail = () => {
     const [eventData, setEventData] = useState(null);
@@ -33,16 +34,20 @@ const EventDetail = () => {
                 // In the fetchEventData function, after filtering UMKMs, add:
 
                 // Filter product promos for this specific event if it's a promo event
-                if (response.data.is_promo_event) {
+                if (response.data) {
                     const filteredPromos = allPromoProduct.filter(
-                        (item) => item.event_id === Number(eventId),
+                        (item) => item.event.id === Number(eventId),
                     )
                     setEventPromos(filteredPromos)
                 }
-                setLoading(false)
             } catch (err) {
-                setError(err.message || "An error occurred")
-                setLoading(false)
+                if (err.response?.status === 404) {
+                    setEventData(null); // <- ini kunci
+                } else {
+                    setError(err.message || "An error occurred");
+                }
+            } finally {
+                setLoading(false);
             }
         }
 
@@ -132,6 +137,10 @@ const EventDetail = () => {
         )
     }
 
+    if (!eventId || (!loading && !eventData)) {
+        return <NotFound />;
+    }
+
     if (error) {
         return (
             <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -148,20 +157,18 @@ const EventDetail = () => {
         )
     }
 
-    if (!eventData) return null
-
     const eventStatus = getEventStatus()
     const eventDuration = getEventDuration()
 
     return (
         <div className="min-h-screen bg-gray-50 mt-32">
             {/* Breadcrumb */}
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 bg-white">
+            {/* <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 bg-white">
                 <button className="flex items-center text-gray-600 hover:text-red-600 transition-colors">
                     <ChevronLeft className="w-4 h-4 mr-2" />
                     Kembali ke Beranda
                 </button>
-            </div>
+            </div> */}
 
             {/* Main Content */}
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
@@ -176,9 +183,9 @@ const EventDetail = () => {
                                 className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
                             />
                             <div
-                                className={`absolute top-4 right-4 px-3 py-1 rounded-full text-sm font-bold ${eventStatus === "Sedang Berlangsung"
+                                className={`absolute top-4 right-4 px-3 py-1 rounded-full text-sm font-bold ${eventStatus == "Sedang Berlangsung"
                                         ? "bg-green-600 text-white"
-                                        : eventStatus === "Akan Datang"
+                                        : eventStatus == "Akan Datang"
                                             ? "bg-blue-600 text-white"
                                             : "bg-gray-600 text-white"
                                     }`}
@@ -299,7 +306,7 @@ const EventDetail = () => {
                                     <span className="text-gray-600">Diperbarui:</span>
                                     <span className="text-gray-900">{formatDate(eventData.updated_at)}</span>
                                 </div>
-                                <div className="flex items-center justify-between">
+                                {/* <div className="flex items-center justify-between">
                                     <span className="text-gray-600">Event UMKM:</span>
                                     <span className={`font-medium ${eventData.is_umkm_event ? "text-green-600" : "text-gray-600"}`}>
                                         {eventData.is_umkm_event ? "Ya" : "Tidak"}
@@ -310,7 +317,7 @@ const EventDetail = () => {
                                     <span className={`font-medium ${eventData.is_promo_event ? "text-green-600" : "text-gray-600"}`}>
                                         {eventData.is_promo_event ? "Ya" : "Tidak"}
                                     </span>
-                                </div>
+                                </div> */}
                             </div>
                         </div>
                     </div>
@@ -319,7 +326,7 @@ const EventDetail = () => {
                 {/* Participating UMKMs Section */}
                 <div className="mt-16">
                     <div className="flex justify-between items-center mb-6">
-                        <h2 className="text-2xl font-bold text-gray-900">UMKM Peserta</h2>
+                        <h2 className="text-2xl font-bold text-gray-900">UMKM</h2>
                         <div className="flex items-center space-x-2">
                             <Users className="w-5 h-5 text-gray-500" />
                             <span className="text-gray-600">{eventUmkms.length} UMKM terdaftar</span>
@@ -372,7 +379,7 @@ const EventDetail = () => {
                 </div>
 
                 {/* Product Promos Section - Only show for promo events */}
-                {eventData.is_promo_event && (
+                {eventData && (
                     <div className="mt-16">
                         <div className="flex justify-between items-center mb-6">
                             <h2 className="text-2xl font-bold text-gray-900">Produk Promo</h2>
@@ -436,34 +443,34 @@ const EventDetail = () => {
                                                 </div>
 
                                                 {/* Product Info */}
-                                                <div className="space-y-1 text-xs text-gray-600 mb-4">
+                                                {/* <div className="space-y-1 text-xs text-gray-600 mb-4"> */}
                                                     {/* <div className="flex justify-between">
                                                             <span>ID Produk:</span>
                                                             <span className="font-medium">{promo.product.id}</span>
                                                         </div> */}
-                                                    <div className="flex justify-between">
+                                                    {/* <div className="flex justify-between">
                                                         <span>UMKM ID:</span>
                                                         <span className="font-medium">{promo.product.umkm_id}</span>
-                                                    </div>
-                                                    <div className="flex justify-between">
+                                                    </div> */}
+                                                    {/* <div className="flex justify-between">
                                                         <span>Kategori:</span>
                                                         <span className="font-medium">{promo.product.category_id}</span>
-                                                    </div>
-                                                </div>
+                                                    </div> */}
+                                                {/* </div> */}
 
                                                 {/* Action Buttons */}
                                                 <div className="space-y-2">
                                                     <h3
-                                                        className={`w-full py-2 px-4 rounded-lg text-sm font-medium transition-colors text-center ${promo.product.status === "available"
+                                                        className={`w-full py-2 px-4 rounded-lg text-sm font-medium transition-colors text-center ${promo.product.status == "available"
                                                             ? " text-red-700"
-                                                            : promo.product.status === "pre_order"
+                                                            : promo.product.status == "pre_order"
                                                                 ? "text-yellow-700"
                                                                 : " text-gray-600"
                                                             }`}
                                                     >
-                                                        {promo.product.status === "available"
+                                                        {promo.product.status == "available"
                                                             ? "Tersedia"
-                                                            : promo.product.status === "pre_order"
+                                                            : promo.product.status == "pre_order"
                                                                 ? "Pre Order"
                                                                 : "Tidak Tersedia"}
                                                     </h3>

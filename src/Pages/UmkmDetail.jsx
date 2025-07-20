@@ -1,25 +1,32 @@
 "use client"
 import { useState, useEffect } from "react";
-import { ChevronLeft, MapPin, Heart, Share2, Phone, Mail, Globe, Star, StarHalf, User, Calendar } from "lucide-react"
+import { MapPin, Share2, Phone, Mail, User, Calendar } from "lucide-react"
 import { useParams } from "react-router-dom"
 import { umkmService } from "../Services/umkmService";
-import ProductCard from "../components/common/components/ProductCard";
+// import ProductCard from "../components/common/components/ProductCard";
+import RelatedItems from "../components/Product/RelatedItems";
+import NotFound from "./NotFound";
 
 const UMKMDetail = () => {
   let { umkmId } = useParams();
   const [umkmData, setUmkmData] = useState(null);
+  const [totalProducts, setTotalProducts] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [isLiked, setIsLiked] = useState(false);
 
   useEffect(() => {
     const fetchUmkmData = async () => {
       try {
         const response = await umkmService.getUMKM(umkmId);
         setUmkmData(response.data);
-        setLoading(false);
       } catch (err) {
-        setError(err.message);
+        if (err.response?.status === 404) {
+          setUmkmData(null); // trigger NotFound
+        } else {
+          setError(err.message); // misalnya koneksi gagal atau 500
+        }
+      } finally {
+        // Set loading to false after fetching data
         setLoading(false);
       }
     };
@@ -28,62 +35,6 @@ const UMKMDetail = () => {
   }, [umkmId]);
 
   console.log("UMKM Data:", umkmData);
-
-  const data = {
-    umkm: {
-      id: 9,
-      nama_umkm: "Fashion Muslim Zhafira",
-      foto_profile: "https://images.pexels.com/photos/4492138/pexels-photo-4492138.jpeg",
-      alamat_lengkap: "6098 Muriel Summit, Wehnermouth, NM 56281-3456",
-      phone: "089351956795",
-      wa_link: "https://wa.me/089351956795",
-      deskripsi: "Fashion Muslim Zhafira menyediakan berbagai produk fashion muslimah berkualitas tinggi dengan desain modern dan nyaman dipakai. Kami berkomitmen untuk memberikan pengalaman berbelanja terbaik dengan produk yang memenuhi standar kualitas tertinggi."
-    },
-    produk: [
-      {
-        id: 1,
-        nama: "Gamis Modern",
-        harga: "Rp 250.000",
-        diskon: "Rp 200.000",
-        foto: "https://images.pexels.com/photos/4492138/pexels-photo-4492138.jpeg",
-        rating: 4.5,
-        kategori: {
-          id: 5,
-          nama: "Pilih Lokal"
-        }
-      },
-      {
-        id: 2,
-        nama: "Kerudung Segi Empat",
-        harga: "Rp 120.000",
-        diskon: "Rp 95.000",
-        foto: "https://images.pexels.com/photos/1030946/pexels-photo-1030946.jpeg",
-        rating: 4.2
-      },
-      {
-        id: 3,
-        nama: "Tunik Katun",
-        harga: "Rp 180.000",
-        diskon: "Rp 150.000",
-        foto: "https://images.pexels.com/photos/9558699/pexels-photo-9558699.jpeg",
-        rating: 3.4
-      },
-      {
-        id: 4,
-        nama: "Setelan Muslimah",
-        harga: "Rp 350.000",
-        diskon: "Rp 299.000",
-        foto: "https://images.pexels.com/photos/4050388/pexels-photo-4050388.jpeg",
-        rating: 4.8
-      }
-    ],
-    promo: {
-      judul: "Diskon 50% untuk Semua Baju Renang dan Pengiriman Cepat Gratis",
-      subjudul: "Beli Sekarang",
-      kode: "GRATISONGKIR",
-      berlaku: "30 Maret 2024"
-    }
-  }
 
   const formatDate = (dateString) => {
     if (!dateString) return "-";
@@ -114,6 +65,11 @@ const UMKMDetail = () => {
     )
   }
 
+  if (!umkmData || (!loading && !umkmData)) {
+    return <NotFound />;
+  }
+
+
   if (error) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -130,17 +86,16 @@ const UMKMDetail = () => {
     )
   }
 
-  if (!umkmData) return null
 
   return (
     <div className="min-h-screen bg-gray-50 mt-32">
       {/* Breadcrumb */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 bg-white">
+      {/* <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 bg-white">
         <button className="flex items-center text-gray-600 hover:text-red-600 transition-colors">
           <ChevronLeft className="w-4 h-4 mr-2" />
           Kembali ke Daftar UMKM
         </button>
-      </div>
+      </div> */}
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
@@ -235,8 +190,8 @@ const UMKMDetail = () => {
               {/* Stats */}
               <div className="grid grid-cols-2 gap-4 py-4 border-t border-b border-gray-200">
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-gray-900">ID-{umkmData.id}</div>
-                  <div className="text-sm text-gray-600">ID UMKM</div>
+                  <div className="text-2xl font-bold text-gray-900">{totalProducts}</div>
+                  <div className="text-sm text-gray-600">Produk</div>
                 </div>
                 <div className="text-center">
                   <div className={`text-2xl font-bold ${umkmData.is_active ? "text-green-600" : "text-red-600"}`}>
@@ -336,7 +291,8 @@ const UMKMDetail = () => {
 
         {/* Products Section */}
         <div className="mt-16">
-          <div className="flex justify-between items-center mb-6">
+          <RelatedItems umkmId={umkmData.id} onTotal={(total) => setTotalProducts(total)} />
+          {/* <div className="flex justify-between items-center mb-6">
             <h2 className="text-2xl font-bold text-gray-900">Produk Unggulan</h2>
             <button className="text-red-600 font-medium">Lihat Semua Produk</button>
           </div>
@@ -347,7 +303,7 @@ const UMKMDetail = () => {
                 <ProductCard produk={produk} />
               </div>
             ))}
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-// import RelatedItems from "../components/Product/RelatedItems";
+import RelatedItems from "../components/Product/RelatedItems";
 import GaleriProduct from "../components/Product/Galeri";
 import ActiveLastBreadcrumb from "../components/common/components/Link";
-import RedButton from "../components/common/components/RedButton";
+// import RedButton from "../components/common/components/RedButton";
 import WishlistIcon from "../components/common/components/WishlistIcon";
 import { Link, useParams } from "react-router-dom";
 import { productService } from "../Services/productService";
+import FormBuy from "../components/Product/FormBuy";
 import NotFound from "./NotFound";
 
 const Product = () => {
@@ -15,19 +16,25 @@ const Product = () => {
   let { productId } = useParams();
 
   useEffect(() => {
-    const fetchProductData = async () => {
-      try {
-        const response = await productService.getProduct(productId);
-        setProductData(response.data);
-        setLoading(false);
-      } catch (err) {
-        setError(err.message);
-        setLoading(false);
+  const fetchProductData = async () => {
+    try {
+      const response = await productService.getProduct(productId);
+      setProductData(response.data);
+    } catch (err) {
+      if (err.response?.status === 404) {
+        setProductData(null); // biar trigger NotFound
+      } else {
+        setError(err.message); // misalnya koneksi gagal atau 500 beneran
       }
-    };
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    fetchProductData();
-  }, [productId]);
+  fetchProductData();
+}, [productId]);
+
+
 
   // Format harga ke Rupiah
   const formatRupiah = (price) => {
@@ -37,6 +44,8 @@ const Product = () => {
       minimumFractionDigits: 0,
     }).format(price);
   };
+  console.log("photos", productData?.photos);
+
 
   if (loading) {
     return (
@@ -47,6 +56,9 @@ const Product = () => {
         </div>
       </div>
     )
+  }
+  if (!productId || (!loading && !productData)) {
+    return <NotFound />;
   }
 
   if (error) {
@@ -65,7 +77,8 @@ const Product = () => {
     )
   }
 
-  if (!productData) return <NotFound />;
+  
+
 
   return (
     <>
@@ -106,16 +119,16 @@ const Product = () => {
                   </p>
 
                   <span
-                    className={`px-3 py-1 rounded-full text-sm capitalize ${productData.status === 'pre_order'
-                        ? 'bg-yellow-100 text-yellow-800'
-                        : productData.status === 'available'
-                          ? 'bg-green-100 text-green-800'
-                          : 'bg-red-100 text-red-800'
+                    className={`px-3 py-1 rounded-full text-sm capitalize ${productData.status == 'pre_order'
+                      ? 'bg-yellow-100 text-yellow-800'
+                      : productData.status == 'available'
+                        ? 'bg-green-100 text-green-800'
+                        : 'bg-red-100 text-red-800'
                       }`}
                   >
-                    {productData.status === 'pre_order'
+                    {productData.status == 'pre_order'
                       ? 'Pre-Order'
-                      : productData.status === 'available'
+                      : productData.status == 'available'
                         ? 'Tersedia'
                         : 'Stok Kosong'}
                   </span>
@@ -130,9 +143,8 @@ const Product = () => {
 
               <span className="font-medium">Dapatkan Harga Spesial Dengan Memesan Melalui WhatsApp</span>
               <div className="font-inter text-xl flex gap-4 items-center">
-                <a href={productData.umkm.wa_link} target="_blank" rel="noopener noreferrer">
-                  <RedButton name={"Beli Sekarang"} />
-                </a>
+                {/* <RedButton name={"Beli Sekarang"} /> */}
+                <FormBuy productId={productId} applicationId="01" />
 
                 <WishlistIcon selectedProduct={productData} />
               </div>
@@ -164,7 +176,7 @@ const Product = () => {
             </div>
           </div>
           <hr className="mx-30 border-gray-300" />
-          {/* <RelatedItems categoryId={productData.category_id} /> */}
+          <RelatedItems categoryId={productData.category_id} />
         </div>
       </div>
     </>

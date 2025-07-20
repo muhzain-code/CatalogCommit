@@ -129,7 +129,7 @@ const Navigations = () => {
                 )}
               </List>
 
-              <footer className="text-center py-4">
+              {/* <footer className="text-center py-4">
                 <a
                   href="https://www.linkedin.com/in/mahmoud-mansy-a189a5232/"
                   target="_blank"
@@ -138,7 +138,7 @@ const Navigations = () => {
                   © 2024 Mahmoud Mansy.
                   {i18n.t("footer.allRightsReserved")}
                 </a>
-              </footer>
+              </footer> */}
             </motion.div>
           </Drawer>
         </>

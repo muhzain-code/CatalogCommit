@@ -62,7 +62,7 @@ const FlashSaleItem = ({ item }) => {
 
         {renderStatusBadge()}
 
-        <Link to={`/allProducts/${item.id}`}>
+        <Link to={`/allProducts/${item.id}`} className="w-full h-full">
           <img
             loading="lazy"
             src={item.image}
@@ -73,6 +73,7 @@ const FlashSaleItem = ({ item }) => {
 
         <WishlistIcon selectedProduct={item} style="absolute top-3 right-3" />
       </div>
+
       <div className="flex md:items-start items-center flex-col">
         <h3 className="text-lg font-base mt-4 text-center line-clamp-2 h-8">
           {item.name}

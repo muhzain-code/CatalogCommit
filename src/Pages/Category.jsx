@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Grid, Typography } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import FlashSaleItem from "../components/common/components/FlashSaleItem";
 import i18n from "../components/common/components/LangConfig";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
@@ -15,7 +15,7 @@ const PER_PAGE = 25;
 const Category = () => {
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
-  const [filteredCategories, setFilteredCategories] = useState([]);
+  const [filteredCategories, setFilteredCategories] = useState([1]);
   const [products, setProducts] = useState([]);
   const [page, setPage] = useState(1);
   const [lastPage, setLastPage] = useState(1);
@@ -23,6 +23,7 @@ const Category = () => {
   const [loadingProducts, setLoadingProducts] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState(null);
+  const location = useLocation();
 
   // Fetch categories with caching
   useEffect(() => {
@@ -113,6 +114,14 @@ const Category = () => {
 
     fetchProducts();
   }, [filteredCategories, page]);
+
+  useEffect(() => {
+    if (location.state?.categoryId) {
+      setFilteredCategories(location.state.categoryId);
+      setPage(1);
+    }
+  }, [location.state]);
+
 
   const handleCategoryChange = (e) => {
     const categoryId = e.target.value;
