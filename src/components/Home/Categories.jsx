@@ -19,6 +19,7 @@ const UMKMList = () => {
         // Mengambil semua data UMKM dari API
         const data = await allUmkm();
         setUmkmList(data);
+        console.log("UMKM List:", data);
       } catch (err) {
         setError("Gagal memuat data UMKM");
         console.error("Error fetching UMKM data:", err);
@@ -117,6 +118,7 @@ const UMKMList = () => {
       </div>
     )
   }
+  console.log("photos umkm", umkmList.map(umkm => umkm.photo_profile_url));
 
   return (
     <div className="relative group">
@@ -157,7 +159,7 @@ const UMKMList = () => {
                         <div className="w-full h-[90px] rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center relative">
                           <img
                             loading="lazy"
-                            src={umkm.photo_profile || "/placeholder.svg?height=90&width=140"}
+                            src={umkm.photo_profile_url}
                             alt={umkm.name}
                             className="w-full h-full object-cover group-hover/card:scale-110 transition-transform duration-500"
                             onError={(e) => {

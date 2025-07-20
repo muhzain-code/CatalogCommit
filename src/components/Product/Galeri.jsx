@@ -40,7 +40,7 @@ const GaleriProduct = ({ gallery }) => {
                                 </div>
                             ) : (
                                 <img
-                                    src={url}
+                                    src={url.url}
                                     alt={`Product view ${index + 1}`}
                                     className="w-full h-full object-cover rounded-xl"
                                     onError={() =>

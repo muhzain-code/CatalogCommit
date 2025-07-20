@@ -65,7 +65,7 @@ const FlashSaleItem = ({ item }) => {
         <Link to={`/allProducts/${item.id}`} className="w-full h-full">
           <img
             loading="lazy"
-            src={item.image}
+            src={item.cardPhoto || item.image}
             alt={item.name}
             className="w-full h-full object-cover transition-transform duration-300"
           />

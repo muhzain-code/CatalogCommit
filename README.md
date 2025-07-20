@@ -1,6 +1,6 @@
 # E-Commerce Website 🙌
 
-The E-commerce website is a full-stack application built using React with Vite as the bundler. It incorporates Tailwind CSS for styling and Material UI for components, offering a sleek and modern user interface. The platform provides essential functionalities such as signup and login for users to access their accounts, wishlist and cart pages for managing items, search functionality to easily find products, and a profile section for personalization. Furthermore, it includes checkout processes with support for coupons and purchasing, ensuring a seamless shopping experience for customers.
+Website E-commerce ini merupakan aplikasi full-stack yang dibangun menggunakan React dengan Vite sebagai bundler. Untuk tampilan, digunakan Tailwind CSS dan Material UI, sehingga menghasilkan antarmuka yang modern dan menarik. Platform ini menyediakan fitur-fitur utama seperti pendaftaran dan login agar pengguna dapat mengakses akun mereka, halaman wishlist dan keranjang untuk mengelola barang, fungsi pencarian untuk memudahkan menemukan produk, serta bagian profil untuk personalisasi. Selain itu, terdapat proses checkout yang mendukung penggunaan kupon dan pembelian, sehingga memastikan pengalaman belanja yang lancar bagi pelanggan.
 
 
   <img  src="public/assets/Screenshots/0.png" alt="Home">

@@ -217,6 +217,7 @@ export const transformProductData = (apiProduct) => {
     status: transformStatus(apiProduct.status),
     price: Number.parseFloat(apiProduct.price) || 0,
     image: apiProduct.photo?.file_path || "",
+    cardPhoto: apiProduct.photo?.url || "",
     createdAt: apiProduct.date || new Date().toISOString().split("T")[0],
     stock: 0, // Not provided by API
     sold: 0, // Not provided by API
