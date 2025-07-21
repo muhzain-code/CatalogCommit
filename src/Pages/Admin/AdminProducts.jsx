@@ -390,11 +390,13 @@ const AdminProducts = () => {
                         <table className="min-w-full divide-y divide-gray-200">
                             <thead className="bg-gray-50">
                                 <tr>
+                                    <th className="w-12 py-4 pl-4 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
+
                                     <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Produk
                                     </th>
                                     <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Brand & UMKM
+                                        UMKM
                                     </th>
                                     <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Kategori
@@ -425,9 +427,13 @@ const AdminProducts = () => {
                                         </td>
                                     </tr>
                                 ) : (
-                                    products.map((product) => (
+                                    products.map((product, i) => (
                                         <tr key={product.id} className="admin-table-row">
-                                            <td className="px-6 py-4 align-top">
+                                            <td className="py-4 pl-4 whitespace-nowrap text-center">
+                                                {(currentPage - 1) * itemsPerPage + i + 1}
+                                            </td>
+
+                                            <td className="px-6 py-4 align-middle">
                                                 <div className="flex items-start">
                                                     <ImageWithFallback
                                                         srcs={[product.image]}
@@ -435,16 +441,16 @@ const AdminProducts = () => {
                                                         className="h-12 min-w-12 max-w-12 rounded-lg object-cover shadow-sm shrink-0"
                                                         fallbackIcon={Package}
                                                     />
-                                                    <div className="ml-4 max-w-xs">
+                                                    <div className="ml-4 max-w-xs self-center">
                                                         <div className="text-sm font-medium text-gray-900 break-words">{product.name}</div>
-                                                        <div className="text-sm text-gray-500">ID: {product.id}</div>
+                                                        {/* <div className="text-sm text-gray-500">ID: {product.id}</div> */}
                                                     </div>
                                                 </div>
                                             </td>
 
                                             <td className="px-6 py-4 whitespace-nowrap">
-                                                <div className="text-sm font-medium text-gray-900">{product.brand}</div>
-                                                <div className="text-sm text-gray-500">{product.umkm}</div>
+                                                <div className="text-sm font-medium text-gray-900">{product.umkm}</div>
+                                                {/* <div className="text-sm text-gray-500">{product.umkm}</div> */}
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap">
                                                 <span className="inline-flex px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">
