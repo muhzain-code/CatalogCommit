@@ -203,14 +203,14 @@ const UMKMDetail = () => {
 
               {/* Contact Actions */}
               <div className="space-y-3">
-                <a
+                {/* <a
                   href={umkmData.wa_link}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="block w-full bg-red-600 hover:bg-red-700 text-white py-3 px-6 rounded-lg font-medium transition-colors text-center"
                 >
                   Hubungi via WhatsApp
-                </a>
+                </a> */}
                 {/* Owner Information */}
                 <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
                   <h3 className="font-medium text-blue-900 mb-2">Informasi Pemilik</h3>

@@ -92,9 +92,9 @@ const BannerSection = ({ products }) => {
           )}
 
           <div className="absolute bottom-6 left-6 bg-black/50 text-white p-4 rounded-xl">
-            <h2 className="text-xl md:text-2xl font-bold">
+            {/* <h2 className="text-xl md:text-2xl font-bold">
               {product.name || "Tanpa Nama"}
-            </h2>
+            </h2> */}
           </div>
         </Link>
       ))}
