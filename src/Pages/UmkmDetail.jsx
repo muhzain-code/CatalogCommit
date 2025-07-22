@@ -215,7 +215,7 @@ const UMKMDetail = () => {
                         <span className="text-blue-700 font-medium">Jenis Kelamin:</span> {getGenderText(umkmData.gender)}
                       </p>
                       <p>
-                        <span className="text-blue-700 font-medium">NIK:</span> {umkmData.nik}
+                        <span className="text-blue-700 font-medium">Alamat:</span> {umkmData.address}
                       </p>
                     </div>
                   </div>

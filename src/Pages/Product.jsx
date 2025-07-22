@@ -190,7 +190,7 @@ const Product = () => {
       <br />
       <hr className="border-gray-300" />
       <br />
-      <RelatedItems categoryId={productData.category_id} />
+      <RelatedItems categoryId={productData.category_id} productId={productData.id} />
     </>
 
   );
