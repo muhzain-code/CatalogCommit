@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Plus, Search, Edit, Trash2, Calendar, Filter, AlertCircle, RefreshCw } from "lucide-react"
+import { Plus, Search, Edit, Trash2, Calendar, Filter, AlertCircle, RefreshCw, Gift } from "lucide-react"
 import PromoProductModal from "../../components/Admin/Modals/PromoProductModal"
 import LoadingSpinner from "../../components/Admin/LoadingSpinner"
 import ErrorNotification from "../../components/Admin/ErrorNotification"
@@ -10,6 +10,7 @@ import { promoProductService } from "../../Services/promoProductService"
 import Pagination from "../../components/Admin/Pagination"
 import { productService } from "../../Services/productService"
 import { eventService } from "../../Services/eventService"
+import ImageWithFallback from "../../components/Admin/ImageWithFallback"
 
 const AdminPromoProducts = () => {
     const [promoProducts, setPromoProducts] = useState([])
@@ -349,6 +350,8 @@ const AdminPromoProducts = () => {
                         <table className="min-w-full divide-y divide-gray-200">
                             <thead className="bg-gray-50">
                                 <tr>
+                                    <th className="w-12 py-4 pl-4 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
+
                                     <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Promo & Produk
                                     </th>
@@ -378,15 +381,24 @@ const AdminPromoProducts = () => {
                                             </div>
                                         </td>
                                     </tr>
-                                ) : (promoProducts.map((promo) => (
+                                ) : (promoProducts.map((promo, i) => (
                                     <tr key={promo.id} className="admin-table-row">
+                                        <td className="py-4 pl-4 whitespace-nowrap text-center">
+                                            {(currentPage - 1) * itemsPerPage + i + 1}
+                                        </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             <div className="flex items-center">
-                                                <img
+                                                <ImageWithFallback
+                                                    srcs={[promo.event?.photo]}
+                                                    alt={promo.product?.name ?? "Produk"}
+                                                    className="h-12 w-12 rounded-lg object-cover shadow-sm"
+                                                    fallbackIcon={Gift}
+                                                />
+                                                {/* <img
                                                     className="h-12 w-12 rounded-lg object-cover shadow-sm"
                                                     src={promo.event?.photo || "/placeholder.svg"} // pakai foto dari event
                                                     alt={promo.product?.name ?? "Produk"}
-                                                />
+                                                /> */}
                                                 <div className="ml-4">
                                                     <div className="text-sm font-medium text-gray-900">{promo.event?.name}</div>
                                                     <div className="text-sm text-gray-500">{promo.product?.name}</div>
@@ -457,16 +469,16 @@ const AdminPromoProducts = () => {
                             </tbody>
                         </table>
                     </div>
+                    {totalPages > 1 && (
+                        <Pagination
+                            currentPage={currentPage}
+                            totalPages={totalPages}
+                            totalItems={totalItems}
+                            itemsPerPage={itemsPerPage}
+                            onPageChange={handlePageChange}
+                        />
+                    )}
                 </div>
-                {totalPages > 1 && (
-                    <Pagination
-                        currentPage={currentPage}
-                        totalPages={totalPages}
-                        totalItems={totalItems}
-                        itemsPerPage={itemsPerPage}
-                        onPageChange={handlePageChange}
-                    />
-                )}
             </div>
             <PromoProductModal
                 isOpen={isModalOpen}

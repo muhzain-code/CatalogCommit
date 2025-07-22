@@ -266,7 +266,7 @@ const AdminCategories = () => {
                 </div>
 
                 {/* Categories Grid */}
-                <div className="relative">
+                {/* <div className="relative">
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                         {loading && categories.length > 0 && (
                             <div className="absolute inset-0 bg-white bg-opacity-75 flex items-center justify-center z-10">
@@ -285,11 +285,6 @@ const AdminCategories = () => {
                             <div key={category.id} className="bg-white rounded-xl shadow-sm p-6 admin-card-hover">
                                 <div className="flex items-center justify-center mb-4">
                                     <div className="relative">
-                                        {/* <img
-                                    className="h-20 w-20 rounded-xl object-cover shadow-sm"
-                                    src={category.photo}
-                                    alt={category.name}
-                                /> */}
                                         <ImageWithFallback
                                             srcs={[category.photo]}
                                             alt={category.name}
@@ -330,7 +325,89 @@ const AdminCategories = () => {
                             </div>
                         ))}
                     </div>
-                </div>
+                </div> */}
+
+                <div className="bg-white rounded-xl shadow-sm overflow-hidden relative">
+                    {loading && categories.length > 0 && (
+                        <div className="absolute inset-0 bg-white bg-opacity-75 flex items-center justify-center z-10">
+                            <LoadingSpinner size="sm" text="Memuat..." />
+                        </div>
+                    )}
+
+                    <div className="overflow-x-auto">
+                        <table className="min-w-full divide-y divide-gray-200">
+                            <thead className="bg-gray-50">
+                                <tr>
+                                    <th className="w-12 py-4 pl-4 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
+                                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kategori</th>
+                                    {/* <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Deskripsi</th> */}
+                                    <th className="w-20 px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                    <th className="w-20 px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody className="bg-white divide-y divide-gray-200">
+                                {categories.length === 0 && !loading ? (
+                                    <tr>
+                                        <td colSpan="5" className="px-6 py-12 text-center text-gray-500">
+                                            <div className="flex flex-col items-center">
+                                                <Search className="w-12 h-12 text-gray-300 mb-4" />
+                                                <p className="text-lg font-medium">Tidak ada Kategori ditemukan</p>
+                                                <p className="text-sm">Coba ubah filter atau kata kunci pencarian</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ) : (
+                                    categories.map((category, i) => (
+                                        <tr key={category.id} className="admin-table-row">
+                                            <td className="py-4 pl-4 whitespace-nowrap text-center">
+                                                {(currentPage - 1) * itemsPerPage + i + 1}
+                                            </td>
+                                            <td className="px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap">
+                                                <div className="flex items-start">
+                                                    <ImageWithFallback
+                                                        srcs={[category.photo]}
+                                                        alt={category.name}
+                                                        className="h-12 min-w-12 max-w-12 rounded-lg object-cover shadow-sm shrink-0"
+                                                        fallbackIcon={Store}
+                                                    />
+                                                    <div className="ml-4 max-w-xs self-center">
+                                                        <div className="text-sm font-medium text-gray-900 break-words">{category.name}</div>
+                                                    </div>
+                                                </div>
+                                                {/* {category.name} */}
+                                            </td>
+                                            {/* <td className="px-6 py-4 text-sm text-gray-700">
+                                                {category.description}
+                                            </td> */}
+                                            <td className="px-6 py-4">
+                                                <span
+                                                    className={`admin-status-badge ${category.status === "Aktif" ? "bg-[#d1fae5] text-[#065f46]" : "bg-red-100 text-red-800"}`}
+                                                >
+                                                    {category.status}
+                                                </span>
+                                            </td>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                                <div className="flex space-x-2">
+                                                    <button
+                                                        onClick={() => handleEdit(category)}
+                                                        className="text-green-600 hover:text-green-900 p-2 hover:bg-green-50 rounded-lg transition-colors"
+                                                    >
+                                                        <Edit className="w-4 h-4" />
+                                                    </button>
+                                                    <button
+                                                        onClick={() => handleDelete(category.id, category.name)}
+                                                        className="text-red-600 hover:text-red-900 p-2 hover:bg-red-50 rounded-lg transition-colors"
+                                                    >
+                                                        <Trash2 className="w-4 h-4" />
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ))
+                                )}
+                            </tbody>
+                        </table>
+                    </div>
                 {totalPages > 1 && (
                     <Pagination
                         currentPage={currentPage}
@@ -340,6 +417,8 @@ const AdminCategories = () => {
                         onPageChange={handlePageChange}
                     />
                 )}
+                </div>
+
             </div>
             <CategoryModal
                 isOpen={isModalOpen}

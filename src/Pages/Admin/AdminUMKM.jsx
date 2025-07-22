@@ -21,7 +21,7 @@ const AdminUMKM = () => {
     const [currentPage, setCurrentPage] = useState(1)
     const [totalPages, setTotalPages] = useState(1)
     const [totalItems, setTotalItems] = useState(0)
-    const [itemsPerPage, setItemsPerPage] = useState(9)
+    const [itemsPerPage, setItemsPerPage] = useState(10)
     const [paginationMeta, setPaginationMeta] = useState({})
 
 
@@ -270,15 +270,15 @@ const AdminUMKM = () => {
                             value={itemsPerPage}
                             onChange={(e) => handlePerPageChange(Number.parseInt(e.target.value))}
                         >
-                            <option value={9}>9 per halaman</option>
-                            <option value={18}>18 per halaman</option>
+                            <option value={10}>10 per halaman</option>
+                            <option value={20}>20 per halaman</option>
                             <option value={25}>25 per halaman</option>
                             <option value={50}>50 per halaman</option>
                         </select>
                     </div>
                 </div>
 
-                <div className="relative">
+                {/* <div className="relative">
                     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                         {loading && umkms.length > 0 && (
                             <div className="absolute inset-0 bg-white bg-opacity-75 flex items-center justify-center z-10">
@@ -295,11 +295,11 @@ const AdminUMKM = () => {
                             </div>
                         ) : umkms.map((umkm) => (
                             <div key={umkm.id} className="bg-white rounded-xl shadow-sm p-6">
-                                {/* <img
+                                <img
                                     src={umkm.photo_profile_url || umkm.photo_profile}
                                     alt={umkm.name}
                                     className="w-full h-40 object-cover rounded-lg mb-4"
-                                /> */}
+                                /> 
                                 <ImageWithFallback
                                     srcs={[umkm.photo_profile_url, umkm.photo_profile]}
                                     alt={umkm.name}
@@ -360,18 +360,134 @@ const AdminUMKM = () => {
                         ))}
 
                     </div>
+                </div> */}
+
+                <div className="bg-white rounded-xl shadow-sm overflow-hidden relative">
+                    {loading && umkms.length > 0 && (
+                        <div className="absolute inset-0 bg-white bg-opacity-75 flex items-center justify-center z-10">
+                            <LoadingSpinner size="sm" text="Memuat..." />
+                        </div>
+                    )}
+
+                    <div className="overflow-x-auto">
+                        <table className="min-w-full divide-y divide-gray-200">
+                            <thead className="bg-gray-50">
+                                <tr>
+                                    <th className="w-12 py-4 pl-4 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
+                                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">UMKM</th>
+                                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Deskripsi</th>
+                                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pemilik</th>
+                                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kontak</th>
+                                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Alamat</th>
+                                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody className="bg-white divide-y divide-gray-200">
+                                {umkms.length === 0 && !loading ? (
+                                    <tr>
+                                        <td colSpan="7" className="px-6 py-12 text-center text-gray-500">
+                                            <div className="flex flex-col items-center">
+                                                <Search className="w-12 h-12 text-gray-300 mb-4" />
+                                                <p className="text-lg font-medium">Tidak ada UMKM ditemukan</p>
+                                                <p className="text-sm">Coba ubah filter atau kata kunci pencarian</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ) : (
+                                    umkms.map((umkm, i) => (
+                                        <tr key={umkm.id} className="admin-table-row">
+                                            <td className="py-4 pl-4 whitespace-nowrap text-center">
+                                                {(currentPage - 1) * itemsPerPage + i + 1}
+                                            </td>
+
+                                            <td className="px-6 py-4 align-middle">
+                                                <div className="flex items-start">
+                                                    <ImageWithFallback
+                                                        srcs={[umkm.photo_profile_url, umkm.photo_profile]}
+                                                        alt={umkm.name}
+                                                        className="h-12 min-w-12 max-w-12 rounded-lg object-cover shadow-sm shrink-0"
+                                                        fallbackIcon={Store}
+                                                    />
+                                                    <div className="ml-4 max-w-xs self-center">
+                                                        <div className="text-sm font-medium text-gray-900 break-words">{umkm.name}</div>
+                                                    </div>
+                                                </div>
+                                            </td>
+
+                                            <td className="px-6 py-4 text-sm text-gray-700 break-words">
+                                                {umkm.description}
+                                            </td>
+
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                                <div className="font-medium text-gray-900">{umkm.owner_name}</div>
+                                                <div>{umkm.gender === "l" ? "Laki-laki" : "Perempuan"}</div>
+                                                <div className="text-gray-500 text-sm">NIK: {umkm.nik}</div>
+                                            </td>
+
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                                <div className="flex items-center mb-1">
+                                                    <Phone className="w-4 h-4 mr-1 text-gray-400" />
+                                                    {umkm.phone}
+                                                </div>
+                                                <div className="flex items-center mb-1">
+                                                    <Mail className="w-4 h-4 mr-1 text-gray-400" />
+                                                    <a href={`mailto:${umkm.email}`} className="text-blue-600 hover:underline">{umkm.email}</a>
+                                                </div>
+                                                {umkm.wa_link && (
+                                                    <div className="flex items-center">
+                                                        <ExternalLink className="w-4 h-4 mr-1 text-gray-400" />
+                                                        <a href={umkm.wa_link} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800">WhatsApp</a>
+                                                    </div>
+                                                )}
+                                            </td>
+
+                                            <td className="px-6 py-4 text-sm text-gray-700">
+                                                <div className="flex items-start">
+                                                    <MapPin className="w-4 h-4 mr-1 mt-0.5 text-gray-400" />
+                                                    <span className="line-clamp-2">{umkm.address}</span>
+                                                </div>
+                                            </td>
+
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                                <div className={`admin-status-badge ${umkm.is_active ? "bg-[#d1fae5] text-[#065f46]" : "bg-red-100 text-red-800"}`}>
+                                                    {umkm.is_active ? "Aktif" : "Nonaktif"}
+                                                </div>
+                                                {/* <div className="text-xs text-gray-500 mt-1">Sejak {new Date(umkm.created_at).toLocaleDateString("id-ID")}</div> */}
+                                            </td>
+
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                                <div className="flex space-x-2">
+                                                    <button
+                                                        onClick={() => handleEdit(umkm)}
+                                                        className="text-green-600 hover:text-green-900 p-2 hover:bg-green-50 rounded-lg transition-colors"
+                                                    >
+                                                        <Edit className="w-4 h-4" />
+                                                    </button>
+                                                    <button
+                                                        onClick={() => handleDelete(umkm.id, umkm.name)}
+                                                        className="text-red-600 hover:text-red-900 p-2 hover:bg-red-50 rounded-lg transition-colors"
+                                                    >
+                                                        <Trash2 className="w-4 h-4" />
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ))
+                                )}
+                            </tbody>
+                        </table>
+                    </div>
+                    {totalPages > 1 && (
+                        <Pagination
+                            currentPage={currentPage}
+                            totalPages={totalPages}
+                            totalItems={totalItems}
+                            itemsPerPage={itemsPerPage}
+                            onPageChange={handlePageChange}
+                        />
+                    )}
                 </div>
-
-                {totalPages > 1 && (
-                    <Pagination
-                        currentPage={currentPage}
-                        totalPages={totalPages}
-                        totalItems={totalItems}
-                        itemsPerPage={itemsPerPage}
-                        onPageChange={handlePageChange}
-                    />
-                )}
-
             </div>
             <UMKMModal
                 isOpen={isModalOpen}

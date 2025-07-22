@@ -371,107 +371,121 @@ const AdminEvents = () => {
                         </div>
                     </div>
                 </div>
+                <div className="bg-white rounded-xl shadow-sm overflow-hidden relative">
+                    {loading && events.length > 0 && (
+                        <div className="absolute inset-0 bg-white bg-opacity-75 flex items-center justify-center z-10">
+                            <LoadingSpinner size="sm" text="Memuat..." />
+                        </div>
+                    )}
 
-                {/* Categories Grid */}
-                <div className="relative">
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                        {loading && events.length > 0 && (
-                            <div className="absolute inset-0 bg-white bg-opacity-75 flex items-center justify-center z-10">
-                                <LoadingSpinner size="sm" text="Memuat..." />
-                            </div>
-                        )}
-                        {events.length === 0 && !loading ? (
-                            <div className="w-full text-center py-12 text-gray-500 md:col-span-2 lg:col-span-3 xl:col-span-4">
-                                <div className="flex flex-col items-center">
-                                    <Search className="w-12 h-12 text-gray-300 mb-4" />
-                                    <p className="text-lg font-medium">Tidak ada Event ditemukan</p>
-                                    <p className="text-sm">Coba ubah filter atau kata kunci pencarian</p>
-                                </div>
-                            </div>
-                        ) : events.map((event) => (
-                            <div key={event.id} className="bg-white rounded-xl shadow-sm overflow-hidden admin-card-hover">
-                                <div className="relative">
-                                    <ImageWithFallback
-                                        className="w-full h-48 object-cover"
-                                        src={event.photo}
-                                        alt={event.name}
-                                        srcs={[event.photo]}
-                                        fallbackIcon={Megaphone}
-                                        sizeIconFallback={10}
-                                    />
-
-                                    {/* Opsional: badge promo jika ada */}
-                                    {event.is_promo_event && (
-                                        <div className="absolute top-4 left-4">
-                                            <div className="bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold flex items-center">
-                                                Promo Event
+                    <div className="overflow-x-auto">
+                        <table className="min-w-full divide-y divide-gray-200">
+                            <thead className="bg-gray-50">
+                                <tr>
+                                    <th className="w-12 py-4 pl-4 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
+                                    {/* <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Banner</th> */}
+                                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Event</th>
+                                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Deskripsi</th>
+                                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal</th>
+                                    {/* <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jenis</th> */}
+                                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody className="bg-white divide-y divide-gray-200">
+                                {events.length === 0 && !loading ? (
+                                    <tr>
+                                        <td colSpan="7" className="px-6 py-12 text-center text-gray-500">
+                                            <div className="flex flex-col items-center">
+                                                <Search className="w-12 h-12 text-gray-300 mb-4" />
+                                                <p className="text-lg font-medium">Tidak ada Event ditemukan</p>
+                                                <p className="text-sm">Coba ubah filter atau kata kunci pencarian</p>
                                             </div>
-                                        </div>
-                                    )}
-
-                                    {event.is_umkm_event && (
-                                        <div className="absolute top-4 left-4">
-                                            <div className="bg-blue-500 text-white px-3 py-1 rounded-full text-sm font-bold flex items-center">
-                                                Event UMKM
-                                            </div>
-                                        </div>
-                                    )}
-
-
-                                    <div className="absolute top-4 right-4">
-                                        <span
-                                            className={`admin-status-badge ${event.is_active
-                                                ? "bg-[#d1fae5] text-[#065f46]"
-                                                : "bg-red-100 text-red-800"
-                                                }`}
-                                        >
-                                            {event.is_active ? "Aktif" : "Berakhir"}
-                                        </span>
-                                    </div>
-                                </div>
-
-                                <div className="p-6">
-                                    <h3 className="text-xl font-semibold text-gray-900 mb-2">{event.name}</h3>
-                                    <p className="text-gray-600 mb-4 line-clamp-2">{event.description}</p>
-
-                                    <div className="space-y-2 text-sm text-gray-500 mb-4">
-                                        <div className="flex items-center">
-                                            <Calendar className="w-4 h-4 mr-2" />
-                                            <span>
-                                                {formatDate(event.start_date)} - {formatDate(event.end_date)}
-                                            </span>
-                                        </div>
-                                    </div>
-
-                                    <div className="flex justify-end space-x-2">
-                                        <button
-                                            onClick={() => handleEdit(event)}
-                                            className="text-green-600 hover:text-green-900 p-2 hover:bg-green-50 rounded-lg transition-colors"
-                                        >
-                                            <Edit className="w-4 h-4" />
-                                        </button>
-                                        <button
-                                            onClick={() => handleDelete(event.id, event.name)}
-                                            className="text-red-600 hover:text-red-900 p-2 hover:bg-red-50 rounded-lg transition-colors"
-                                        >
-                                            <Trash2 className="w-4 h-4" />
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
+                                        </td>
+                                    </tr>
+                                ) : (
+                                    events.map((event, i) => (
+                                        <tr key={event.id}>
+                                            <td className="py-4 pl-4 whitespace-nowrap text-center">
+                                                {(currentPage - 1) * itemsPerPage + i + 1}
+                                            </td>
+                                            <td className="px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap">
+                                                <div className="flex items-start">
+                                                    <ImageWithFallback
+                                                        srcs={[event.photo]}
+                                                        alt={event.name}
+                                                        className="h-12 min-w-20 max-w-20 rounded-lg object-cover shadow-sm shrink-0"
+                                                        fallbackIcon={Megaphone}
+                                                    />
+                                                    <div className="ml-4 max-w-xs self-center">
+                                                        <div className="text-sm font-medium text-gray-900 break-words">{event.name}</div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td className="px-6 py-4 text-sm text-gray-700 max-w-sm line-clamp-2">
+                                                {event.description}
+                                            </td>
+                                            <td className="px-6 py-4 whitespace-nowrap">
+                                                <div className="text-sm text-gray-900">
+                                                    <div className="flex items-center">
+                                                        <Calendar className="w-4 h-4 mr-1" />
+                                                        {formatDate(event?.start_date)}
+                                                    </div>
+                                                    <div className="text-gray-500">
+                                                        s/d {formatDate(event.end_date)}
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            {/* <td className="px-6 py-4 text-sm text-gray-700 whitespace-nowrap">
+                                                {event.is_promo_event && (
+                                                    <span className="inline-block bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full mr-2">
+                                                        Promo Event
+                                                    </span>
+                                                )}
+                                                {event.is_umkm_event && (
+                                                    <span className="inline-block bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+                                                        Event UMKM
+                                                    </span>
+                                                )}
+                                            </td> */}
+                                            <td className="px-6 py-4">
+                                                <span className={`admin-status-badge ${event.is_active ? "bg-[#d1fae5] text-[#065f46]" : "bg-red-100 text-red-800"}`}>
+                                                    {event.is_active ? "Aktif" : "Berakhir"}
+                                                </span>
+                                            </td>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                                <div className="flex space-x-2">
+                                                    <button
+                                                        onClick={() => handleEdit(event)}
+                                                        className="text-green-600 hover:text-green-900 p-2 hover:bg-green-50 rounded-lg transition-colors"
+                                                    >
+                                                        <Edit className="w-4 h-4" />
+                                                    </button>
+                                                    <button
+                                                        onClick={() => handleDelete(event.id, event.name)}
+                                                        className="text-red-600 hover:text-red-900 p-2 hover:bg-red-50 rounded-lg transition-colors"
+                                                    >
+                                                        <Trash2 className="w-4 h-4" />
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ))
+                                )}
+                            </tbody>
+                        </table>
                     </div>
-
+                    {totalPages > 1 && (
+                        <Pagination
+                            currentPage={currentPage}
+                            totalPages={totalPages}
+                            totalItems={totalItems}
+                            itemsPerPage={itemsPerPage}
+                            onPageChange={handlePageChange}
+                        />
+                    )}
                 </div>
-                {totalPages > 1 && (
-                    <Pagination
-                        currentPage={currentPage}
-                        totalPages={totalPages}
-                        totalItems={totalItems}
-                        itemsPerPage={itemsPerPage}
-                        onPageChange={handlePageChange}
-                    />
-                )}
+
             </div>
             <EventsModal
                 isOpen={isModalOpen}
