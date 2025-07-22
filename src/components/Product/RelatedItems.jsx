@@ -5,6 +5,7 @@ import RedTitle from "../common/components/RedTitle";
 import ViewAll from "../common/components/ViewAll";
 import { Grid } from "@mui/material";
 import { productService, transformProductData } from "../../Services/productService";
+import Loader from "../common/components/Loader";
 
 const RelatedItems = ({ categoryId, umkmId, onTotal }) => {
   const [relatedProducts, setRelatedProducts] = useState([]);
@@ -60,13 +61,6 @@ const RelatedItems = ({ categoryId, umkmId, onTotal }) => {
     fetchRelatedProducts();
   }, [categoryId, umkmId, onTotal]);
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center h-64">
-        <p>Memuat produk terkait...</p>
-      </div>
-    );
-  }
 
   if (error) {
     return (
@@ -78,9 +72,9 @@ const RelatedItems = ({ categoryId, umkmId, onTotal }) => {
 
   return (
     <>
-      <div className="mx-auto md:mx-2">
+      <div className="mx-auto md:mx-2 lg:px-9 md:px-0">
         <RedTitle title={"Produk Terkait"} />
-        <div className="relative mt-10 flex flex-row gap-2 md:gap-12 transition-transform duration-300 transform">
+        <div className="relative mt-10 flex flex-row gap-2 md:gap-10 transition-transform duration-300 transform lg:px-32 md:px-0">
           <Grid
             container
             spacing={3}
@@ -88,7 +82,7 @@ const RelatedItems = ({ categoryId, umkmId, onTotal }) => {
             alignItems="center"
           >
             {relatedProducts.map((item, index) => (
-              <Grid item key={item.id}>
+              <Grid item key={item.id} xs={6} sm={4} md={3} lg={3}>
                 <FlashSaleItem
                   item={item}
                   index={index}
@@ -96,6 +90,12 @@ const RelatedItems = ({ categoryId, umkmId, onTotal }) => {
                 />
               </Grid>
             ))}
+            {loading &&
+              Array.from({ length: 8 }).map((_, index) => (
+                <Grid item key={`loader-${index}`}>
+                  <Loader />
+                </Grid>
+              ))}
           </Grid>
         </div>
       </div>

@@ -62,7 +62,11 @@ const Row1 = () => {
         <nav className="py-6">
           <ul>
             {loading ? (
-              <li className="px-4 py-2 text-sm text-gray-400">Loading...</li>
+              Array.from({ length: 5 }).map((_, index) => (
+                <li key={index} className="px-4 py-2">
+                  <div className="h-4 w-32 bg-gray-300 animate-pulse rounded" />
+                </li>
+              ))
             ) : categories.length === 0 ? (
               <li className="px-4 py-2 text-sm text-gray-400">Tidak ada kategori</li>
             ) : (
@@ -88,6 +92,7 @@ const Row1 = () => {
               </>
             )}
           </ul>
+
         </nav>
       </div>
 
@@ -95,8 +100,8 @@ const Row1 = () => {
       <div className="border-l border-gray-300 hidden xl:block"></div>
 
       {/* Main Content */}
-      <div className="flex xl:my-10 xl:ml-10 xl:gap-16 items-center jusify-between flex-col-reverse md:flex-row  md:h-96 bg-black text-white w-full">
-        <BannerSection products={events} />
+      <div className="flex xl:my-10 xl:ml-10 xl:gap-16 items-center jusify-between flex-col-reverse md:flex-row  md:h-96 w-full">
+        <BannerSection products={events} loading={loading} />
       </div>
     </div>
   )

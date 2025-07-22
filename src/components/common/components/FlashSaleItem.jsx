@@ -52,7 +52,7 @@ const FlashSaleItem = ({ item }) => {
       <div
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        className="relative rounded flex items-center justify-center bg-zinc-100 w-[270px] h-80 md:h-60 transform transition-transform duration-300 hover:scale-105 focus:outline-none hover:-translate-y-2 overflow-hidden"
+        className="relative rounded flex items-center justify-center bg-zinc-100 w-full aspect-square transform transition-transform duration-300 hover:scale-105 focus:outline-none hover:-translate-y-2 overflow-hidden"
       >
         {discountPercentage && (
           <div className="absolute top-0 left-0 bg-red-500 text-white py-1 px-3 m-2 rounded">
@@ -74,8 +74,8 @@ const FlashSaleItem = ({ item }) => {
         <WishlistIcon selectedProduct={item} style="absolute top-3 right-3" />
       </div>
 
-      <div className="flex md:items-start items-center flex-col">
-        <h3 className="text-lg font-base mt-4 text-center line-clamp-2 h-8">
+      <div className="flex md:items-start items-start flex-col">
+        <h3 className="text-lg font-base mt-4 truncate line-clamp-2 h-8 w-11/12">
           {item.name}
         </h3>
         <p className="text-white bg-red-400 px-2 py-1 rounded-md text-xs font-semibold mt-2">

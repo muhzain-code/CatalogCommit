@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
-import { Share2, Calendar, Clock, Users, Tag, Building2, Sparkles } from "lucide-react";
+import { Calendar, Clock, Users, Tag, Sparkles } from "lucide-react";
 import { eventService } from "../Services/eventService";
 import { fetchAllEventUmkm } from "../Services/eventUmkmService";
 import { fetchAllPromoProduct } from "../Services/promoProductService";
 import { Link, useParams } from "react-router-dom";
 import NotFound from "./NotFound";
+import Loading from "../components/common/components/Loading";
 
 const EventDetail = () => {
     const [eventData, setEventData] = useState(null);
@@ -131,8 +132,9 @@ const EventDetail = () => {
         return (
             <div className="min-h-screen bg-gray-50 flex items-center justify-center">
                 <div className="text-center">
-                    <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-red-600 mx-auto"></div>
-                    <p className="mt-4 text-gray-600">Memuat data event...</p>
+                    {/* <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-red-600 mx-auto"></div> */}
+                    <Loading />
+                    {/* <p className="mt-4 text-gray-600">Memuat data event...</p> */}
                 </div>
             </div>
         )
@@ -162,7 +164,7 @@ const EventDetail = () => {
     const eventDuration = getEventDuration()
 
     return (
-        <div className="min-h-screen bg-gray-50 mt-32">
+        <div className="min-h-screen bg-white mt-32">
             {/* Breadcrumb */}
             {/* <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 bg-white">
                 <button className="flex items-center text-gray-600 hover:text-red-600 transition-colors">
@@ -177,26 +179,28 @@ const EventDetail = () => {
                     {/* Left Side - Event Image */}
                     <div className="space-y-4">
                         {/* Main Image */}
-                        <div className="relative w-full h-96 rounded-xl overflow-hidden shadow-lg">
+                        <div className="relative w-full max-w-full rounded-xl overflow-hidden shadow-lg h-60 sm:h-72 md:h-80 lg:h-96">
                             <img
                                 src={eventData.photo || "/placeholder.svg"}
                                 alt={eventData.name}
                                 className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
                             />
                             <div
-                                className={`absolute top-4 right-4 px-3 py-1 rounded-full text-sm font-bold ${eventStatus == "Sedang Berlangsung"
-                                    ? "bg-green-600 text-white"
-                                    : eventStatus == "Akan Datang"
-                                        ? "bg-blue-600 text-white"
-                                        : "bg-gray-600 text-white"
+                                className={`absolute top-2 right-2 sm:top-4 sm:right-4 px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-bold 
+                                            ${eventStatus === "Sedang Berlangsung"
+                                        ? "bg-green-600 text-white"
+                                        : eventStatus === "Akan Datang"
+                                            ? "bg-blue-600 text-white"
+                                            : "bg-gray-600 text-white"
                                     }`}
                             >
                                 {eventStatus}
                             </div>
                         </div>
 
+
                         {/* Event Type Cards */}
-                        <div className="grid grid-cols-2 gap-4">
+                        {/* <div className="grid grid-cols-2 gap-4">
                             <div className="bg-white p-4 rounded-lg shadow-sm border">
                                 <div className="flex items-center space-x-2">
                                     <Tag className="w-5 h-5 text-red-500" />
@@ -217,7 +221,7 @@ const EventDetail = () => {
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
 
                     {/* Right Side - Event Details */}
@@ -233,9 +237,9 @@ const EventDetail = () => {
                   >
                     <Heart className={`w-5 h-5 ${isLiked ? "fill-red-600 text-red-600" : "text-gray-600"}`} />
                   </button> */}
-                                    <button className="p-2 rounded-full border border-gray-300 hover:bg-gray-100">
+                                    {/* <button className="p-2 rounded-full border border-gray-300 hover:bg-gray-100">
                                         <Share2 className="w-5 h-5 text-gray-600" />
-                                    </button>
+                                    </button> */}
                                 </div>
                             </div>
 
@@ -413,7 +417,7 @@ const EventDetail = () => {
                         </div>
 
                         {eventPromos.length > 0 ? (
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                                 {eventPromos.map((promo) => {
                                     const discount = calculateDiscount(promo.product.price, promo.promo_price)
                                     const statusBadge = getStatusBadge(promo.product.status)
@@ -424,8 +428,9 @@ const EventDetail = () => {
                                             className="bg-white rounded-lg shadow-sm border hover:shadow-lg transition-all duration-300 overflow-hidden"
                                         >
                                             {/* Product Image Placeholder */}
-                                            <div className="relative h-48 bg-gradient-to-br from-red-100 to-red-200">
+                                            <div className="relative bg-gradient-to-br from-red-100 to-red-200 aspect-video">
                                                 <img
+                                                    loading="lazy"
                                                     src={promo.product.active_photos[0]?.file_path || `/placeholder.svg?height=200&width=300`}
                                                     alt={promo.product.name}
                                                     className="w-full h-full object-cover"
@@ -464,22 +469,6 @@ const EventDetail = () => {
                                                     {/* Promo Price (highlighted) */}
                                                     <div className="text-lg font-bold text-red-600">{formatPrice(promo.promo_price)}</div>
                                                 </div>
-
-                                                {/* Product Info */}
-                                                {/* <div className="space-y-1 text-xs text-gray-600 mb-4"> */}
-                                                {/* <div className="flex justify-between">
-                                                            <span>ID Produk:</span>
-                                                            <span className="font-medium">{promo.product.id}</span>
-                                                        </div> */}
-                                                {/* <div className="flex justify-between">
-                                                        <span>UMKM ID:</span>
-                                                        <span className="font-medium">{promo.product.umkm_id}</span>
-                                                    </div> */}
-                                                {/* <div className="flex justify-between">
-                                                        <span>Kategori:</span>
-                                                        <span className="font-medium">{promo.product.category_id}</span>
-                                                    </div> */}
-                                                {/* </div> */}
 
                                                 {/* Action Buttons */}
                                                 <div className="space-y-2">

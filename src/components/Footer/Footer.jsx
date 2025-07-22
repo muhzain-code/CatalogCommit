@@ -61,6 +61,7 @@ const Footer = () => {
         >
           <Grid
             item
+            xs={8}
             sm={6}
             md={2.5}
             className="justify-center items-stretch md:justify-between md:leading-5"
