@@ -17,6 +17,7 @@ const AllProducts = () => {
   const [error, setError] = useState(null);
 
   const fetchProducts = async (pageToFetch) => {
+    if (loading) return; 
     try {
       setLoading(true);
       const response = await productService.getProducts(pageToFetch, PER_PAGE);
@@ -30,7 +31,11 @@ const AllProducts = () => {
         };
       });
 
-      setProducts(prev => [...prev, ...transformed]);
+      setProducts(prev => {
+        const existingIds = new Set(prev.map(p => p.id));
+        const newProducts = transformed.filter(p => !existingIds.has(p.id));
+        return [...prev, ...newProducts];
+      });
       setLastPage(response.meta.last_page);
     } catch (err) {
       console.error("Fetch error:", err);
@@ -44,19 +49,29 @@ const AllProducts = () => {
     fetchProducts(1); // initial fetch
   }, []);
 
+  useEffect(() => {
+    const ids = products.map(p => p.id);
+    const duplicates = ids.filter((id, idx) => ids.indexOf(id) !== idx);
+    if (duplicates.length > 0) {
+      console.warn("Duplicate product IDs:", duplicates);
+    }
+  }, [products]);
+
+
   const handleLoadMore = () => {
-    if (page < lastPage) {
+    if (!loading && page < lastPage) {
       const nextPage = page + 1;
       setPage(nextPage);
       fetchProducts(nextPage);
     }
   };
 
+
   if (error) {
     return (
       <div className="mt-40 flex flex-col gap-5">
         <Typography variant="h3" align="center" gutterBottom>
-          {i18n.t("allProducts.title")}
+          {"Jelahjahi Berbagai Produk"}
         </Typography>
         <div className="text-center text-red-500">{error}</div>
         <div className="mt-6 flex justify-around items-center md:mx-12">
@@ -74,12 +89,12 @@ const AllProducts = () => {
   return (
     <div className="mt-40 flex flex-col gap-5">
       <Typography variant="h3" align="center" gutterBottom>
-        {i18n.t("allProducts.title")}
+        {"Jelajahi Berbagai Produk"}
       </Typography>
       <div className="mx-auto">
-        <Grid container spacing={6} justifyContent="center" alignItems="center">
+        <Grid container spacing={3} justifyContent="center" alignItems="center">
           {products.map((item, index) => (
-            <Grid item key={`${item.id}-${index}`}>
+            <Grid item key={`${item.id}-${index}`} xs={6} sm={4} md={3} lg={3}>
               <FlashSaleItem
                 item={item}
                 totalItems={products.length}

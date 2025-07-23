@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
-import { Share2, Calendar, Clock, Users, Tag, Building2 } from "lucide-react";
+import { Calendar, Clock, Users, Tag, Sparkles } from "lucide-react";
 import { eventService } from "../Services/eventService";
 import { fetchAllEventUmkm } from "../Services/eventUmkmService";
 import { fetchAllPromoProduct } from "../Services/promoProductService";
 import { Link, useParams } from "react-router-dom";
 import NotFound from "./NotFound";
+import Loading from "../components/common/components/Loading";
 
 const EventDetail = () => {
     const [eventData, setEventData] = useState(null);
@@ -76,6 +77,7 @@ const EventDetail = () => {
         })
     }
 
+    //logic untuk event badge
     const getEventStatus = () => {
         if (!eventData) return "Unknown"
 
@@ -130,8 +132,9 @@ const EventDetail = () => {
         return (
             <div className="min-h-screen bg-gray-50 flex items-center justify-center">
                 <div className="text-center">
-                    <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-red-600 mx-auto"></div>
-                    <p className="mt-4 text-gray-600">Memuat data event...</p>
+                    {/* <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-red-600 mx-auto"></div> */}
+                    <Loading />
+                    {/* <p className="mt-4 text-gray-600">Memuat data event...</p> */}
                 </div>
             </div>
         )
@@ -161,7 +164,7 @@ const EventDetail = () => {
     const eventDuration = getEventDuration()
 
     return (
-        <div className="min-h-screen bg-gray-50 mt-32">
+        <div className="min-h-screen bg-white mt-32">
             {/* Breadcrumb */}
             {/* <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 bg-white">
                 <button className="flex items-center text-gray-600 hover:text-red-600 transition-colors">
@@ -176,16 +179,17 @@ const EventDetail = () => {
                     {/* Left Side - Event Image */}
                     <div className="space-y-4">
                         {/* Main Image */}
-                        <div className="relative w-full h-96 rounded-xl overflow-hidden shadow-lg">
+                        <div className="relative w-full max-w-full rounded-xl overflow-hidden shadow-lg h-60 sm:h-72 md:h-80 lg:h-96">
                             <img
                                 src={eventData.photo || "/placeholder.svg"}
                                 alt={eventData.name}
                                 className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
                             />
                             <div
-                                className={`absolute top-4 right-4 px-3 py-1 rounded-full text-sm font-bold ${eventStatus == "Sedang Berlangsung"
+                                className={`absolute top-2 right-2 sm:top-4 sm:right-4 px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-bold 
+                                            ${eventStatus === "Sedang Berlangsung"
                                         ? "bg-green-600 text-white"
-                                        : eventStatus == "Akan Datang"
+                                        : eventStatus === "Akan Datang"
                                             ? "bg-blue-600 text-white"
                                             : "bg-gray-600 text-white"
                                     }`}
@@ -194,8 +198,9 @@ const EventDetail = () => {
                             </div>
                         </div>
 
+
                         {/* Event Type Cards */}
-                        <div className="grid grid-cols-2 gap-4">
+                        {/* <div className="grid grid-cols-2 gap-4">
                             <div className="bg-white p-4 rounded-lg shadow-sm border">
                                 <div className="flex items-center space-x-2">
                                     <Tag className="w-5 h-5 text-red-500" />
@@ -216,7 +221,7 @@ const EventDetail = () => {
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
 
                     {/* Right Side - Event Details */}
@@ -232,9 +237,9 @@ const EventDetail = () => {
                   >
                     <Heart className={`w-5 h-5 ${isLiked ? "fill-red-600 text-red-600" : "text-gray-600"}`} />
                   </button> */}
-                                    <button className="p-2 rounded-full border border-gray-300 hover:bg-gray-100">
+                                    {/* <button className="p-2 rounded-full border border-gray-300 hover:bg-gray-100">
                                         <Share2 className="w-5 h-5 text-gray-600" />
-                                    </button>
+                                    </button> */}
                                 </div>
                             </div>
 
@@ -336,35 +341,57 @@ const EventDetail = () => {
                     {eventUmkms.length > 0 ? (
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                             {eventUmkms.map((item) => (
-                                <div key={item.id} className="bg-white rounded-lg shadow-sm border hover:shadow-md transition-shadow">
-                                    <div className="p-6">
-                                        <div className="flex items-center space-x-3 mb-4">
-                                            <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
-                                                <Building2 className="w-6 h-6 text-red-600" />
-                                            </div>
-                                            <div className="flex-1">
-                                                <h3 className="font-semibold text-gray-900 text-sm">{item.umkm_id.name}</h3>
-                                                <p className="text-xs text-gray-500">ID: {item.umkm_id.id}</p>
-                                            </div>
-                                        </div>
+                                <div key={item.id} className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl hover:border-red-200 transition-all duration-300 group/card cursor-pointer transform hover:-translate-y-1">
+                                    {/* Image Container */}
+                                    <div className="relative h-48 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
+                                        <img
+                                            loading="lazy"
+                                            src={item.umkm_id.photo_profile_url}
+                                            alt={item.umkm_id.name}
+                                            className="w-full h-full object-cover group-hover/card:scale-110 transition-transform duration-500"
+                                            onError={(e) => {
+                                                e.target.src = "/placeholder.svg?height=200&width=300"
+                                            }}
+                                        />
 
-                                        <div className="space-y-2 text-xs text-gray-600">
-                                            <div className="flex justify-between">
+                                        {/* Overlay Gradient */}
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-300"></div>
+                                    </div>
+
+                                    {/* Content */}
+                                    <div className="p-6">
+                                        {/* UMKM Name */}
+                                        <h3 className="font-bold text-gray-900 text-lg mb-4 group-hover/card:text-red-600 transition-colors duration-200 line-clamp-1">
+                                            {item.umkm_id.name}
+                                        </h3>
+
+                                        {/* Status & Registration Date */}
+                                        <div className="space-y-3 text-gray-600 mb-5">
+                                            <div className="flex justify-between text-sm">
                                                 <span>Status:</span>
-                                                <span className={`font-medium ${item.is_active ? "text-green-600" : "text-red-600"}`}>
-                                                    {item.is_active ? "Aktif" : "Nonaktif"}
+                                                <span className={`font-medium ${item.is_active ? 'text-green-600' : 'text-red-600'}`}>
+                                                    {item.is_active ? 'Aktif' : 'Nonaktif'}
                                                 </span>
                                             </div>
-                                            <div className="flex justify-between">
+                                            <div className="flex justify-between text-sm">
                                                 <span>Terdaftar:</span>
                                                 <span>{formatDate(item.created_at)}</span>
                                             </div>
                                         </div>
+
+                                        {/* Action Button */}
                                         <Link to={`/umkm/${item.umkm_id.id}`}>
-                                            <button className="w-full mt-4 bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors">
-                                                Lihat Detail UMKM
+                                            <button className="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white py-3 px-4 rounded-xl font-medium transition-all duration-200 transform hover:scale-[1.02] shadow-lg hover:shadow-xl">
+                                                Lihat Detail
                                             </button>
                                         </Link>
+                                    </div>
+
+                                    {/* Hover Effect Sparkles */}
+                                    <div className="absolute inset-0 pointer-events-none opacity-0 group-hover/card:opacity-100 transition-opacity duration-300">
+                                        <Sparkles className="absolute top-4 left-4 w-4 h-4 text-yellow-400 animate-pulse" />
+                                        <Sparkles className="absolute top-8 right-8 w-3 h-3 text-blue-400 animate-pulse delay-100" />
+                                        <Sparkles className="absolute bottom-8 left-8 w-3 h-3 text-purple-400 animate-pulse delay-200" />
                                     </div>
                                 </div>
                             ))}
@@ -390,7 +417,7 @@ const EventDetail = () => {
                         </div>
 
                         {eventPromos.length > 0 ? (
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                                 {eventPromos.map((promo) => {
                                     const discount = calculateDiscount(promo.product.price, promo.promo_price)
                                     const statusBadge = getStatusBadge(promo.product.status)
@@ -401,9 +428,10 @@ const EventDetail = () => {
                                             className="bg-white rounded-lg shadow-sm border hover:shadow-lg transition-all duration-300 overflow-hidden"
                                         >
                                             {/* Product Image Placeholder */}
-                                            <div className="relative h-48 bg-gradient-to-br from-red-100 to-red-200">
+                                            <div className="relative bg-gradient-to-br from-red-100 to-red-200 aspect-video">
                                                 <img
-                                                    src={`/placeholder.svg?height=200&width=300`}
+                                                    loading="lazy"
+                                                    src={promo.product.active_photos[0]?.file_path || `/placeholder.svg?height=200&width=300`}
                                                     alt={promo.product.name}
                                                     className="w-full h-full object-cover"
                                                 />
@@ -441,22 +469,6 @@ const EventDetail = () => {
                                                     {/* Promo Price (highlighted) */}
                                                     <div className="text-lg font-bold text-red-600">{formatPrice(promo.promo_price)}</div>
                                                 </div>
-
-                                                {/* Product Info */}
-                                                {/* <div className="space-y-1 text-xs text-gray-600 mb-4"> */}
-                                                    {/* <div className="flex justify-between">
-                                                            <span>ID Produk:</span>
-                                                            <span className="font-medium">{promo.product.id}</span>
-                                                        </div> */}
-                                                    {/* <div className="flex justify-between">
-                                                        <span>UMKM ID:</span>
-                                                        <span className="font-medium">{promo.product.umkm_id}</span>
-                                                    </div> */}
-                                                    {/* <div className="flex justify-between">
-                                                        <span>Kategori:</span>
-                                                        <span className="font-medium">{promo.product.category_id}</span>
-                                                    </div> */}
-                                                {/* </div> */}
 
                                                 {/* Action Buttons */}
                                                 <div className="space-y-2">
@@ -505,7 +517,7 @@ const EventDetail = () => {
                     </div>
                 )}
             </div>
-        </div>
+        </div >
     )
 }
 

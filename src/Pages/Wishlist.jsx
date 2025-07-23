@@ -1,15 +1,15 @@
 import { useWishlist } from "../context/WishlistContext";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import { Grid } from "@mui/material";
 import FlashSaleItem from "../components/common/components/FlashSaleItem";
 import { ITEMS } from "../components/common/functions/items";
-import RedTitle from "../components/common/components/RedTitle";
-import WhiteButton from "../components/common/components/WhiteButton";
+// import RedTitle from "../components/common/components/RedTitle";
+// import WhiteButton from "../components/common/components/WhiteButton";
 import { useState } from "react";
 import { Snackbar } from "@mui/material";
 import { Alert } from "@mui/material";
 import { useCart } from "../context/CartContext";
-import { motion } from "framer-motion"; // Import motion from Framer Motion for animations
+// import { motion } from "framer-motion"; // Import motion from Framer Motion for animations
 import i18n from "../components/common/components/LangConfig";
 
 function Wishlist() {
@@ -60,7 +60,7 @@ function Wishlist() {
             {i18n.t("wishlist.title")} ({wishlistItems.length})
           </h2>
 
-          <WhiteButton
+          {/* <WhiteButton
             name={i18n.t("whiteButtons.moveAllToBag")}
             onClick={handleClick}
             disabled={
@@ -68,12 +68,12 @@ function Wishlist() {
               wishlistItems === null ||
               snackbarOpen === true
             }
-          />
+          /> */}
         </div>
 
         <Grid container spacing={3} justifyContent="center" alignItems="center">
           {wishlistItems.map((item, index) => (
-            <Grid item key={item.id} xs={0} sm={6} md={4} lg={3}>
+            <Grid item key={item.id} xs={6} sm={4} md={3} lg={3}>
               <FlashSaleItem
                 item={item}
                 index={index}
@@ -87,14 +87,14 @@ function Wishlist() {
         </Grid>
       </div>
       <>
-        <div className="flex justify-between items-center md:mr-6 mx-4 ">
+        {/* <div className="flex justify-between items-center md:mr-6 mx-4 ">
           <RedTitle title={i18n.t("wishlist.justForYou")} color="black" />
           <Link to="/allProducts">
             <WhiteButton name={i18n.t("whiteButtons.seeAll")} />
           </Link>
-        </div>
+        </div> */}
         {/* Motion */}
-        <div className="relative  overflow-x-auto overflow-y-hidden flex justify-start items-center md:h-[400px] ">
+        {/* <div className="relative  overflow-x-auto overflow-y-hidden flex justify-start items-center md:h-[400px] ">
           <motion.div
             className="flex gap-2 md:gap-12"
             initial={{ opacity: 0, x: 0 }}
@@ -121,7 +121,7 @@ function Wishlist() {
               </motion.div>
             ))}
           </motion.div>
-        </div>
+        </div> */}
         {/* Motion */}
       </>
       <Snackbar

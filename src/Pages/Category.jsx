@@ -9,6 +9,7 @@ import WhiteButton from "../components/common/components/WhiteButton";
 import Loader from "../components/common/components/Loader";
 import { productService, transformProductData } from "../Services/productService";
 import { categoryService } from "../Services/categoryService";
+import Loading from "../components/common/components/Loading";
 
 const PER_PAGE = 25;
 
@@ -153,7 +154,7 @@ const Category = () => {
   }
 
   if (loading && !selectedCategory) {
-    return <Loader />;
+    return <Loading />;
   }
 
   return (
@@ -203,7 +204,7 @@ const Category = () => {
         <Grid container spacing={3} justifyContent="center" alignItems="center">
           {/* Show actual products */}
           {products.map((item) => (
-            <Grid item key={item.id}>
+            <Grid item key={item.id} xs={6} sm={4} md={3} lg={3}>
               <FlashSaleItem
                 item={item}
                 stars={item.stars}

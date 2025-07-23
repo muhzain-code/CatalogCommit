@@ -2,8 +2,9 @@ import { useKeenSlider } from "keen-slider/react"
 import { Link } from "react-router-dom"
 import PropTypes from "prop-types"
 import "keen-slider/keen-slider.min.css"
+import Loading from "./Loading"
 
-const BannerSection = ({ products }) => {
+const BannerSection = ({ products, loading }) => {
   const [sliderRef, instanceRef] = useKeenSlider(
     {
       loop: true,
@@ -60,6 +61,14 @@ const BannerSection = ({ products }) => {
   // const handleImgError = useCallback((e) => {
   //   e.target.src = "/placeholder.jpg" // fallback path
   // }, [])
+   if (loading) {
+    return (
+      <div className="w-full aspect-[16/9] max-h-[400px] bg-gray-100 rounded-xl flex items-center justify-center">
+        <Loading />
+      </div>
+    )
+  }
+
   if (!products || products.length === 0) return null;
 
   return (
@@ -91,11 +100,11 @@ const BannerSection = ({ products }) => {
             />
           )}
 
-          <div className="absolute bottom-6 left-6 bg-black/50 text-white p-4 rounded-xl">
-            <h2 className="text-xl md:text-2xl font-bold">
+          {/* <div className="absolute bottom-6 left-6 bg-black/50 text-white p-4 rounded-xl"> */}
+            {/* <h2 className="text-xl md:text-2xl font-bold">
               {product.name || "Tanpa Nama"}
-            </h2>
-          </div>
+            </h2> */}
+          {/* </div> */}
         </Link>
       ))}
     </div>

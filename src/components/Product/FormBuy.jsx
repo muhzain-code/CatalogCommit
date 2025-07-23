@@ -115,20 +115,19 @@ const FormBuy = ({ productId, applicationId }) => {
         <>
             <button
                 onClick={() => setIsOpen(true)}
-                className={`motion-safe:hover:animate-pulse text-sm md:text-base md:px-12 py-3 rounded px-6
-    bg-red-600 text-white hover:bg-red-500 transition-transform duration-100 transform hover:translate-y-[-4px]`}
+                className="bg-red-600 text-white px-6 md:px-12 py-3 text-sm md:text-base rounded-xl font-medium shadow-md hover:bg-red-500 transition-all duration-200 hover:-translate-y-1"
             >
                 Beli Sekarang
             </button>
 
             {isOpen && (
-                <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center p-4">
-                    <div className="bg-white w-full max-w-md rounded-xl shadow-lg overflow-hidden relative">
+                <div className="fixed inset-0 z-50 bg-black bg-opacity-40 flex items-center justify-center p-4">
+                    <div className="relative bg-white w-full max-w-md rounded-2xl shadow-2xl overflow-hidden transition-all duration-300">
                         {isLoading && (
                             <div className="absolute inset-0 bg-white bg-opacity-80 flex items-center justify-center z-10">
-                                <div className="text-center">
+                                <div className="flex flex-col items-center">
                                     <svg
-                                        className="animate-spin mx-auto h-8 w-8 text-blue-600"
+                                        className="animate-spin h-8 w-8 text-blue-600"
                                         xmlns="http://www.w3.org/2000/svg"
                                         fill="none"
                                         viewBox="0 0 24 24"
@@ -147,79 +146,93 @@ const FormBuy = ({ productId, applicationId }) => {
                                             d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
                                         ></path>
                                     </svg>
-                                    <p className="mt-2 text-sm text-gray-600">Memproses...</p>
+                                    <p className="mt-2 text-sm text-gray-600">Memproses pesanan...</p>
                                 </div>
                             </div>
                         )}
 
-                        <div className="flex justify-between items-center p-4 border-b">
-                            <h2 className="text-lg font-semibold">Form Pembelian</h2>
+                        <div className="flex justify-between items-center p-5 border-b border-gray-200">
+                            <h2 className="text-lg font-semibold text-gray-800">Form Pembelian</h2>
                             <button
-                                className="text-gray-600 text-xl"
+                                className="text-gray-500 text-xl hover:text-gray-700"
                                 onClick={() => !isLoading && closeModal()}
                             >
                                 &times;
                             </button>
                         </div>
 
-                        <form onSubmit={handleSubmit} className="p-4 space-y-4 relative z-0">
+                        <form onSubmit={handleSubmit} className="p-5 space-y-4 relative z-0">
                             <div>
-                                <label className="block font-medium mb-1">Nama Lengkap</label>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                                    Nama Lengkap
+                                </label>
                                 <input
                                     name="buyer_name"
                                     value={formData.buyer_name}
                                     onChange={handleChange}
                                     placeholder="Nama penerima"
-                                    className={`w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.buyer_name ? "border-red-500" : "border-gray-300"
-                                        }`}
                                     disabled={isLoading}
+                                    className={`w-full px-3 py-2 rounded-lg border text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                                        errors.buyer_name ? "border-red-500" : "border-gray-300"
+                                    }`}
                                 />
-                                {errors.buyer_name && <p className="text-red-500 text-sm">{errors.buyer_name}</p>}
+                                {errors.buyer_name && (
+                                    <p className="text-xs italic text-red-500 mt-1">{errors.buyer_name}</p>
+                                )}
                             </div>
 
                             <div>
-                                <label className="block font-medium mb-1">Nomor WhatsApp</label>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                                    Nomor WhatsApp
+                                </label>
                                 <input
                                     name="buyer_phone"
                                     value={formData.buyer_phone}
                                     onChange={handleChange}
                                     placeholder="081234567890"
-                                    className={`w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.buyer_phone ? "border-red-500" : "border-gray-300"
-                                        }`}
                                     disabled={isLoading}
+                                    className={`w-full px-3 py-2 rounded-lg border text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                                        errors.buyer_phone ? "border-red-500" : "border-gray-300"
+                                    }`}
                                 />
-                                {errors.buyer_phone && <p className="text-red-500 text-sm">{errors.buyer_phone}</p>}
+                                {errors.buyer_phone && (
+                                    <p className="text-xs italic text-red-500 mt-1">{errors.buyer_phone}</p>
+                                )}
                             </div>
 
                             <div>
-                                <label className="block font-medium mb-1">Alamat Lengkap</label>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                                    Alamat Lengkap
+                                </label>
                                 <textarea
                                     name="buyer_address"
                                     value={formData.buyer_address}
                                     onChange={handleChange}
-                                    placeholder="Jl. Nama Jalan No. X, Kota"
+                                    placeholder="Jl. Nama Jalan No. X, Desa. Kecamatan, Kabupaten."
                                     rows="3"
-                                    className={`w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.buyer_address ? "border-red-500" : "border-gray-300"
-                                        }`}
                                     disabled={isLoading}
+                                    className={`w-full px-3 py-2 rounded-lg border text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                                        errors.buyer_address ? "border-red-500" : "border-gray-300"
+                                    }`}
                                 />
-                                {errors.buyer_address && <p className="text-red-500 text-sm">{errors.buyer_address}</p>}
+                                {errors.buyer_address && (
+                                    <p className="text-xs italic text-red-500 mt-1">{errors.buyer_address}</p>
+                                )}
                             </div>
 
-                            <div className="flex justify-end gap-2">
+                            <div className="flex justify-end gap-3 pt-2">
                                 <button
                                     type="button"
-                                    className="px-4 py-2 border rounded-lg text-gray-700 hover:bg-gray-100"
                                     onClick={() => !isLoading && closeModal()}
                                     disabled={isLoading}
+                                    className="px-4 py-2 text-sm rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100 transition disabled:opacity-50"
                                 >
                                     Batal
                                 </button>
                                 <button
                                     type="submit"
-                                    className={`px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition ${isLoading ? "opacity-60 cursor-not-allowed" : ""
-                                        }`}
                                     disabled={isLoading}
+                                    className="px-4 py-2 text-sm rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition disabled:opacity-50"
                                 >
                                     Pesan Sekarang
                                 </button>

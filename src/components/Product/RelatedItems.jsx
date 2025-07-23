@@ -5,68 +5,63 @@ import RedTitle from "../common/components/RedTitle";
 import ViewAll from "../common/components/ViewAll";
 import { Grid } from "@mui/material";
 import { productService, transformProductData } from "../../Services/productService";
+import Loader from "../common/components/Loader";
 
-const RelatedItems = ({ categoryId, umkmId, onTotal }) => {
+const RelatedItems = ({ categoryId, umkmId, onTotal, productId }) => {
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchRelatedProducts = async () => {
-      // Kalau dua-duanya kosong, skip
-      if (!categoryId && !umkmId) return;
+  const fetchRelatedProducts = async () => {
+    if (!categoryId && !umkmId) return;
 
-      try {
-        setLoading(true);
+    try {
+      setLoading(true);
 
-        const filter = {};
-        let limit = 8;
+      const filter = {};
+      let limit = 8;
 
-        if (categoryId) {
-          filter.category_id = String(categoryId);
-        }
-
-        if (umkmId) {
-          filter.umkm_id = String(umkmId);
-          limit = 1000; // cukup besar untuk ambil semua
-        }
-
-        const response = await productService.getProducts(
-          1,         // page
-          limit,     // limit, tergantung case
-          "",        // search query
-          filter     // filter dinamis
-        );
-
-        const transformed = response.data.map(transformProductData);
-
-        // Untuk category, tetap limit ke 8
-        const filtered = categoryId
-          ? transformed.filter(p => p.id !== categoryId).slice(0, 8)
-          : transformed;
-
-        setRelatedProducts(filtered);
-        if (onTotal) {
-          onTotal(filtered.length);
-        }
-      } catch (err) {
-        setError("Gagal memuat produk terkait");
-        console.error("Error fetching related products:", err);
-      } finally {
-        setLoading(false);
+      if (categoryId) {
+        filter.category_id = String(categoryId);
       }
-    };
 
-    fetchRelatedProducts();
-  }, [categoryId, umkmId, onTotal]);
+      if (umkmId) {
+        filter.umkm_id = String(umkmId);
+        limit = 1000;
+      }
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center h-64">
-        <p>Memuat produk terkait...</p>
-      </div>
-    );
-  }
+      const response = await productService.getProducts(
+        1,
+        limit,
+        "",
+        filter
+      );
+
+      const transformed = response.data.map(transformProductData);
+
+      const filtered = categoryId
+        ? transformed
+            .filter((p) => p.id !== productId) // logic untuk menghindari produk yang sama
+            .slice(0, 8)
+        : transformed;
+
+      setRelatedProducts(filtered);
+      if (onTotal) {
+        onTotal(filtered.length);
+      }
+    } catch (err) {
+      setError("Gagal memuat produk terkait");
+      console.error("Error fetching related products:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchRelatedProducts();
+}, [categoryId, umkmId, onTotal, productId]);
+
+
 
   if (error) {
     return (
@@ -78,9 +73,9 @@ const RelatedItems = ({ categoryId, umkmId, onTotal }) => {
 
   return (
     <>
-      <div className="mx-auto md:mx-2">
+      <div className="mx-auto md:mx-2 lg:px-9 md:px-0">
         <RedTitle title={"Produk Terkait"} />
-        <div className="relative mt-10 flex flex-row gap-2 md:gap-12 transition-transform duration-300 transform">
+        <div className="relative mt-10 flex flex-row gap-2 md:gap-10 transition-transform duration-300 transform lg:px-32 md:px-0">
           <Grid
             container
             spacing={3}
@@ -88,7 +83,7 @@ const RelatedItems = ({ categoryId, umkmId, onTotal }) => {
             alignItems="center"
           >
             {relatedProducts.map((item, index) => (
-              <Grid item key={item.id}>
+              <Grid item key={item.id} xs={6} sm={4} md={3} lg={3}>
                 <FlashSaleItem
                   item={item}
                   index={index}
@@ -96,6 +91,12 @@ const RelatedItems = ({ categoryId, umkmId, onTotal }) => {
                 />
               </Grid>
             ))}
+            {loading &&
+              Array.from({ length: 8 }).map((_, index) => (
+                <Grid item key={`loader-${index}`}>
+                  <Loader />
+                </Grid>
+              ))}
           </Grid>
         </div>
       </div>

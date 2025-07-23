@@ -7,6 +7,7 @@ import i18n from "../common/components/LangConfig";
 import { Grid } from "@mui/material";
 import { productService } from "../../Services/productService";
 import { transformProductData } from "../../Services/productService";
+import Loader from "../common/components/Loader";
 
 const AllProducts = () => {
   const [products, setProducts] = useState([]);
@@ -38,14 +39,6 @@ const AllProducts = () => {
   }, []);
   console.log("AllProducts:", products);
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center h-64">
-        <p>Memuat produk...</p>
-      </div>
-    );
-  }
-
   if (error) {
     return (
       <div className="flex justify-center items-center h-64 text-red-500">
@@ -71,7 +64,7 @@ const AllProducts = () => {
             alignItems="center"
           >
             {Array.isArray(products) && products.map((item, index) => (
-              <Grid item key={item.id}>
+              <Grid item key={item.id} xs={6} sm={4} md={3} lg={3}>
                 <FlashSaleItem
                   item={item}
                   index={index}
@@ -79,7 +72,12 @@ const AllProducts = () => {
                 />
               </Grid>
             ))}
-
+            {loading &&
+              Array.from({ length: 8 }).map((_, index) => (
+                <Grid item key={`loader-${index}`}>
+                  <Loader />
+                </Grid>
+              ))}
           </Grid>
         </div>
       </div>

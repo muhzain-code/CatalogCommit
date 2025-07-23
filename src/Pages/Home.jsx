@@ -3,9 +3,9 @@ import Row1 from "../components/Home/Row1";
 // import FlashSale from "../components/Home/FlashSale";
 // import BestSelling from "../components/Home/BestSelling";
 import Categories from "../components/Home/Categories";
-import Services from "../components/common/components/Services";
+// import Services from "../components/common/components/Services";
 import AllProducts from "../components/Home/AllProducts";
-import Featured from "../components/Home/Featured";
+// import Featured from "../components/Home/Featured";
 // import { ITEMS } from "../components/common/functions/items";
 const Home = () => {
   return (
@@ -16,8 +16,8 @@ const Home = () => {
       {/* <BestSelling items={ITEMS} /> */}
       {/* <Deal /> */}
       <AllProducts/>
-      <Featured />
-      <Services />
+      {/* <Featured /> */}
+      {/* <Services /> */}
     </div>
   );
 };
