@@ -1,7 +1,7 @@
 "use client"
 
 import { Link, useLocation } from "react-router-dom"
-import { ShoppingBag, Building2, FolderOpen, Megaphone, Gift, Home, X, PartyPopper, Tag } from "lucide-react"
+import { ShoppingBag, Building2, FolderOpen, Megaphone, Gift, Home, X, Tag } from "lucide-react"
 
 const AdminSidebar = ({ isOpen, setIsOpen }) => {
   const location = useLocation()
@@ -12,7 +12,7 @@ const AdminSidebar = ({ isOpen, setIsOpen }) => {
     { path: "/admin/umkm", name: "UMKM", icon: Building2 },
     { path: "/admin/categories", name: "Kategori", icon: FolderOpen },
     { path: "/admin/events", name: "Event", icon: Megaphone },
-    { path: "/admin/event-umkm", name: "Event UMKM", icon: PartyPopper },
+    // { path: "/admin/event-umkm", name: "Event UMKM", icon: PartyPopper },
     { path: "/admin/promo-products", name: "Produk Promo", icon: Gift },
     { path: "/admin/applications", name: "Applications", icon: Tag },
   ]

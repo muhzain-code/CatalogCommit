@@ -23,7 +23,6 @@ import AdminDashboard from "./Pages/Admin/AdminDashboard"
 import AdminProducts from "./Pages/Admin/AdminProducts"
 import AdminUMKM from "./Pages/Admin/AdminUMKM"
 import AdminCategories from "./Pages/Admin/AdminCategories"
-import AdminEventUMKM from "./Pages/Admin/AdminEventUMKM"
 import AdminEvents from "./Pages/Admin/AdminEvents"
 import AdminPromoProducts from "./Pages/Admin/AdminPromoProducts"
 import AdminBrands from "./Pages/Admin/AdminApplications"
@@ -65,7 +64,7 @@ const routes = [
       { path: "applications", element: AdminBrands },
       { path: "umkm", element: AdminUMKM },
       { path: "categories", element: AdminCategories },
-      { path: "event-umkm", element: AdminEventUMKM },
+      // { path: "event-umkm", element: AdminEventUMKM },
       { path: "events", element: AdminEvents },
       { path: "promo-products", element: AdminPromoProducts },
     ],
