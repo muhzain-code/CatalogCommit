@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { Grid, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import FlashSaleItem from "../components/common/components/FlashSaleItem";
-// import i18n from "../components/common/components/LangConfig";
 import RedButton from "../components/common/components/RedButton";
 import WhiteButton from "../components/common/components/WhiteButton";
 import Loader from "../components/common/components/Loader";
@@ -17,12 +16,11 @@ const AllProducts = () => {
   const [error, setError] = useState(null);
 
   const fetchProducts = async (pageToFetch) => {
-    if (loading) return; 
+    if (loading) return;
     try {
       setLoading(true);
       const response = await productService.getProducts(pageToFetch, PER_PAGE);
-
-      const transformed = response.data.map(product => {
+      const transformed = response.data.map((product) => {
         const p = transformProductData(product);
         return {
           ...p,
@@ -30,10 +28,9 @@ const AllProducts = () => {
           rates: p.rates || 0,
         };
       });
-
-      setProducts(prev => {
-        const existingIds = new Set(prev.map(p => p.id));
-        const newProducts = transformed.filter(p => !existingIds.has(p.id));
+      setProducts((prev) => {
+        const existingIds = new Set(prev.map((p) => p.id));
+        const newProducts = transformed.filter((p) => !existingIds.has(p.id));
         return [...prev, ...newProducts];
       });
       setLastPage(response.meta.last_page);
@@ -46,17 +43,16 @@ const AllProducts = () => {
   };
 
   useEffect(() => {
-    fetchProducts(1); // initial fetch
+    fetchProducts(1);
   }, []);
 
   useEffect(() => {
-    const ids = products.map(p => p.id);
+    const ids = products.map((p) => p.id);
     const duplicates = ids.filter((id, idx) => ids.indexOf(id) !== idx);
     if (duplicates.length > 0) {
       console.warn("Duplicate product IDs:", duplicates);
     }
   }, [products]);
-
 
   const handleLoadMore = () => {
     if (!loading && page < lastPage) {
@@ -66,12 +62,11 @@ const AllProducts = () => {
     }
   };
 
-
   if (error) {
     return (
       <div className="mt-40 flex flex-col gap-5">
         <Typography variant="h3" align="center" gutterBottom>
-          {"Jelahjahi Berbagai Produk"}
+          {"Jelajahi Berbagai Produk"}
         </Typography>
         <div className="text-center text-red-500">{error}</div>
         <div className="mt-6 flex justify-around items-center md:mx-12">
@@ -87,18 +82,16 @@ const AllProducts = () => {
   }
 
   return (
-    <div className="mt-40 flex flex-col gap-5 px-2 md:px-24">
+    <div className="container mx-auto mt-40 flex flex-col gap-5 px-2 md:px-14">
       <Typography variant="h3" align="center" gutterBottom>
         {"Jelajahi Berbagai Produk"}
       </Typography>
-      <div className="mx-auto">
+
+      <div className="relative mx-2 my-10 flex flex-row gap-2 md:gap-12">
         <Grid container spacing={3} justifyContent="center" alignItems="center">
           {products.map((item, index) => (
             <Grid item key={`${item.id}-${index}`} xs={6} sm={4} md={3} lg={3}>
-              <FlashSaleItem
-                item={item}
-                totalItems={products.length}
-              />
+              <FlashSaleItem item={item} totalItems={products.length} />
             </Grid>
           ))}
           {loading &&
@@ -114,9 +107,7 @@ const AllProducts = () => {
         <button
           onClick={handleLoadMore}
           type="button"
-          className="md:mx-auto text-center rounded-md px-5 py-3 mt-8 shadow hover:shadow-md active:shadow-inner transition
-          hover:bg-gray-50 border text-[#696A75] hover:text-[#696A75] border-[#696A75] hover:border-[#696A75]
-          hover:scale-105 hover:-translate-y-2 transform duration-300 ease-in-out"
+          className="md:mx-auto text-center rounded-md px-5 py-3 mt-8 shadow hover:shadow-md active:shadow-inner transition hover:bg-gray-50 border text-[#696A75] hover:text-[#696A75] border-[#696A75] hover:border-[#696A75] hover:scale-105 hover:-translate-y-2 transform duration-300 ease-in-out"
         >
           {"Muat Lebih Banyak.."}
         </button>
