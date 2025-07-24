@@ -188,7 +188,7 @@ const Product = () => {
         </div>
       </div>
       <br />
-      <hr className="border-gray-300" />
+      <hr className="border-gray-300"/>
       <br />
       <RelatedItems categoryId={productData.category_id} productId={productData.id} />
     </>

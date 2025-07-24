@@ -62,7 +62,7 @@ const FlashSaleItem = ({ item }) => {
 
         {renderStatusBadge()}
 
-        <Link to={`/allProducts/${item.id}`} className="w-full h-full">
+        <Link to={`/product/${item.id}`} className="w-full h-full">
           <img
             loading="lazy"
             src={item.cardPhoto || item.image}

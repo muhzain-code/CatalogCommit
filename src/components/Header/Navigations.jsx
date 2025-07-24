@@ -27,7 +27,7 @@ const Navigations = () => {
   // Map routes to their corresponding labels
   const routes = [
     { path: "/", label: "Beranda" },
-    { path: "/allProducts", label: "Produk" },
+    { path: "/products", label: "Produk" },
     { path: "/contact", label: "Kontak" },
     { path: "/about", label: "Tentang"},
     ...(currentUser

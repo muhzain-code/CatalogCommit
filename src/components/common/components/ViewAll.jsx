@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 const ViewAll = ({ name }) => {
   return (
-    <Link to="/allProducts">
+    <Link to="/products">
       <RedButton name={name} />
     </Link>
   );

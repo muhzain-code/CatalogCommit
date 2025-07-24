@@ -486,7 +486,7 @@ const EventDetail = () => {
                                                                 ? "Pre Order"
                                                                 : "Tidak Tersedia"}
                                                     </h3>
-                                                    <Link to={`/allProducts/${promo.product.id}`}>
+                                                    <Link to={`/product/${promo.product.id}`}>
                                                         <button className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 px-4 rounded-lg text-sm font-medium transition-colors">
                                                             Lihat Detail
                                                         </button>

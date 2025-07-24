@@ -30,7 +30,7 @@ const NotFound = () => {
 
   return (
     <div className="flex flex-col justify-around items-start mt-36 mx-4 md:mx-40 ">
-      <ActiveLastBreadcrumb path="Home/404 Error" />
+      <ActiveLastBreadcrumb path="Beranda/404 Error" />
       <div className="flex flex-col items-center mt-12 mx-auto">
         <div className="flex flex-col justify-center gap-4 items-center text-center">
           <h1 className="text-3xl md:text-8xl">404 Not Found</h1>{" "}
@@ -57,7 +57,7 @@ const NotFound = () => {
           //  className="w-40 h-40 mt-8"
         />
         <Link to="..">
-          <RedButton name={i18n.t("redButtons.backToHomePage")} />
+          <RedButton name={"Kembali Ke Beranda"} />
         </Link>
       </div>
     </div>
