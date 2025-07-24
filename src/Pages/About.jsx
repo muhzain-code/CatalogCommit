@@ -3,14 +3,14 @@
 // import TeamMembers from "../components/About/TeamMembers";
 import Services from "../components/common/components/Services.jsx";
 import ActiveLastBreadcrumb from "../components/common/components/Link.jsx";
-import i18n from "../components/common/components/LangConfig";
+// import i18n from "../components/common/components/LangConfig";
 const About = () => {
   return (
     <>
       <div className="flex flex-col justify-center items-start mt-48">
         <div className="md:mx-40">
           <ActiveLastBreadcrumb
-            path={`${i18n.t("home")}/${i18n.t("aboutPage.title")}`}
+            path={`${"Beranda"}/${"Tentang"}`}
           />
         </div>
 

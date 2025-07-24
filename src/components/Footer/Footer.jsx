@@ -8,7 +8,7 @@ import { Container, Grid, Typography } from "@mui/material";
 // import QrCode from "./QrCode.png";
 // import GooglePlay from "./GooglePlay.png";
 // import AppStore from "./AppStore.png";
-import i18n from "../common/components/LangConfig";
+// import i18n from "../common/components/LangConfig";
 import { Link } from "react-router-dom";
 const Footer = () => {
   // const [email, setEmail] = useState("");
@@ -129,7 +129,7 @@ const Footer = () => {
             className="justify-center items-stretch md:justify-between md:leading-10"
           >
             <Typography variant="h6" gutterBottom>
-              {i18n.t("footer.support")}
+              {"Dukungan"}
             </Typography>
             <Typography gutterBottom>PemKab. Probolinggo</Typography>
             <Typography gutterBottom>ptpoter999@gmail.com</Typography>
@@ -203,17 +203,17 @@ const Footer = () => {
             className="justify-center items-stretch md:justify-between md:leading-10"
           >
             <Typography variant="h6" gutterBottom>
-              {i18n.t("footer.quickLinks")}
+              {"Tautan Cepat"}
             </Typography>
             <ul className="list-none p-0">
               <li>
                 <Link to="/allProducts" sx={{ color: "white" }}>
-                  {i18n.t("allProducts.redTitle")}
+                  {"Produk"}
                 </Link>
               </li>
               <li>
                 <Link to="/category" sx={{ color: "white" }}>
-                  {i18n.t("category.redTitle")}
+                  {"Kategori"}
                 </Link>
               </li>
 

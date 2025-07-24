@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Calendar, Clock, Users, Tag, Sparkles } from "lucide-react";
 import { eventService } from "../Services/eventService";
-import { fetchAllEventUmkm } from "../Services/eventUmkmService";
+// import { fetchAllEventUmkm } from "../Services/eventUmkmService";
 import { fetchAllPromoProduct } from "../Services/promoProductService";
 import { Link, useParams } from "react-router-dom";
 import NotFound from "./NotFound";
@@ -9,7 +9,7 @@ import Loading from "../components/common/components/Loading";
 
 const EventDetail = () => {
     const [eventData, setEventData] = useState(null);
-    const [eventUmkms, setEventUmkms] = useState([]);
+    // const [eventUmkms, setEventUmkms] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [eventPromos, setEventPromos] = useState([]);
@@ -21,7 +21,7 @@ const EventDetail = () => {
             try {
                 // await new Promise((resolve) => setTimeout(resolve, 1000))
                 const response = await eventService.getEvent(eventId)
-                const allEventUmkms = await fetchAllEventUmkm();
+                // const allEventUmkms = await fetchAllEventUmkm();
                 // console.log("All Event UMKMs:", allEventUmkms);
                 const allPromoProduct = await fetchAllPromoProduct();
                 console.log("All Promo Products:", allPromoProduct);
@@ -29,8 +29,8 @@ const EventDetail = () => {
                 setEventData(response.data)
 
                 // Filter UMKMs for this specific event
-                const filteredUmkms = allEventUmkms.filter((item) => item.event_id.id === Number(eventId))
-                setEventUmkms(filteredUmkms)
+                // const filteredUmkms = allEventUmkms.filter((item) => item.event_id.id === Number(eventId))
+                // setEventUmkms(filteredUmkms)
                 // Update the fetchEventData function to include product promos
                 // In the fetchEventData function, after filtering UMKMs, add:
 
@@ -55,7 +55,7 @@ const EventDetail = () => {
         fetchEventData()
     }, [eventId])
     console.log("Event Data:", eventData)
-    console.log("Event UMKMs:", eventUmkms)
+    // console.log("Event UMKMs:", eventUmkms)
     // console,log("alleventUmkms", allEventUmkms)
     console.log("Event Promos:", eventPromos)
 
@@ -282,15 +282,15 @@ const EventDetail = () => {
                         </div>
 
                         {/* Stats */}
-                        <div className="grid grid-cols-3 gap-4 py-4 border-t border-b border-gray-200">
+                        <div className="grid grid-cols-2 gap-4 py-4 border-t border-b border-gray-200">
                             <div className="text-center">
                                 <div className="text-2xl font-bold text-gray-900">{eventPromos.length}</div>
                                 <div className="text-sm text-gray-600">Produk</div>
                             </div>
-                            <div className="text-center">
+                            {/* <div className="text-center">
                                 <div className="text-2xl font-bold text-gray-900">{eventUmkms.length}</div>
                                 <div className="text-sm text-gray-600">UMKM Peserta</div>
-                            </div>
+                            </div> */}
                             <div className="text-center">
                                 <div className={`text-2xl font-bold ${eventData.is_active ? "text-green-600" : "text-red-600"}`}>
                                     {eventData.is_active ? "Aktif" : "Nonaktif"}
@@ -329,22 +329,22 @@ const EventDetail = () => {
                 </div>
 
                 {/* Participating UMKMs Section */}
-                <div className="mt-16">
-                    <div className="flex justify-between items-center mb-6">
+                {/* <div className="mt-16"> */}
+                    {/* <div className="flex justify-between items-center mb-6">
                         <h2 className="text-2xl font-bold text-gray-900">UMKM</h2>
                         <div className="flex items-center space-x-2">
                             <Users className="w-5 h-5 text-gray-500" />
                             <span className="text-gray-600">{eventUmkms.length} UMKM terdaftar</span>
                         </div>
-                    </div>
+                    </div> */}
 
-                    {eventUmkms.length > 0 ? (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                            {eventUmkms.map((item) => (
-                                <div key={item.id} className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl hover:border-red-200 transition-all duration-300 group/card cursor-pointer transform hover:-translate-y-1">
+                    {/* {eventUmkms.length > 0 ? ( */}
+                        {/* <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"> */}
+                            {/* {eventUmkms.map((item) => ( */}
+                                {/* <div key={item.id} className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl hover:border-red-200 transition-all duration-300 group/card cursor-pointer transform hover:-translate-y-1"> */}
                                     {/* Image Container */}
-                                    <div className="relative h-48 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
-                                        <img
+                                    {/* <div className="relative h-48 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200"> */}
+                                        {/* <img
                                             loading="lazy"
                                             src={item.umkm_id.photo_profile_url}
                                             alt={item.umkm_id.name}
@@ -352,21 +352,21 @@ const EventDetail = () => {
                                             onError={(e) => {
                                                 e.target.src = "/placeholder.svg?height=200&width=300"
                                             }}
-                                        />
+                                        /> */}
 
                                         {/* Overlay Gradient */}
-                                        <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-300"></div>
-                                    </div>
+                                        {/* <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-300"></div>
+                                    </div> */}
 
                                     {/* Content */}
-                                    <div className="p-6">
+                                    {/* <div className="p-6">
                                         {/* UMKM Name */}
-                                        <h3 className="font-bold text-gray-900 text-lg mb-4 group-hover/card:text-red-600 transition-colors duration-200 line-clamp-1">
+                                        {/* <h3 className="font-bold text-gray-900 text-lg mb-4 group-hover/card:text-red-600 transition-colors duration-200 line-clamp-1">
                                             {item.umkm_id.name}
-                                        </h3>
+                                        </h3> */}
 
                                         {/* Status & Registration Date */}
-                                        <div className="space-y-3 text-gray-600 mb-5">
+                                        {/* <div className="space-y-3 text-gray-600 mb-5">
                                             <div className="flex justify-between text-sm">
                                                 <span>Status:</span>
                                                 <span className={`font-medium ${item.is_active ? 'text-green-600' : 'text-red-600'}`}>
@@ -377,33 +377,33 @@ const EventDetail = () => {
                                                 <span>Terdaftar:</span>
                                                 <span>{formatDate(item.created_at)}</span>
                                             </div>
-                                        </div>
+                                        </div> */}
 
                                         {/* Action Button */}
-                                        <Link to={`/umkm/${item.umkm_id.id}`}>
+                                        {/* <Link to={`/umkm/${item.umkm_id.id}`}>
                                             <button className="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white py-3 px-4 rounded-xl font-medium transition-all duration-200 transform hover:scale-[1.02] shadow-lg hover:shadow-xl">
                                                 Lihat Detail
                                             </button>
                                         </Link>
-                                    </div>
+                                    </div> */}
 
                                     {/* Hover Effect Sparkles */}
-                                    <div className="absolute inset-0 pointer-events-none opacity-0 group-hover/card:opacity-100 transition-opacity duration-300">
+                                    {/* <div className="absolute inset-0 pointer-events-none opacity-0 group-hover/card:opacity-100 transition-opacity duration-300">
                                         <Sparkles className="absolute top-4 left-4 w-4 h-4 text-yellow-400 animate-pulse" />
                                         <Sparkles className="absolute top-8 right-8 w-3 h-3 text-blue-400 animate-pulse delay-100" />
                                         <Sparkles className="absolute bottom-8 left-8 w-3 h-3 text-purple-400 animate-pulse delay-200" />
                                     </div>
-                                </div>
-                            ))}
-                        </div>
-                    ) : (
-                        <div className="text-center py-12 bg-white rounded-lg border">
+                                </div> */}
+                            {/* ))} */}
+                        {/* </div> */}
+                    {/* ) : ( */}
+                        {/* <div className="text-center py-12 bg-white rounded-lg border">
                             <Users className="w-16 h-16 text-gray-300 mx-auto mb-4" />
                             <h3 className="text-lg font-medium text-gray-900 mb-2">Belum Ada UMKM Peserta</h3>
                             <p className="text-gray-600">Event ini belum memiliki UMKM yang terdaftar sebagai peserta.</p>
                         </div>
                     )}
-                </div>
+                </div> */}
 
                 {/* Product Promos Section - Only show for promo events */}
                 {eventData && (

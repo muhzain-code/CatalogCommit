@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Grid, Typography } from "@mui/material";
 import { Link, useLocation } from "react-router-dom";
 import FlashSaleItem from "../components/common/components/FlashSaleItem";
-import i18n from "../components/common/components/LangConfig";
+// import i18n from "../components/common/components/LangConfig";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ViewAll from "../components/common/components/ViewAll";
 import WhiteButton from "../components/common/components/WhiteButton";
@@ -140,14 +140,14 @@ const Category = () => {
     return (
       <div className="container mx-auto mt-40 flex flex-col gap-5">
         <Typography variant="h3" align="center" gutterBottom>
-          {i18n.t("allProducts.byCategory")}
+          {"Jelajahi Berdasarkan Kategori"}
         </Typography>
         <div className="text-center text-red-500">{error}</div>
         <div className="mt-6 flex justify-center gap-5 md:gap-20 items-center md:mx-12">
           <Link to="..">
-            <WhiteButton name={i18n.t("whiteButtons.backToHomePage")} />
+            <WhiteButton name={"Kembali Ke Beranda"} />
           </Link>
-          <ViewAll name={i18n.t("redButtons.viewAllProducts")} />
+          <ViewAll name={"Liat Semua Produk"} />
         </div>
       </div>
     );
@@ -158,9 +158,9 @@ const Category = () => {
   }
 
   return (
-    <div className="container mx-auto mt-40 flex flex-col gap-5">
+    <div className="container mx-auto mt-40 flex flex-col gap-5 px-2 md:px-14">
       <Typography variant="h3" align="center" gutterBottom>
-        {i18n.t("allProducts.byCategory")}
+        {"Jelajahi Berdasarkan Kategori"}
       </Typography>
       
       {/* Filter Section */}
@@ -239,15 +239,15 @@ const Category = () => {
           hover:bg-gray-50 border text-[#696A75] hover:text-[#696A75] border-[#696A75] hover:border-[#696A75]
           hover:scale-105 hover:-translate-y-2 transform duration-300 ease-in-out"
         >
-          {i18n.t("whiteButtons.loadMore")}
+          {"Muat Lebih Banyak.."}
         </button>
       )}
 
       <div className="mt-6 flex justify-center gap-5 md:gap-20 items-center md:mx-12">
         <Link to="..">
-          <WhiteButton name={i18n.t("whiteButtons.backToHomePage")} />
+          <WhiteButton name={"Kembali Ke Beranda"} />
         </Link>
-        <ViewAll name={i18n.t("redButtons.viewAllProducts")} />
+        <ViewAll name={"Liat Semua Produk"} />
       </div>
     </div>
   );

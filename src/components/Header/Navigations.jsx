@@ -26,15 +26,15 @@ const Navigations = () => {
 
   // Map routes to their corresponding labels
   const routes = [
-    { path: "/", label: i18n.t("home") },
-    { path: "/allProducts", label: i18n.t("allProducts.redTitle") },
-    { path: "/contact", label: i18n.t("contact") },
-    { path: "/about", label: i18n.t("about") },
+    { path: "/", label: "Beranda" },
+    { path: "/allProducts", label: "Produk" },
+    { path: "/contact", label: "Kontak" },
+    { path: "/about", label: "Tentang"},
     ...(currentUser
-      ? [{ path: "/account", label: i18n.t("account") }]
+      ? [{ path: "/account", label: "Akun" }]
       : [
           { path: "/login", label: i18n.t("loginPage.login") },
-          { path: "/cek-resi", label: i18n.t("Cek Resi") },
+          { path: "/cek-resi", label: "Cek Resi" },
         ]),
   ];
 

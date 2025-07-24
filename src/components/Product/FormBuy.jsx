@@ -1,6 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import { API_BASE_URL } from "../../config";
+import { RotateCcw } from "lucide-react";
+
+const STORAGE_KEY = "buyFormData";
 
 const FormBuy = ({ productId, applicationId }) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -12,6 +15,18 @@ const FormBuy = ({ productId, applicationId }) => {
     });
     const [errors, setErrors] = useState({});
 
+    // 1) Load from localStorage once
+    useEffect(() => {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+            try {
+                setFormData(JSON.parse(saved));
+            } catch {
+                localStorage.removeItem(STORAGE_KEY);
+            }
+        }
+    }, []);
+
     const resetForm = () => {
         setFormData({
             buyer_name: "",
@@ -19,16 +34,21 @@ const FormBuy = ({ productId, applicationId }) => {
             buyer_address: "",
         });
         setErrors({});
+        localStorage.removeItem(STORAGE_KEY); // clear if you want
     };
 
     const closeModal = () => {
         setIsOpen(false);
-        resetForm();
+        // keep data in storage so next time it’s still there
     };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData((prev) => ({ ...prev, [name]: value }));
+        const updated = { ...formData, [name]: value };
+        setFormData(updated);
+        // 2) Save each change
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+
         if (errors[name]) {
             setErrors((prev) => ({ ...prev, [name]: "" }));
         }
@@ -37,10 +57,14 @@ const FormBuy = ({ productId, applicationId }) => {
     const validateForm = () => {
         const newErrors = {};
         if (!formData.buyer_name.trim()) newErrors.buyer_name = "Nama harus diisi";
-        if (!formData.buyer_phone.trim()) newErrors.buyer_phone = "Nomor telepon harus diisi";
-        else if (!/^[0-9]{10,13}$/.test(formData.buyer_phone)) newErrors.buyer_phone = "Nomor telepon harus 10-13 digit angka";
-        if (!formData.buyer_address.trim()) newErrors.buyer_address = "Alamat harus diisi";
-        else if (formData.buyer_address.length < 10) newErrors.buyer_address = "Alamat terlalu pendek";
+        if (!formData.buyer_phone.trim())
+            newErrors.buyer_phone = "Nomor telepon harus diisi";
+        else if (!/^[0-9]{10,13}$/.test(formData.buyer_phone))
+            newErrors.buyer_phone = "Nomor telepon harus 10-13 digit angka";
+        if (!formData.buyer_address.trim())
+            newErrors.buyer_address = "Alamat harus diisi";
+        else if (formData.buyer_address.length < 10)
+            newErrors.buyer_address = "Alamat terlalu pendek";
 
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
@@ -51,7 +75,6 @@ const FormBuy = ({ productId, applicationId }) => {
         if (!validateForm()) return;
 
         setIsLoading(true);
-
         const payload = {
             ...formData,
             product_id: productId,
@@ -72,11 +95,7 @@ const FormBuy = ({ productId, applicationId }) => {
                 if (response.status === 400) msg = "Data tidak valid.";
                 else if (response.status === 500) msg = "Server error.";
 
-                Swal.fire({
-                    icon: "error",
-                    title: "Gagal",
-                    text: msg,
-                });
+                Swal.fire({ icon: "error", title: "Gagal", text: msg });
                 return;
             }
 
@@ -90,7 +109,8 @@ const FormBuy = ({ productId, applicationId }) => {
                 }).then(() => {
                     window.location.href = data.wa_link;
                 });
-
+                // optionally clear saved data on successful order:
+                // resetForm();
                 closeModal();
             } else {
                 Swal.fire({
@@ -99,8 +119,7 @@ const FormBuy = ({ productId, applicationId }) => {
                     text: "Link WhatsApp tidak ditemukan.",
                 });
             }
-
-        } catch (err) {
+        } catch {
             Swal.fire({
                 icon: "error",
                 title: "Gagal",
@@ -153,12 +172,23 @@ const FormBuy = ({ productId, applicationId }) => {
 
                         <div className="flex justify-between items-center p-5 border-b border-gray-200">
                             <h2 className="text-lg font-semibold text-gray-800">Form Pembelian</h2>
-                            <button
-                                className="text-gray-500 text-xl hover:text-gray-700"
-                                onClick={() => !isLoading && closeModal()}
-                            >
-                                &times;
-                            </button>
+                            <div className="flex items-center gap-2">
+                                <button
+                                    type="button"
+                                    onClick={() => !isLoading && resetForm()}
+                                    disabled={isLoading}
+                                    title="Kosongkan Form"
+                                    className="text-gray-500 hover:text-gray-700 disabled:opacity-50"
+                                >
+                                    <RotateCcw size={20} />
+                                </button>
+                                <button
+                                    className="text-gray-500 text-xl hover:text-gray-700"
+                                    onClick={() => !isLoading && closeModal()}
+                                >
+                                    &times;
+                                </button>
+                            </div>
                         </div>
 
                         <form onSubmit={handleSubmit} className="p-5 space-y-4 relative z-0">
@@ -172,9 +202,8 @@ const FormBuy = ({ productId, applicationId }) => {
                                     onChange={handleChange}
                                     placeholder="Nama penerima"
                                     disabled={isLoading}
-                                    className={`w-full px-3 py-2 rounded-lg border text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                                        errors.buyer_name ? "border-red-500" : "border-gray-300"
-                                    }`}
+                                    className={`w-full px-3 py-2 rounded-lg border text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.buyer_name ? "border-red-500" : "border-gray-300"
+                                        }`}
                                 />
                                 {errors.buyer_name && (
                                     <p className="text-xs italic text-red-500 mt-1">{errors.buyer_name}</p>
@@ -191,9 +220,8 @@ const FormBuy = ({ productId, applicationId }) => {
                                     onChange={handleChange}
                                     placeholder="081234567890"
                                     disabled={isLoading}
-                                    className={`w-full px-3 py-2 rounded-lg border text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                                        errors.buyer_phone ? "border-red-500" : "border-gray-300"
-                                    }`}
+                                    className={`w-full px-3 py-2 rounded-lg border text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.buyer_phone ? "border-red-500" : "border-gray-300"
+                                        }`}
                                 />
                                 {errors.buyer_phone && (
                                     <p className="text-xs italic text-red-500 mt-1">{errors.buyer_phone}</p>
@@ -211,9 +239,8 @@ const FormBuy = ({ productId, applicationId }) => {
                                     placeholder="Jl. Nama Jalan No. X, Desa. Kecamatan, Kabupaten."
                                     rows="3"
                                     disabled={isLoading}
-                                    className={`w-full px-3 py-2 rounded-lg border text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                                        errors.buyer_address ? "border-red-500" : "border-gray-300"
-                                    }`}
+                                    className={`w-full px-3 py-2 rounded-lg border text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.buyer_address ? "border-red-500" : "border-gray-300"
+                                        }`}
                                 />
                                 {errors.buyer_address && (
                                     <p className="text-xs italic text-red-500 mt-1">{errors.buyer_address}</p>
@@ -229,6 +256,14 @@ const FormBuy = ({ productId, applicationId }) => {
                                 >
                                     Batal
                                 </button>
+                                {/* <button
+                                    type="button"
+                                    onClick={(resetForm)}
+                                    disabled={isLoading}
+                                    className="px-4 py-2 text-sm rounded-lg  bg-blue-600 text-white hover:bg-blue-700 transition disabled:opacity-50"
+                                >
+                                    Kosongkan Form
+                                </button> */}
                                 <button
                                     type="submit"
                                     disabled={isLoading}

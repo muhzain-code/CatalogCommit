@@ -181,17 +181,17 @@ const UMKMDetail = () => {
                 </div>
 
                 {/* Stats */}
-                <div className="grid grid-cols-2 gap-4 py-4 border-t border-b border-gray-200">
-                  <div className="text-center">
+                <div className="grid gap-4 py-4 border-t border-b border-gray-200 place-items-center">
+                  <div className="flex flex-col items-center justify-center text-center">
                     <div className="text-2xl font-bold text-gray-900">{totalProducts}</div>
-                    <div className="text-sm text-gray-600">Produk</div>
+                    <div className="text-sm text-gray-600">Total Produk</div>
                   </div>
-                  <div className="text-center">
+                  {/* <div className="text-center">
                     <div className={`text-2xl font-bold ${umkmData.is_active ? "text-green-600" : "text-red-600"}`}>
                       {umkmData.is_active ? "Aktif" : "Nonaktif"}
                     </div>
                     <div className="text-sm text-gray-600">Status</div>
-                  </div>
+                  </div> */}
                 </div>
 
                 {/* Contact Actions */}

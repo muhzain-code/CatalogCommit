@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Grid, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import FlashSaleItem from "../components/common/components/FlashSaleItem";
-import i18n from "../components/common/components/LangConfig";
+// import i18n from "../components/common/components/LangConfig";
 import RedButton from "../components/common/components/RedButton";
 import WhiteButton from "../components/common/components/WhiteButton";
 import Loader from "../components/common/components/Loader";
@@ -76,10 +76,10 @@ const AllProducts = () => {
         <div className="text-center text-red-500">{error}</div>
         <div className="mt-6 flex justify-around items-center md:mx-12">
           <Link to="..">
-            <WhiteButton name={i18n.t("whiteButtons.backToHomePage")} />
+            <WhiteButton name={"Kembali Ke Beranda"} />
           </Link>
           <Link to="/category">
-            <RedButton name={i18n.t("redButtons.exploreByCategory")} />
+            <RedButton name={"Jelajahi Berdasarkan Kategori"} />
           </Link>
         </div>
       </div>
@@ -87,7 +87,7 @@ const AllProducts = () => {
   }
 
   return (
-    <div className="mt-40 flex flex-col gap-5">
+    <div className="mt-40 flex flex-col gap-5 px-2 md:px-24">
       <Typography variant="h3" align="center" gutterBottom>
         {"Jelajahi Berbagai Produk"}
       </Typography>
@@ -118,16 +118,16 @@ const AllProducts = () => {
           hover:bg-gray-50 border text-[#696A75] hover:text-[#696A75] border-[#696A75] hover:border-[#696A75]
           hover:scale-105 hover:-translate-y-2 transform duration-300 ease-in-out"
         >
-          {i18n.t("whiteButtons.loadMore")}
+          {"Muat Lebih Banyak.."}
         </button>
       )}
 
       <div className="mt-6 flex justify-around items-center md:mx-12">
         <Link to="..">
-          <WhiteButton name={i18n.t("whiteButtons.backToHomePage")} />
+          <WhiteButton name={"Kembali Ke Beranda"} />
         </Link>
         <Link to="/category">
-          <RedButton name={i18n.t("redButtons.exploreByCategory")} />
+          <RedButton name={"Jelajahi Berdasarkan Kategori"} />
         </Link>
       </div>
     </div>

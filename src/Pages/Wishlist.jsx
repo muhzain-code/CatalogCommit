@@ -57,7 +57,7 @@ function Wishlist() {
       <div className="mx-auto md:mx-2 my-20">
         <div className="flex justify-around md:justify-between items-center md:mr-6 mb-12">
           <h2 className="text-lg">
-            {i18n.t("wishlist.title")} ({wishlistItems.length})
+            {"Produk Yang Ditandai"} ({wishlistItems.length})
           </h2>
 
           {/* <WhiteButton

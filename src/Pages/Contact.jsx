@@ -1,11 +1,11 @@
 import ActiveLastBreadcrumb from "../components/common/components/Link";
-import i18n from "../components/common/components/LangConfig";
+// import i18n from "../components/common/components/LangConfig";
 
 const Contact = () => {
   return (
     <div className="flex flex-col mx-4 xl:ml-36 mt-48 gap-20">
       <ActiveLastBreadcrumb
-        path={`${i18n.t("home")}/${i18n.t("footer.Contact")}`}
+        path={`${"Beranda"}/${"Kontak"}`}
       />
       <div className="flex flex-col lg:flex-row gap-12 mx-auto w-full max-w-7xl">
         {/* Kolom 1: Telepon */}

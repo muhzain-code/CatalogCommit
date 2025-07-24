@@ -3,7 +3,7 @@ import FlashSaleItem from "../common/components/FlashSaleItem";
 // import PropTypes from "prop-types";
 import RedTitle from "../common/components/RedTitle";
 import ViewAll from "../common/components/ViewAll";
-import i18n from "../common/components/LangConfig";
+// import i18n from "../common/components/LangConfig";
 import { Grid } from "@mui/material";
 import { productService } from "../../Services/productService";
 import { transformProductData } from "../../Services/productService";
@@ -82,7 +82,7 @@ const AllProducts = () => {
         </div>
       </div>
       <div className="flex justify-center">
-        <ViewAll name={i18n.t("redButtons.viewAllProducts")} />
+        <ViewAll name={"Liat Semua Produk"} />
       </div>
     </>
   );
